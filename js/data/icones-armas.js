@@ -8,7 +8,26 @@
 const CAMINHOS_IMAGENS = {
     
     abelha_anarquica: 'assets/armas/Bachira.png',
-};
+    indomito_mutavel: 'assets/armas/Isagi.jpg',
+    tirano_atroz: 'assets/armas/Barou.jpg',
+    felino_celere: 'assets/armas/chigiri.jpg',
+    espectro_inanime: 'assets/armas/Nagi.jpg',
+    camaleao_mimetico: 'assets/armas/Reo.jpg',
+    carrasco_sintetico: 'assets/armas/Kunigami.jpg',
+    guardiao_selvatico: 'assets/armas/Gagamaru.jpg',
+    muralha_tenaz: 'assets/armas/Raichi.jpg',
+    arauto_vigilante: 'assets/armas/Arauto.jpg',
+    vandalo_duelista: 'assets/armas/Vandalo.jpg',
+    esqualo_sideral: 'assets/armas/Esqualo.jpg',
+    corvo_pejorativo: 'assets/armas/Corvo.jpg',
+    shinobi_absconso: 'assets/armas/Shinobi.jpg',
+    trem_sonico: 'assets/armas/Trem.jpg',
+    astro_inabalavel: 'assets/armas/Astro.jpg',
+    sadista_frigido: 'assets/armas/Sadista.jpg',
+    ritmista_limitrofe: 'assets/armas/Ritmista.jpg',
+    astro_ascendente: 'assets/armas/Astro.jpg',
+    devoto_iluminado: 'assets/armas/Devoto.jpg',
+};  
 
 /** Monograma automático (círculo com a inicial) pras armas sem imagem ainda. */
 function monograma(nome) {
