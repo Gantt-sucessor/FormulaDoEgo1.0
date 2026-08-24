@@ -12,15 +12,15 @@ export async function entrarNaCampanha(codigo) {
   return data;
 }
 
-/** Lista as fichas de um jogador específico numa campanha (pra ele poder ter várias e escolher). */
+/**
+ * Lista as fichas de um jogador específico (pra ele poder ter várias e escolher).
+ * Passe campanhaId = null pra listar as fichas "soltas" (sem campanha nenhuma).
+ */
 export async function listarFichasDoJogador(campanhaId, nomeJogador) {
-  const { data, error } = await supabase
-    .from('fichas')
-    .select('*')
-    .eq('campanha_id', campanhaId)
-    .eq('nome_jogador', nomeJogador)
-    .order('criada_em', { ascending: false });
+  let query = supabase.from('fichas').select('*').eq('nome_jogador', nomeJogador);
+  query = campanhaId ? query.eq('campanha_id', campanhaId) : query.is('campanha_id', null);
 
+  const { data, error } = await query.order('criada_em', { ascending: false });
   if (error) throw error;
   return data;
 }
@@ -33,12 +33,12 @@ export async function buscarFicha(fichaId) {
 }
 
 /**
- * Cria uma ficha nova. Nada aqui é obrigatório além de campanha/jogador/personagem —
+ * Cria uma ficha nova. campanhaId pode ser null (ficha "solta", sem campanha) —
  * o resto (atributos, perícias, arma, ótica, tendências, categoria) pode ser
  * preenchido aos poucos, na ordem que o jogador quiser.
  */
 export async function criarFicha({
-  campanhaId, nomeJogador, nomePersonagem,
+  campanhaId = null, nomeJogador, nomePersonagem,
   atributos = {}, pericias = {},
   armaId = null, oticaId = null,
   tendenciaPrincipalId = null, tendenciaSecundariaId = null,

@@ -1,6 +1,8 @@
 // Fórmula do Ego — Armas (classes)
-// Cada personagem escolhe 1 arma, fixa após a escolha. Cada arma dá:
-// 1 mecânica especial + habilidades: sem bola / com bola / variante / fluxo.
+// Cada personagem escolhe 1 arma, fixa após a escolha. Estrutura de cada arma:
+//   1. mecanica_especial — o "gatilho": como/quando o efeito da arma é ativado.
+//   2. passiva — o efeito nomeado que a mecânica desbloqueia, com os números detalhados.
+//   3. habilidades — as 4 habilidades da arma: sem bola / com bola / variante / fluxo.
 // dificuldade: 1 a 5 estrelas (complexidade de jogar a arma).
 
 export const ARMAS = [
@@ -9,7 +11,8 @@ export const ARMAS = [
     nome: 'Indômito Mutável',
     dificuldade: 4,
     tema: 'Adaptação como arma — vence oponentes fortes ou domina o próprio time.',
-    mecanica_especial: { nome: 'Divino general imoral', texto: 'Desbloqueia o efeito Adaptado (via habilidades ou 1 PdS): cada acúmulo dá -1 bônus a um oponente numa jogada J vs J específica contra você (máx -5, dura até o fim da partida).' },
+    mecanica_especial: { nome: 'Divino general imoral', texto: 'Desbloqueia o efeito Adaptado através de habilidades específicas ou gastando 1 PdS em seu turno.' },
+    passiva: { nome: 'Adaptado', texto: 'Sempre que acumular x1 desse efeito, pode escolher uma jogada de J vs J para oponentes receberem -1 em executá-la contra você (ex: -1 de bônus em lhe roubar), com o bônus negativo sendo acumulável (máx. -5 por jogada). O efeito dura até o fim da partida, assim como seu benefício.' },
     habilidades: [
       { nome: 'Chute direto', tipo: 'sem bola', texto: 'Ao receber passe/rebote: chute regular fora do turno +5 bônus.' },
       { nome: 'Peças fora do lugar', tipo: 'com bola', simbolo: '✪', texto: 'Cria área ao redor; quem entrar recebe Adaptado x1 (1x por pessoa/partida).' },
@@ -22,7 +25,8 @@ export const ARMAS = [
     nome: 'Abelha Anárquica',
     dificuldade: 2,
     tema: 'Criatividade em dribles — extremamente superior aos outros dribladores.',
-    mecanica_especial: { nome: "Eu 'tou voando alto", texto: 'Jogadas de Drible custam -1 reação necessária (não se aplica às habilidades da classe).' },
+    mecanica_especial: { nome: "Eu 'tou voando alto", texto: 'Sempre ativa: não precisa de gatilho pra funcionar.' },
+    passiva: { nome: "Eu 'tou voando alto", texto: 'Jogadas de Drible custam -1 reação necessária pra serem executadas (não se aplica às habilidades da própria classe).' },
     habilidades: [
       { nome: 'Levantando voo', tipo: 'sem bola', simbolo: '❖', texto: 'Levantar bola garantido de 3m, não interceptável naturalmente.' },
       { nome: 'Hyperspeed scissors', tipo: 'com bola', texto: 'Contra roubo declarado: drible +3 bônus; se ganhar, avança 5m driblando garantido.' },
@@ -35,7 +39,8 @@ export const ARMAS = [
     nome: 'Tirano Atroz',
     dificuldade: 5,
     tema: 'Devorar como dominação — a bola é uma serva esférica que serve pra você brilhar.',
-    mecanica_especial: { nome: 'Vilão do cenário', texto: 'Devorar um alvo o torna "subjulgado" — dura mais a cada vez (d4+1 turnos → d6+1 rodadas → até o fim da partida).' },
+    mecanica_especial: { nome: 'Vilão do cenário', texto: 'Ativa sempre que você devora um alvo, aplicando automaticamente o efeito Subjulgado nele.' },
+    passiva: { nome: 'Subjulgado', texto: 'Quem é devorado por você recebe esse efeito, que dura mais a cada nova vez: 1ª vez = d4+1 turnos; 2ª vez = d6+1 rodadas; 3ª vez em diante = até o fim da partida. Alvos subjulgados falham automaticamente contra certas habilidades da classe.' },
     habilidades: [
       { nome: 'Curvem-se', tipo: 'sem bola', texto: 'Testa Consumir vs Emocional; se ganhar, devora e obriga o alvo a passar.' },
       { nome: 'Trono do rei', tipo: 'com bola', simbolo: '✪', texto: 'Cria área no setor: +1 vantagem em Potência; subjulgado que entrar sofre devorar/interceptação +6 bônus.' },
@@ -48,12 +53,13 @@ export const ARMAS = [
     nome: 'Felino Célere',
     dificuldade: 4,
     tema: 'Aceleração latente — pernas construídas pra ultrapassar qualquer oponente.',
-    mecanica_especial: { nome: 'Velocidade latente', texto: 'Gastar todos os fôlegos numa rodada só se movendo dá +1 fôlego na próxima (máx +5) + 1 ponto de aceleração.' },
+    mecanica_especial: { nome: 'Velocidade latente', texto: 'Ativa sempre que você gasta todos os fôlegos numa rodada só se movendo.' },
+    passiva: { nome: 'Ponto de aceleração', texto: 'Ao gastar todos os fôlegos numa rodada só se movendo: +1 fôlego na próxima rodada (acumulativo, máx. +5) + 1 ponto de aceleração, usado pra melhorar as habilidades da classe.' },
     habilidades: [
-      { nome: 'Mach 44', tipo: 'sem bola', texto: 'Avança 1m por turno automaticamente.' },
-      { nome: 'Tiro em movimento', tipo: 'com bola', simbolo: '❖', texto: 'Avança driblando com Destreza, chuta/passa com Destreza no final.' },
-      { nome: 'Pantera x trem', tipo: 'variante', texto: 'Você e um aliado avançam juntos, somando a Constância de ambos.' },
-      { nome: 'Ângulo de 44°', tipo: 'fluxo', texto: 'Avança Constância+3m, chute/passe +2 bônus por 3m andados.' },
+      { nome: 'Mach 44', tipo: 'sem bola', texto: 'Avança 1m por turno automaticamente (2 pontos de aceleração = 2m).' },
+      { nome: 'Tiro em movimento', tipo: 'com bola', simbolo: '❖', texto: 'Avança driblando com Destreza, chuta/passa com Destreza no final (2 pontos = +1 vantagem +2m).' },
+      { nome: 'Pantera x trem', tipo: 'variante', texto: 'Você e um aliado avançam juntos, somando a Constância de ambos (3 pontos = duplica sua Constância).' },
+      { nome: 'Ângulo de 44°', tipo: 'fluxo', texto: 'Avança Constância+3m, chute/passe +2 bônus por 3m andados (4 pontos = vantagens em vez de bônus).' },
     ],
   },
   {
@@ -61,7 +67,8 @@ export const ARMAS = [
     nome: 'Espectro Inânime',
     dificuldade: 1,
     tema: 'Controle de bola — total noção de onde e como ela vai.',
-    mecanica_especial: { nome: 'Bola morta', texto: 'Desbloqueia a jogada "Domínio acrobático": Perícia Agilidade, Dj 25 (+1/oponente em 3x3m), Reação — domina bola via passe/levantar bola.' },
+    mecanica_especial: { nome: 'Bola morta', texto: 'Desbloqueia uma jogada especial nova, disponível a qualquer momento (não depende de gatilho).' },
+    passiva: { nome: 'Domínio acrobático', texto: 'Perícia: Agilidade | Dj: 25 (+1 por oponente em 3x3m) | Distância: pessoal | Ação: Reação — domina a bola vinda de um passe ou de levantar bola.' },
     habilidades: [
       { nome: 'Black hole trap', tipo: 'sem bola', simbolo: '✪', texto: 'Domínio acrobático; fica no ar; quem tentar interceptar seu voleio gasta ação de movimento.' },
       { nome: 'Recepção orientada', tipo: 'com bola', texto: 'Avança driblando com testes de domínio; driblados ficam caídos.' },
@@ -74,7 +81,8 @@ export const ARMAS = [
     nome: 'Camaleão Mimético',
     dificuldade: 5,
     tema: 'Cópia — uma máquina em qualquer posição.',
-    mecanica_especial: { nome: 'Diante dos seus olhos', texto: 'No seu setor, ação egoísta troca entre Forma ofensiva e Forma defensiva (+3 bônus por 3 jogadas).' },
+    mecanica_especial: { nome: 'Diante dos seus olhos', texto: 'No seu setor, uma ação egoísta troca sua forma ativa.' },
+    passiva: { nome: 'Forma ofensiva / Forma defensiva', texto: 'Enquanto na forma escolhida, +3 bônus nos atributos correspondentes (ofensivos ou defensivos) durante as próximas 3 jogadas.' },
     habilidades: [
       { nome: 'Cópia 99%', tipo: 'sem bola', simbolo: '✪', texto: 'Copia e guarda 1 habilidade de um alvo (usa com metade do PdE).' },
       { nome: 'Simulacro de movimento', tipo: 'com bola', simbolo: '❖', texto: 'Copia os 2 maiores atributos do alvo.' },
@@ -87,7 +95,8 @@ export const ARMAS = [
     nome: 'Carrasco Sintético',
     dificuldade: 2,
     tema: 'Retaliação — o corpo é uma máquina que destrói e é destruída.',
-    mecanica_especial: { nome: 'Retaliação', texto: 'Todo efeito negativo recebido dá +1 ponto de fibra; 1 ponto = +2 bônus em Potência/Robustez.' },
+    mecanica_especial: { nome: 'Retaliação', texto: 'Ativa automaticamente sempre que você recebe um efeito negativo.' },
+    passiva: { nome: 'Ponto de fibra', texto: 'Todo efeito negativo recebido dá +1 ponto de fibra; cada ponto de fibra concede +2 bônus em jogadas de Potência/Robustez.' },
     habilidades: [
       { nome: 'Deus ex machina', tipo: 'sem bola', texto: 'Antes de rolar Robustez J vs J: testa Músculos vs Pressão; se vencer, escolhe efeito no alvo.' },
       { nome: 'Justiça na marra', tipo: 'com bola', simbolo: '✪', texto: 'Escolhe a perna: boa = chute de poder +4m; ruim = chute que derruba alvos.' },
@@ -100,7 +109,8 @@ export const ARMAS = [
     nome: 'Guardião Selvático',
     dificuldade: 3,
     tema: 'Instinto reativo — qualquer bola na sua direção é presa.',
-    mecanica_especial: { nome: 'Salto, Sinapses', texto: 'Pode fazer jogada de reação mesmo sem reações sobrando (+2 PdE), +2 bônus com Instintos.' },
+    mecanica_especial: { nome: 'Salto, Sinapses', texto: 'Ativa quando você opta por gastar PdE extra pra reagir sem ter reações sobrando.' },
+    passiva: { nome: 'Reflexo extra', texto: 'Pode fazer uma jogada de reação mesmo sem reações sobrando, gastando +2 PdE, com +2 bônus se a jogada usar Instintos.' },
     habilidades: [
       { nome: 'Reflexo florestal', tipo: 'sem bola', simbolo: '❖', texto: 'Oponente em 10x10m: ganha adrenalina, defesas podem usar Instintos.' },
       { nome: 'Garra de urso', tipo: 'com bola', texto: 'Após defesa/interceptação: passe alto +2m DdP.' },
@@ -113,7 +123,8 @@ export const ARMAS = [
     nome: 'Muralha Tenaz',
     dificuldade: 1,
     tema: 'Marcação que quebra qualquer jogador que sofre com ela.',
-    mecanica_especial: { nome: 'MODO SEXY!', texto: 'Alvo gasta fôlego a 2m de você: 2 reações pra avançar e começar marcação/corta-ângulo.' },
+    mecanica_especial: { nome: 'MODO SEXY!', texto: 'Ativa quando um alvo gasta fôlego a até 2m de você.' },
+    passiva: { nome: 'Avanço automático', texto: 'Quando o gatilho ocorre, gasta 2 reações pra avançar até o alvo e começar marcação ou corta-ângulo contra ele.' },
     habilidades: [
       { nome: 'Para na muralha!', tipo: 'sem bola', simbolo: '✪', texto: 'Marcação/corta-ângulo +3 bônus, repetível se o alvo escapar.' },
       { nome: '0 espaço pessoal', tipo: 'com bola', texto: 'Área ao seu redor: oponentes dentro contam como marcados.' },
@@ -126,7 +137,8 @@ export const ARMAS = [
     nome: 'Arauto Vigilante',
     dificuldade: 3,
     tema: 'A visão de jogo transforma o campo num tabuleiro de xadrez.',
-    mecanica_especial: { nome: 'Acenda o farol', texto: 'Ao alguém entrar em 5x5m, analisa com 1 reação; o time todo passa a considerar o alvo analisado.' },
+    mecanica_especial: { nome: 'Acenda o farol', texto: 'Ativa quando alguém entra em 5x5m de você.' },
+    passiva: { nome: 'Análise automática', texto: 'Gasta 1 reação pra analisar o alvo que entrou na área; o time inteiro passa a considerar o alvo analisado nas jogadas seguintes.' },
     habilidades: [
       { nome: 'Tabuleiro', tipo: 'sem bola', simbolo: '❖', texto: 'Área estática 5x5m; alvo com bola que entrar sofre roubo com 2 vantagens.' },
       { nome: 'Redirecionamento tático', tipo: 'com bola', texto: 'Dois aliados no mesmo setor trocam de lugar; passe +5 bônus depois.' },
@@ -139,7 +151,8 @@ export const ARMAS = [
     nome: 'Vândalo Duelista',
     dificuldade: 4,
     tema: 'Futebol de rua — ninguém acompanha seu ritmo.',
-    mecanica_especial: { nome: 'Futebol de rua', texto: 'Desbloqueia a jogada "Corte": Perícia Criatividade, J vs J, Reação+1 fôlego — se ganhar, avança 2m, driblado cai.' },
+    mecanica_especial: { nome: 'Futebol de rua', texto: 'Desbloqueia uma jogada especial nova, disponível a qualquer momento (não depende de gatilho).' },
+    passiva: { nome: 'Corte', texto: 'Perícia: Criatividade | J vs J | Distância: Adjacente | Ação: Reação+1 fôlego — se ganhar, avança 2m, o driblado fica caído por 1 turno.' },
     habilidades: [
       { nome: 'Corte de asfalto', tipo: 'sem bola', texto: 'Ao receber passe: avança fazendo Corte contra 2 "obstáculos" sequenciais.' },
       { nome: 'Gyro shot', tipo: 'com bola', simbolo: '✪', texto: 'Chute curvo +4 bônus; interceptar exige teste de Momento difícil.' },
@@ -152,7 +165,8 @@ export const ARMAS = [
     nome: 'Esqualo Sideral',
     dificuldade: 3,
     tema: 'O tubarão não caça sozinho — devora a presa em grupo.',
-    mecanica_especial: { nome: 'Satélite natural', texto: 'Efeito Orbitando: ao fazer passe curto/antecipado, você se move junto com o receptor.' },
+    mecanica_especial: { nome: 'Satélite natural', texto: 'Ativa sempre que você faz um passe curto ou antecipado.' },
+    passiva: { nome: 'Orbitando', texto: 'Você acompanha o movimento de quem recebeu seu passe; ao receber um passe de volta, pode repassar em vez de dominar ou fazer voleio.' },
     habilidades: [
       { nome: 'Andou na prancha', tipo: 'sem bola', texto: 'Acompanha o alvo com bola por 4 turnos (flanqueado); ao fim, roubo +4 bônus.' },
       { nome: 'Meu sol brilhe', tipo: 'com bola', simbolo: '❖', texto: 'Passe antecipado repetido com o mesmo aliado, avançando juntos.' },
@@ -165,7 +179,8 @@ export const ARMAS = [
     nome: 'Corvo Pejorativo',
     dificuldade: 4,
     tema: 'O assassinato do elo mais fraco leva seu time à vitória.',
-    mecanica_especial: { nome: 'Aceito o segundo lugar', texto: '+1 PdE soma sua Emocional no teste J vs J de aliado em 6x6m.' },
+    mecanica_especial: { nome: 'Aceito o segundo lugar', texto: 'Ativa a qualquer momento gastando +1 PdE, num aliado em até 6x6m.' },
+    passiva: { nome: 'Emocional emprestado', texto: 'Ao ativar, você soma sua Emocional no próximo teste J vs J do aliado escolhido.' },
     habilidades: [
       { nome: 'Livrar-se do estorvo', tipo: 'sem bola', texto: 'Escolhe 2 aliados: um ego ferido+confuso, outro ego alto+inspirado.' },
       { nome: 'Sobrepor protagonismo', tipo: 'com bola', simbolo: '✪', texto: 'Isca (passe +5 bônus, imobiliza 2 oponentes) ou Abutre (imobiliza e avança).' },
@@ -178,7 +193,8 @@ export const ARMAS = [
     nome: 'Shinobi Absconso',
     dificuldade: 2,
     tema: 'Furtividade que te torna praticamente invisível.',
-    mecanica_especial: { nome: 'Kage mane no jutsu', texto: 'Gastar 1 fôlego adjacente a inimigo = furtivo pelos próximos 3 fôlegos; furtivo permite driblar com Destreza.' },
+    mecanica_especial: { nome: 'Kage mane no jutsu', texto: 'Ativa ao gastar 1 fôlego estando adjacente a um inimigo.' },
+    passiva: { nome: 'Furtivo prolongado', texto: 'Fica furtivo pelos próximos 3 fôlegos gastos; enquanto furtivo por esse efeito, pode driblar usando Destreza no lugar do atributo padrão.' },
     habilidades: [
       { nome: 'Passos sorrateiros', tipo: 'sem bola', texto: 'Ação reativa: fica furtivo, avança 4m, alvos no caminho ficam confusos.' },
       { nome: 'Bukijutsu de Shurikens', tipo: 'com bola', simbolo: '❖', texto: 'Passe adiantado +3 bônus, avança e fica furtivo.' },
@@ -191,7 +207,8 @@ export const ARMAS = [
     nome: 'Trem Sônico',
     dificuldade: 2,
     tema: 'Velocidade explosiva — quem começa mais rápido chega antes.',
-    mecanica_especial: { nome: 'Velocidade explosiva', texto: 'Investidas podem ser preparadas: +1m por turno de preparo.' },
+    mecanica_especial: { nome: 'Velocidade explosiva', texto: 'Ativa sempre que você opta por preparar uma investida em vez de executá-la de imediato.' },
+    passiva: { nome: 'Investida preparada', texto: 'Investidas podem ser preparadas por turnos antes de serem executadas: cada turno de preparo dá +1m adicional na investida final.' },
     habilidades: [
       { nome: 'Corro, não paro, me movo', tipo: 'sem bola', simbolo: '✪', texto: '3 investidas seguidas, cada uma em direção diferente da anterior.' },
       { nome: 'Jet counter', tipo: 'com bola', texto: 'Preparação de investida; se tentarem roubar, drible Destreza+Constância.' },
@@ -204,7 +221,8 @@ export const ARMAS = [
     nome: 'Astro Inabalável',
     dificuldade: 3,
     tema: 'O esforço traz evolução, e a evolução traz a vitória.',
-    mecanica_especial: { nome: 'Um por todos', texto: 'Desbloqueia a jogada "Motivar": Perícia Determinação, Dj 15(+3/efeito negativo), 8m — dá inspirado ao aliado se ganhar.' },
+    mecanica_especial: { nome: 'Um por todos', texto: 'Desbloqueia uma jogada especial nova, disponível a qualquer momento (não depende de gatilho).' },
+    passiva: { nome: 'Motivar', texto: 'Perícia: Determinação | Dj: 15 (+3 por efeito negativo do alvo) | Distância: 8m | Ação: Ação egoísta — se ganhar, o aliado recebe inspirado e remove 1 efeito negativo por Determinação turnos (acumulável).' },
     habilidades: [
       { nome: '100% de aproveitamento', tipo: 'sem bola', texto: 'Realoca pontos de 3 perícias suas para outras 3 com poucos pontos.' },
       { nome: 'Meu mérito!', tipo: 'com bola', simbolo: '❖', texto: 'Área que faz "Motivar" em grupo; passe garantido pra um afetado.' },
@@ -217,7 +235,8 @@ export const ARMAS = [
     nome: 'Sadista Frígido',
     dificuldade: 2,
     tema: 'Passes congelantes que fazem seus aliados sofrerem do jeitinho que você gosta.',
-    mecanica_especial: { nome: 'Gostinho da dor', texto: 'Desbloqueia a jogada "Passe sádico": Dj 20, DdP(+2m) — receptor tem desvantagem mas ganha adrenalina se recepcionar.' },
+    mecanica_especial: { nome: 'Gostinho da dor', texto: 'Desbloqueia uma jogada especial nova, disponível a qualquer momento (não depende de gatilho).' },
+    passiva: { nome: 'Passe sádico', texto: 'Perícia: Visão de jogo | Dj: 20 | Distância: DdP (+2m) | Ação: Ação tática — o receptor tem 1 desvantagem em dominar, mas ganha adrenalina por 3 turnos se recepcionar; a distância aumenta +2m se você estiver flanqueado.' },
     habilidades: [
       { nome: 'Frio na espinha', tipo: 'sem bola', texto: 'Analisa aliado (adrenalina) e oponente (imóvel) na distância.' },
       { nome: 'Quebrar o Gelo', tipo: 'com bola', simbolo: '✪', texto: 'Área que imobiliza alvos, permitindo passe sádico com +3m.' },
@@ -230,7 +249,8 @@ export const ARMAS = [
     nome: 'Ritmista Limítrofe',
     dificuldade: 4,
     tema: 'Breakdance caótico — nem os deuses sabem seu próximo passe.',
-    mecanica_especial: { nome: 'Balança desequilibrada', texto: 'Aliado que falha J vs J ganha ponto de azarão (+1 bônus em passes pra ele, máx +5, ganhar PdS reduz).' },
+    mecanica_especial: { nome: 'Balança desequilibrada', texto: 'Ativa automaticamente sempre que um aliado falha um teste de J vs J.' },
+    passiva: { nome: 'Ponto de azarão', texto: 'O aliado que falhou ganha +1 ponto de azarão (+1 bônus em passes pra ele, sem limite de pontos, máx. +5 de bônus); ganhar um PdS remove -1 ponto de azarão.' },
     habilidades: [
       { nome: 'Twist', tipo: 'sem bola', texto: 'Inverte pontos de azarão entre 2 alvos.' },
       { nome: 'Windmill pass', tipo: 'com bola', simbolo: '❖', texto: 'Passe +8 bônus pro aliado com mais pontos de azarão do setor.' },
@@ -243,7 +263,8 @@ export const ARMAS = [
     nome: 'Astro Ascendente',
     dificuldade: 4,
     tema: 'Glam de saltos e cabeceios dignos de um Prêmio Nobel da Paz.',
-    mecanica_especial: { nome: 'Apenas seja glam!', texto: 'Desbloqueia o efeito Enaltecido (só via habilidades próprias): cabeceios defensivos em passes altos, fica no ar, ignora bônus negativos.' },
+    mecanica_especial: { nome: 'Apenas seja glam!', texto: 'Desbloqueia o efeito Enaltecido, aplicável só através das habilidades próprias da classe.' },
+    passiva: { nome: 'Enaltecido', texto: 'Em você: cabeceios defensivos funcionam mesmo em passes altos, você fica no ar e ignora bônus negativos. Em aliado: ignora bônus negativos e suas habilidades custam -1 PdE ao usar.' },
     habilidades: [
       { nome: 'Defesas glam!', tipo: 'sem bola', simbolo: '✪', texto: 'Avança até a trajetória da bola e faz cabeceio defensivo +3 bônus.' },
       { nome: 'Pose glam!', tipo: 'com bola', texto: 'Área estática 5x5m: todos dentro ficam Enaltecidos.' },
@@ -256,7 +277,8 @@ export const ARMAS = [
     nome: 'Devoto Iluminado',
     dificuldade: 4,
     tema: 'Sorte e malícia — quanto mais malicioso, mais sortudo você se sente.',
-    mecanica_especial: { nome: 'Karma', texto: 'Ganhar jogo sujo + 3 PdE = rouba 1 PdS do alvo. Sempre começa a partida com 1 PdS.' },
+    mecanica_especial: { nome: 'Karma', texto: 'Ativa sempre que você ganha um jogo sujo, gastando +3 PdE.' },
+    passiva: { nome: 'Roubo de sorte', texto: 'Ao ativar, rouba 1 PdS do alvo derrotado (se ele tiver 1 ou mais). Você sempre começa a partida com 1 PdS.' },
     habilidades: [
       { nome: 'Por bem ou por mal!', tipo: 'sem bola', texto: 'Avança até a trajetória da bola e faz cabeceio defensivo +3 bônus; sucesso dá Enaltecido.' },
       { nome: 'Aplicar malícia', tipo: 'com bola', texto: '[conteúdo incompleto no livro original — conferir com o Gabriel]' },
