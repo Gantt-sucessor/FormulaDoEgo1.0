@@ -47,7 +47,10 @@
     <div class="ficha-header">
       <div>
         <div class="eyebrow" id="eyebrow-personagem">Ficha</div>
-        <h2 id="titulo-personagem" style="margin-bottom: 0;">Novo personagem</h2>
+        <div class="titulo-personagem-linha">
+          <span id="icone-personagem" class="arma-icone-pequeno"></span>
+          <h2 id="titulo-personagem" style="margin-bottom: 0;">Novo personagem</h2>
+        </div>
       </div>
       <span class="link-trocar" id="link-voltar-lista">← minhas fichas</span>
     </div>
@@ -187,6 +190,7 @@
     import { initPericias } from './js/player/pericias.js';
     import { rolarEEnviar, buscarUltimasRolagens } from './js/player/rolar.js';
     import { getNomeSalvo, setNomeSalvo, getUltimoCodigoSalvo, setUltimoCodigoSalvo } from './js/player/local.js';
+    import { iconeArmaHTML } from './js/data/icones-armas.js';
     import { ATRIBUTOS } from './js/data/atributos.js';
     import { PERICIAS } from './js/data/pericias.js';
     import { ARMAS } from './js/data/armas.js';
@@ -246,7 +250,10 @@
       if (!arma) { info.classList.remove('ativo'); return; }
       info.classList.add('ativo');
       info.innerHTML = `
-        <div>${'★'.repeat(arma.dificuldade)}${'☆'.repeat(5 - arma.dificuldade)} — ${arma.tema}</div>
+        <div style="display:flex; align-items:center; gap:12px; margin-bottom: 4px;">
+          <div class="arma-icone-grande">${iconeArmaHTML(arma.id, arma.nome)}</div>
+          <div>${'★'.repeat(arma.dificuldade)}${'☆'.repeat(5 - arma.dificuldade)} — ${arma.tema}</div>
+        </div>
         <div class="arma-bloco"><strong>Mecânica Especial — ${arma.mecanica_especial.nome}:</strong> ${arma.mecanica_especial.texto}</div>
         <div class="arma-bloco"><strong>Passiva — ${arma.passiva.nome}:</strong> ${arma.passiva.texto}</div>
         <div class="arma-bloco">
@@ -293,10 +300,16 @@
       const otica = OTICAS.find((o) => o.id === document.getElementById('select-otica').value);
       const resumo = document.getElementById('resumo-ficha');
       resumo.innerHTML = [
-        arma ? `<span class="badge">${arma.nome}</span>` : '',
+        arma ? `<span class="badge badge-com-icone"><span class="arma-icone-mini">${iconeArmaHTML(arma.id, arma.nome)}</span>${arma.nome}</span>` : '',
         otica ? `<span class="badge">${otica.nome}</span>` : '',
         !campanhaAtual ? `<span class="badge">sem campanha — rolagens só nesta tela</span>` : '',
       ].join('');
+      atualizarIconePersonagem();
+    }
+
+    function atualizarIconePersonagem() {
+      const arma = ARMAS.find((a) => a.id === document.getElementById('select-arma').value);
+      document.getElementById('icone-personagem').innerHTML = arma ? iconeArmaHTML(arma.id, arma.nome) : '';
     }
 
     // --- Passo 1: nome + código ---
