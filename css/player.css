@@ -131,6 +131,23 @@
 }
 .pericias-total.excedido { color: var(--danger); }
 
+/* Cartão de atributos — hexágono + grade lado a lado, tudo centralizado */
+.atributos-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  text-align: center;
+  max-width: 460px;
+  margin: 0 auto;
+}
+.atributos-card-titulo {
+  font-family: var(--font-display);
+  letter-spacing: 0.1em;
+  color: var(--accent-blue);
+  margin-bottom: 4px;
+}
+
 /* Hexágono */
 .hexagono-wrap {
   display: flex;
@@ -140,7 +157,53 @@
 }
 .hexagono-svg {
   width: 100%;
-  max-width: 340px;
+  max-width: 280px;
+  margin: 0 auto;
+}
+
+/* Grade de atributos com +/- embaixo do hexágono, 3 colunas centralizadas */
+.hex-attr-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-top: 20px;
+}
+@media (max-width: 420px) { .hex-attr-grid { grid-template-columns: repeat(2, 1fr); } }
+.hex-attr-cell {
+  background: var(--bg-surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 10px 8px;
+}
+.hex-attr-nome {
+  font-size: 0.72rem;
+  color: var(--accent-blue);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  margin-bottom: 8px;
+}
+.hex-attr-controles {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+.hex-attr-controles button {
+  width: 24px; height: 24px;
+  border-radius: 50%;
+  border: 1px solid var(--border-strong);
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  cursor: pointer;
+  font-size: 0.9rem;
+  line-height: 1;
+}
+.hex-attr-controles button:hover { border-color: var(--accent-blue); }
+.hex-attr-valor {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  min-width: 22px;
+  color: var(--accent-gold);
 }
 .hex-outline {
   fill: rgba(59, 123, 255, 0.05);
@@ -162,17 +225,11 @@
   font-size: 9px;
   letter-spacing: 0.06em;
 }
-.hex-node {
-  cursor: pointer;
-}
 .hex-node circle {
   fill: var(--bg-surface);
   stroke: var(--border-strong);
   stroke-width: 1.5;
   transition: stroke 0.15s ease, fill 0.15s ease;
-}
-.hex-node:hover circle {
-  stroke: var(--accent-blue);
 }
 .hex-node.preenchido circle {
   fill: var(--accent-blue-dim);
@@ -192,33 +249,6 @@
   letter-spacing: 0.04em;
 }
 
-.hex-pool {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-  justify-content: center;
-}
-.hex-chip {
-  font-family: var(--font-display);
-  font-size: 1rem;
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  border: 1px solid var(--border-strong);
-  background: var(--bg-surface-2);
-  color: var(--text-primary);
-  cursor: pointer;
-}
-.hex-chip:hover:not(:disabled) { border-color: var(--accent-blue); }
-.hex-chip.selecionado {
-  background: var(--accent-blue);
-  border-color: var(--accent-blue);
-  color: #fff;
-}
-.hex-chip.usado {
-  opacity: 0.25;
-  cursor: default;
-}
 .hex-hint {
   font-size: 0.8rem;
   color: var(--text-muted);
