@@ -440,6 +440,35 @@
       if (atual) select.value = atual;
     }
 
+    // --- Formata o detalhe de uma rolagem (dados usados, atributo/perícia, execução absoluta) ---
+    function formatarDetalhe(detalhe) {
+      const cabecalho = [detalhe.atributoNome, detalhe.periciaNome].filter(Boolean).join(' · ');
+
+      let dados = detalhe.detalheBase;
+      if (detalhe.rolagensAtributo?.length) {
+        dados += ` + ${detalhe.rolagensAtributo.length}d6 [${detalhe.rolagensAtributo.join(', ')}]`;
+      }
+      if (detalhe.rolagensVantagem?.length) {
+        dados += ` + ${detalhe.rolagensVantagem.length}d6 vantagem [${detalhe.rolagensVantagem.join(', ')}]`;
+      }
+      if (detalhe.valorPericia) {
+        dados += ` + perícia ${detalhe.valorPericia}`;
+      }
+      if (detalhe.bonus) {
+        dados += detalhe.bonus > 0 ? ` + ${detalhe.bonus} bônus` : ` − ${Math.abs(detalhe.bonus)} bônus`;
+      }
+      if (detalhe.execucaoAbsoluta) {
+        dados += ` — Execução absoluta ${detalhe.execucaoAbsoluta.tipo}! (${detalhe.execucaoAbsoluta.texto})`;
+      }
+
+      return cabecalho ? `${cabecalho} — ${dados}` : dados;
+    }
+
+    function labelPericiaComposta(jogada) {
+      const nomes = jogada.pericias_compostas.map((id) => PERICIAS.find((p) => p.id === id)?.nome || id);
+      return `${nomes.join(' + ')} ÷ ${jogada.divisor}`;
+    }
+
     // --- Jogadas base do livro, clicáveis pra rolar direto ---
     const NOMES_GRUPOS = { chutes: 'Chutes', passes: 'Passes', dribles: 'Dribles', defesa: 'Defesa', goleiro: 'Goleiro' };
     const NOMES_ATRIBUTOS_CURTO = Object.fromEntries(ATRIBUTOS.map((a) => [a.id, a.nome]));
@@ -483,11 +512,11 @@
           // Atributo fixo (perícia simples ou composta com atributo definido) — rola direto
           const periciaDef = PERICIAS.find((p) => p.id === jogada.pericia);
           if (periciaDef) {
-            executarRolagem(jogada.nome, atributosEscolhidos[periciaDef.atributo] || 0, valorPericia);
+            executarRolagem(jogada.nome, atributosEscolhidos[periciaDef.atributo] || 0, valorPericia, NOMES_ATRIBUTOS_CURTO[periciaDef.atributo], periciaDef.nome);
             return;
           }
           if (jogada.atributo) {
-            executarRolagem(jogada.nome, atributosEscolhidos[jogada.atributo] || 0, valorPericia);
+            executarRolagem(jogada.nome, atributosEscolhidos[jogada.atributo] || 0, valorPericia, NOMES_ATRIBUTOS_CURTO[jogada.atributo], labelPericiaComposta(jogada));
             return;
           }
 
@@ -503,7 +532,7 @@
               optBtn.addEventListener('click', (ev) => {
                 ev.stopPropagation();
                 const atrId = optBtn.dataset.atributoEscolhido;
-                executarRolagem(jogada.nome, atributosEscolhidos[atrId] || 0, valorPericia);
+                executarRolagem(jogada.nome, atributosEscolhidos[atrId] || 0, valorPericia, NOMES_ATRIBUTOS_CURTO[atrId], labelPericiaComposta(jogada));
                 renderJogadasBase(); // devolve o card ao normal
               });
             });
@@ -576,7 +605,7 @@
       }
     }
 
-    async function executarRolagem(nomeJogada, valorAtributo, valorPericia) {
+    async function executarRolagem(nomeJogada, valorAtributo, valorPericia, atributoNome = null, periciaNome = null) {
       const resultado = await rolarEEnviar({
         campanhaId: campanhaAtual ? campanhaAtual.id : null,
         fichaId: fichaAtual.id,
@@ -584,6 +613,8 @@
         nomeJogada,
         valorAtributo,
         valorPericia,
+        atributoNome,
+        periciaNome,
       });
 
       const box = document.getElementById('resultado-box');
@@ -594,9 +625,7 @@
       if (resultado.execucaoAbsoluta?.tipo === 'positiva') numero.classList.add('absoluta-positiva');
       if (resultado.execucaoAbsoluta?.tipo === 'negativa') numero.classList.add('absoluta-negativa');
       numero.textContent = resultado.resultado;
-      detalhe.textContent = resultado.execucaoAbsoluta
-        ? `${resultado.detalheBase} — Execução absoluta ${resultado.execucaoAbsoluta.tipo}! (${resultado.execucaoAbsoluta.texto})`
-        : resultado.detalheBase;
+      detalhe.textContent = formatarDetalhe(resultado);
       box.style.display = 'block';
 
       historicoSessao.unshift({ jogada: nomeJogada, resultado: resultado.resultado, detalhe: resultado, hora: new Date().toISOString() });
@@ -616,8 +645,11 @@
         const hora = new Date(r.hora).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
         return `
           <div class="historico-item">
-            <span class="jogada-nome">${r.jogada}<br/><span class="hora">${hora}</span></span>
-            <span class="resultado ${classeExtra}">${r.resultado}</span>
+            <div class="historico-item-topo">
+              <span class="jogada-nome">${r.jogada}<br/><span class="hora">${hora}</span></span>
+              <span class="resultado ${classeExtra}">${r.resultado}</span>
+            </div>
+            ${r.detalhe ? `<div class="historico-detalhe">${formatarDetalhe(r.detalhe)}</div>` : ''}
           </div>
         `;
       }).join('');
@@ -629,7 +661,9 @@
       const periciaId = document.getElementById('select-pericia-jogada').value;
       const valorPericia = periciaId ? (periciasEscolhidas[periciaId] || 0) : 0;
       const nomeJogada = document.getElementById('input-nome-jogada').value.trim() || 'Jogada';
-      await executarRolagem(nomeJogada, valorAtributo, valorPericia);
+      const atributoNome = ATRIBUTOS.find((a) => a.id === atributoId)?.nome || null;
+      const periciaNome = periciaId ? (PERICIAS.find((p) => p.id === periciaId)?.nome || null) : null;
+      await executarRolagem(nomeJogada, valorAtributo, valorPericia, atributoNome, periciaNome);
     });
   </script>
 </body>

@@ -407,12 +407,14 @@
 /* Histórico de rolagens */
 .historico-lista { display: flex; flex-direction: column; gap: 8px; margin-top: 12px; }
 .historico-item {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
   padding: 10px 14px;
   background: var(--bg-surface-2);
   border-radius: var(--radius);
+}
+.historico-item-topo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 .historico-item .jogada-nome { font-size: 0.85rem; }
 .historico-item .hora { font-size: 0.7rem; color: var(--text-muted); }
@@ -423,3 +425,10 @@
 }
 .historico-item .resultado.absoluta-positiva { color: var(--accent-gold); }
 .historico-item .resultado.absoluta-negativa { color: var(--danger); }
+.historico-detalhe {
+  margin-top: 6px;
+  padding-top: 6px;
+  border-top: 1px solid var(--border);
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}

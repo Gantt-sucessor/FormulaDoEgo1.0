@@ -4,9 +4,11 @@ import { rolarJogada } from '../regras/dados.js';
 /**
  * Rola uma jogada. Se houver campanhaId, salva no Supabase e o mestre vê em tempo real.
  * Sem campanha (ficha solta), só calcula o resultado localmente — não fica salvo em lugar nenhum.
+ * atributoNome/periciaNome são só pra exibição (mostrar no histórico o que foi usado na jogada).
  */
-export async function rolarEEnviar({ campanhaId = null, fichaId, nomePersonagem, nomeJogada, valorAtributo, valorPericia, vantagens = 0, desvantagens = 0, bonus = 0 }) {
-  const resultado = rolarJogada({ valorAtributo, valorPericia, vantagens, desvantagens, bonus });
+export async function rolarEEnviar({ campanhaId = null, fichaId, nomePersonagem, nomeJogada, valorAtributo, valorPericia, vantagens = 0, desvantagens = 0, bonus = 0, atributoNome = null, periciaNome = null }) {
+  const base = rolarJogada({ valorAtributo, valorPericia, vantagens, desvantagens, bonus });
+  const resultado = { ...base, atributoNome, periciaNome };
 
   if (campanhaId) {
     const { error } = await supabase.from('rolagens').insert({
