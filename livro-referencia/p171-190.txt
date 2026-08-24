@@ -1,0 +1,31 @@
+[PÁGINAS 171-190]
+
+TIRANO ATROZ (continuação)
+  - Trono do rei ✪ (com bola) — Esf +4PdE|Dis:raio Consumir m|Dur:d2+1 rodadas|TdA:Ação egoísta — cria área no setor da posição; dentro: 1 vantagem em Potência, dribla usando Potência; se subjulgado entrar na área com bola (ou ela passar por cima), avança até e faz devorar/interceptação +6 bônus.
+  - Hierarquia forçada (variante, com bola) — Esf +4PdE|Dur:Consumirx2+1 turnos|TdA:Ação egoísta — +1 vantagem em Potência e devorar por subjulgado (ex: 3 subjulgados = 3 vantagens), mas eles saem do estado (voltam a 0x); também pode devorar oponentes durante a duração.
+  - Vão seguir o rei! (fluxo, 1x) — Esf +4PdE|Dis:todo o time|Dur:Consumir+4 turnos|TdA:Ação egoísta — com bola: todo seu time fica subjulgado+inspirado; se aliado pegar a posse durante, pode obrigá-lo a te passar na hora.
+
+FELINO CÉLERE (★★★★☆) — "velocidade/aceleração". Passiva "Velocidade latente": gastar todos os fôlegos numa rodada só se movendo dá +1 fôlego na próxima rodada (acumulativo, máx +5) + 1 ponto de aceleração (gasto pra melhorar habilidades).
+  Habilidades: Mach 44, Tiro em movimento ❖, Pantera x trem (variante), Ângulo de 44° (fluxo).
+  - Mach 44 (sem bola) — Esf +2PdE|Dur:Constância+1 turnos|TdA:Ação egoísta|G.Ex:2 fôlegos — avança 1m por turno automaticamente (2 pontos aceleração = 2m).
+  - Tiro em movimento ❖ (com bola) — Esf +2PdE|Dis:Constância+2m/DdC ou DdP|Dur:instantâneo|TdA:Ação egoísta+tática — avança Constância+2m driblando com Destreza, chuta/passa com Destreza no final (2 pontos aceleração = +1 vantagem +2m).
+  - Pantera x trem (variante) — pré-req: você ou aliado adjacente com bola, aliado sem ter gasto ação de movimento. Esf +4PdE|Dur:instantâneo|TdA:Ação egoísta|G.Ex:4 fôlegos — avançam juntos Constância somada de ambos (3 pontos aceleração = duplica sua Constância).
+  - Ângulo de 44° (fluxo, 1x) — Esf +4PdE|Dis:Constância+3m|Dur:instantâneo|TdA:Ação egoísta+tática — avança Constância+3m, chute/passe +2 bônus por 3m andados (4 pontos aceleração = vantagens em vez de bônus).
+
+ESPECTRO INÂNIME (★☆☆☆☆) — "controle de bola". Desbloqueia jogada especial "Domínio acrobático" — Perícia:Agilidade|Dj:25(+1 por oponente em 3x3m)|Dis:pessoal|TdA:Reação — domina bola de passe/levantar bola; se ganhar, fica no ar 2 turnos e voleio seguinte dá confuso em quem tentar interceptar.
+  Habilidades: Black hole trap ✪, Recepção orientada, Voleio falso (variante), Tenta acompanhar (fluxo).
+  - Black hole trap ✪ (sem bola) — Esf +3PdE|Dur:Agilidade+1 turnos|TdA:Ação egoísta+2 reações — domínio acrobático, fica no ar; se suceder, quem quiser interceptar seu voleio em 4x4m gasta ação de movimento e tem 1 desvantagem.
+  - Recepção orientada (com bola) — Esf +3PdE|Dis:3m|Dur:instantâneo|TdA:2 reações|G.Ex:4 fôlegos — ao dominar passe: avança 3m driblando com testes de domínio, driblados ficam caídos 2 turnos; termina com levantar bola +3 bônus.
+  - Voleio falso (variante) — Esf +4PdE|Dur:instantâneo|TdA:Ação egoísta+3 reações|G.Ex:4 fôlegos — voleio; se tentarem interceptar, cancela (alvo fica confuso 3 turnos), anda 4m, faz outro voleio (pode repetir por alvo); voleio final +1 vantagem por voleio falso feito.
+  - Tenta acompanhar (fluxo, 1x) — Esf +5PdE|Dis:DdC/pessoal|Dur:instantâneo|TdA:Ação egoísta+3 reações — domínio acrobático +2 vantagens; alvos em 6x6m testam Momento dj=seu resultado+5, falha=caído 3 turnos; voleio seguinte +2 vantagens.
+
+CAMALEÃO MIMÉTICO (★★★★★) — "cópia". Mecânica "Diante dos seus olhos": no seu setor, ação egoísta troca entre Forma ofensiva (+3 bônus atributos ofensivos por 3 jogadas) e Forma defensiva (equivalente).
+  Habilidades: Cópia 99% ✪, Simulacro de movimento ❖, Formação double player (variante), Mimetismo perfeito (fluxo).
+  - Cópia 99% ✪ (sem bola) — Esf +2PdE|Dis:10x10m|Dur:instantâneo|TdA:2 reações|Prep:M/2 turnos — copia e "guarda" 1 habilidade (não fluxo/variante) de um alvo, usa com metade do PdE; não pode copiar outra até usar a guardada.
+  - Simulacro de movimento ❖ (com bola) — Esf +3PdE|Dis:10x10m|Dur:Posicionamento+3 turnos|TdA:Reação|G.Ex:3 fôlegos — copia os 2 maiores atributos do alvo, trocando os seus.
+  - Formação double player (variante) — pré-req: 1 perícia em comum com 3+ pontos com o aliado. Esf +4PdE|Dis:10x10m|Dur:Posicionamento+3 turnos|TdA:2 reações|G.Ex:3 fôlegos — copia TODOS atributos/perícias do aliado; ambos ficam inspirados.
+  - Mimetismo perfeito (fluxo, 1x) — Esf +4PdE|Dis:10x10m|Dur:instantâneo|TdA:2 reações|Prep:M/3 turnos — copia/guarda 1 habilidade de fluxo de um alvo, usa com metade do PdE.
+
+CARRASCO SINTÉTICO (★★☆☆☆) — "retaliação". Mecânica "Retaliação": todo efeito negativo recebido dá +1 ponto de fibra; 1 ponto de fibra = +2 bônus em jogadas de Potência/Robustez.
+  Habilidades: Deus ex machina, Justiça na marra, Tiro irrefreável (variante), Brutalidade exercida (fluxo).
+  - Deus ex machina (sem bola) — Esf +3PdE|Dis:adjacente|Dur:variável|TdA:Ação egoísta+2 reações|G.Ex:3 fôlegos — antes de rolar Robustez J vs J: testa Músculos vs Pressão do alvo; se vencer, escolhe: Tranco (lesionado d4+1 turnos), Pressionar (exausto d2+2 turnos), ou Ombro a ombro (caído 2 turnos).

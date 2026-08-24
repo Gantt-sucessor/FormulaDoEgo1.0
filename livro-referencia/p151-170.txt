@@ -1,0 +1,36 @@
+[PÁGINAS 151-170]
+
+PEGx PEGx (Razoável) — Esf +4PdE | Dis: adjacente/4x4m | Dur: 4 turnos | TdA: Ação egoísta+tática — sem bola, adjacente a alvo: marcação com 2 vantagens em segurá-lo na 1ª rodada; cria área 4x4 que te acompanha; inimigos gastam x2 fôlegos dentro dela.
+
+GANÂNCIA DO POLVO (Razoável) — Esf +4PdE | Dis: pessoal | Dur: 2 turnos | TdA: Ação egoísta(+reação por alvo) — sem bola: escolhe aliados (1 reação cada), dá +3 no próximo teste deles; se ganharem, -1 PdE seu e escolhe +1m DdC, +1m DdP ou +1 fôlego por 2 turnos (acumula).
+
+--- COMPLEXOS (3 chamas) ---
+TOPO DA CADEIA — Esf +5PdE | Dur: Consumir+4 turnos | TdA: Ação egoísta | G.Ex: 1 PdS — sem bola: por Consumir+4 turnos, "devorar" pode ser feito contra inimigos também (regra padrão); devorar aliados nesse modo tem +3 bônus e -1 PdE por alvo devorado.
+
+SALTO DE CONEJITO — Esf +4PdE | Dis: pessoal/6x6m | Dur: Especialização+3 turnos | TdA: Ação egoísta+movimento — sem bola: pula, fica no ar por Especialização+3 turnos; alvos em 6x6m perdem 4 fôlegos; se receber passe nesse estado, voleio instantâneo com 2 vantagens+2 bônus.
+
+VISÕES CRUZADAS — Esf +4PdE | Dis: 8m/5m | Dur: Emocional+5 turnos | TdA: Ação egoísta+2 reações — aliado com bola a até 8m: anda 5m e pede passe (+4 bônus se ele passar); ao dominar, ambos andam 5m e rolam d2 — se resultado igual, entram em reação química.
+
+AINDA TÁ MORNO... — Esf +4PdE | Dur: 2 rodadas | TdA: Ação egoísta | G.Ex: 2 PdS — ao ganhar J vs J, alvo testa Determinação vs dj=Emocionalx6; se falhar, por 2 rodadas todo chute/drible/passe exige teste de Determinação dj18 antes (falha = não faz a jogada, gasta ações mesmo assim).
+
+AVANÇO ESTRAÇALHADOR — Esf +4PdE | Dur: d6+2 turnos | TdA: Ação egoísta | Prep: M/3 turnos — com bola: por d6+2 turnos, Drible usa Robustez, oponentes -5 bônus pra roubar/jogo de corpo; cada drible bem-sucedido dá ego alto por Consumir+1 turnos (acumulativo).
+
+=== ARMAS (classes, cada uma com nível de dificuldade ★) ===
+
+INDÔMITO MUTÁVEL (★★★★☆) — "adaptação como arma". Mecânica especial "Divino general imoral": desbloqueia efeito ߷Adaptado (via habilidades ou 1 PdS no turno) — cada acúmulo dá -1 bônus a um oponente executando uma jogada J vs J específica contra você (máx -5 por jogada, dura até fim da partida).
+  Habilidades: Chute direto, Peças fora do lugar ✪, Monto e desmonto (variante), Rei demônio (fluxo).
+  - Chute direto (sem bola) — Esf +3PdE|Dis:DdC|Dur:instantâneo|TdA:2 reações|G.Ex:[1PdS] — ao receber passe/rebote, chute regular fora do turno +5 bônus (perna ruim: gasta 1PdS pra voleio de armas duplas usando perna boa, +6 bônus).
+  - Peças fora do lugar ✪ (com bola) — Esf +4PdE|Dis:Posicionamento+1m|Dur:Cognição+1 turnos|TdA:Ação egoísta — cria área ao redor; quem entrar recebe Adaptado x1 (1x por pessoa/partida).
+  - Monto e desmonto (variante) — Esf +5PdE|Dis:todo setor|Dur:Posicionamento+1 turnos|TdA:Ação egoísta — na zona dourada com bola: inimigos do mesmo setor têm 1 desvantagem em J vs J contra você; +Adaptado x1 por afetado.
+  - Rei demônio (fluxo, 1x por fluxo) — Esf +5PdE|Dis:pessoal/DdC|Dur:instantâneo|TdA:Ação egoísta+2 reações|G.Ex:2PdS — aliado com bola: avança 6m, testa Posicionamento vs Determinação dele; se ganhar, ele é obrigado a passar +6m DdP+4 bônus pra você; ao receber, chute regular com 2 vantagens+4 bônus.
+
+ABELHA ANÁRQUICA (★★☆☆☆) — "criatividade em dribles". Passiva inerte "Eu 'tou voando alto": Drible custa -1 reação necessária (não aplica a habilidades da classe).
+  Habilidades: Levantando voo ❖, Hyperspeed scissors, Bee-shot (variante), 1001 possibilidades (fluxo).
+  - Levantando voo ❖ (sem bola) — Esf +2PdE|Dis:3m|Dur:instantâneo|TdA:2 reações|G.Ex:2 fôlegos — levantar bola garantido de 3m (em vez de 1m), não interceptável naturalmente; jogadas de levantar bola seguintes +3 bônus.
+  - Hyperspeed scissors (com bola) — Esf +3PdE|Dis:5m|Dur:instantâneo|TdA:2 reações|G.Ex:2 fôlegos — contra roubo/jogo de corpo declarado: drible +3 bônus; se ganhar, avança 5m driblando garantido quem estiver no caminho (exceto goleiro; zagueiro +4 bônus mas não garantido).
+  - Bee-shot (variante) — pré-req: você e o passador driblaram 1 alvo cada nessa rodada. Esf +4PdE|Dis:DdC-2m|Dur:instantâneo|TdA:Ação egoísta+2 reações — voleio usando maior perícia de Drible em vez de precisão, -2m mas 2 vantagens.
+  - 1001 possibilidades (fluxo) — Esf +4PdE|Dur:Driblexd2 turnos|TdA:Ação egoísta — com bola: +2 bônus em Drible por Driblexd2 turnos; cada drible bem-sucedido soma mais +2 bônus (acumulável).
+
+TIRANO ATROZ (★★★★★) — "devorar como dominação". Passiva inerte "Vilão do cenário": devorar um alvo o torna "subjulgado" — 1x devorado=d4+1 turnos; 2x=d6+1 rodadas; 3x+=até fim da partida.
+  Habilidades: Curvem-se, Trono do rei, Hierarquia forçada (variante), Vão seguir o rei! (fluxo).
+  - Curvem-se (sem bola) — Esf +2PdE|Dis:8x8m|Dur:instantâneo|TdA:Ação egoísta — quem tem posse em raio 8x8m: testa Consumir vs Emocional dele; se ganhar, devora — inimigo é obrigado a passar pra oponente à sua escolha; aliado é obrigado a passar pra você. Alvos subjulgados falham automaticamente.

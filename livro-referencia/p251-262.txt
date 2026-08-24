@@ -1,0 +1,15 @@
+[PÁGINAS 251-262]
+
+ASTRO ASCENDENTE (continuação)
+  - Pose glam! (com bola) — Esf +3PdE|Dis:5x5m|Dur:1 rodada|TdA:Ação egoísta+movimento — área estática 5x5m: quem estiver dentro (você/aliados) tem Enaltecido até sair; +1 PdS a cada 2 aliados na área na ativação.
+  - Karatê glam! (variante) — Esf +5PdE|Dis:4x4m|Dur:1 rodada|TdA:2 reações+movimento — alvo com bola a até 4m: cria cerco 4x4m (ele não sai); se chutar/passar, cabeceio defensivo com 2 vantagens; ao fim da rodada, roubo com 2 vantagens (rebote obrigatório).
+  - Perfeição glam! (fluxo, 1x) — Esf +6PdE|Dis:6x6m|Dur:2 rodadas|TdA:Ação tática+egoísta+movimento — sem bola: você e time ficam enaltecidos; área de 6x6m te acompanha — passe/chute na área = cabeceio defensivo automático (sem custo de reação); alvo com bola na área = roubo automático.
+
+[NOTA: as páginas seguintes do PDF (~254-258) parecem repetir o cabeçalho "Blindado Incansável" com o mesmo texto de Astro Ascendente — provável erro de diagramação/rascunho incompleto no documento original. Considerar checar com o Gabriel se há versão mais recente dessas páginas.]
+
+DEVOTO ILUMINADO (★★★★☆) — última arma do livro, "sorte/malícia". Mecânica "Karma": ganhar jogo sujo + 3 PdE = rouba 1 PdS do alvo (se ele tiver 1+). Sempre começa a partida com 1 PdS.
+  Habilidades: Por bem ou por mal!, Aplicar malícia, Plano infalível (variante), Simulação perfeita (fluxo).
+  - Por bem ou por mal! (sem bola) — Esf +4PdE|Dis:3m|Dur:4 turnos|TdA:Ação egoísta+reação — passe/chute em 3m: cabeceio defensivo +3 bônus; sucesso = vira passe alto, ambos recebem enaltecido 4 turnos.
+  [NOTA: as habilidades "Aplicar malícia", "Plano infalível" e "Simulação perfeita" desta última arma não têm texto legível nas páginas finais do PDF (documento parece cortado/incompleto no fim). Vale confirmar com o Gabriel se existe uma versão mais completa do livro.]
+
+=== FIM DA LEITURA DO LIVRO (262 páginas) ===

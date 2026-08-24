@@ -1,0 +1,67 @@
+[PÁGINAS 31-50]
+
+Trash talk — Perícia: emocional | Dj: J vs J | Distância: 5m | Ação: Ação egoísta | Anormalidade: emocional vs emocional (resistência); se ganhar, alvo fica estressado por 1 rodada (acumula efeito, não duração).
+
+--- GOLEIRO ---
+Defesa de goleiro — Perícia: agilidade | Dj: chute inimigo | Distância: Adjacente | Ação: 2 reações | Anormalidade: para a trajetória do chute antes que entre e toma posse. Só posição goleiro.
+Espalmar — Perícia: Instintos | Dj: chute inimigo | Distância: Adjacente | Ação: Reação | Anormalidade: defende e a bola volta metade da trajetória, fica livre. Só goleiro.
+Erguer base — Perícia: constância + Posicionamento ÷2 | Dj: 10 | Distância: pessoal | Ação: Ação de movimento | Anormalidade: pode fazer defesa de goleiro/espalmar gastando 1 reação a menos; dj aumenta +2 por turno seguido usado; deve rerolar a cada início de turno.
+
+--- OUTRAS AÇÕES ---
+Investida — Perícia: - | Dj: - | Distância: constância | Ação: Ação tática | Anormalidade: avança metros = constância+1 em qualquer direção.
+Pedir passe — Perícia: - | Dj: - | Distância: - | Ação: Ação egoísta | Anormalidade: aliado com a posse pode passar pra você gastando 1 reação. [Reação]
+Descansar — Perícia: constância | Ação: ação tática+ação de movimento+reação | Anormalidade: retira PdE = 1+(constância÷2).
+Levantar bola — Perícia: trajetória+instintos÷2 | Dj: 15 | Distância: 1m | Ação: 3 fôlegos | Anormalidade: joga a bola 1m em qualquer direção, avança até ela e faz voleio/cabeceio/domínio mesmo sem receber passe. (bola pode ser interceptada)
+Corta-ângulo — Perícia: escudo | Dj: J vs J | Distância: Adjacente | Ação: Ação tática | Anormalidade: acompanha o alvo, que só pode agir com a perna ruim enquanto cortado; escape = escudo vs momento (resistência). (só contra quem tem posse)
+Cabeceio — Perícia/Dj: variável | Distância: Adjacente | Ação: Reação | Anormalidade: 2 formas — Ofensiva (só com efeito "no ar"): substitui voleio, 1 desvantagem, -3m na DdC, goleiro só pode espalmar. Defensiva: substitui interceptação, -3 bônus, não aumenta distância com PdE; se interceptar, passe curto +3 bônus pro aliado mais próximo (sem aliado próximo = rebote de cabeceio obrigatório). Atributo: Agilidade (ambas).
+
+--- DEVORAR (só contra aliados) ---
+Devorar — Perícia: Consumir+variável÷2 | Dj: J vs J | Distância/Ação: variável | Anormalidade: rouba o protagonismo de um aliado; muda conforme o método:
+  - Interceptação: intercepta chute/passe de aliado. Distância 1m (+1m = +1PdE). Perícia: Instintos. Ação: 2 reações+ação egoísta. [Reação] (devora o receptor, não o passador)
+  - Roubo/Jogo de corpo: rouba a bola do aliado com posse. Distância: Adjacente. Perícia: Agilidade. Ação: Ação tática+ação egoísta.
+  - Não passar: ao pedirem passe a você, pode negar e gastar +1PdE pra testar Consumir vs Determinação do alvo; se ganhar, devora.
+  - Trash talk: desmoraliza. Distância 5m. Perícia: Emocional. Ação: Ação tática+ação egoísta.
+  Ao devorar: você recebe "ego alto" por Ego×2 turnos; alvo recebe "ego ferido" pela mesma duração (ambos acumuláveis em turnos e quantidade). Ego inflado/quebrado têm mesma duração e são acumulativos.
+
+JOGADAS FALHAS
+Passe falho: role d4 — a bola vai para um lado (metros = distância do passe), fica livre.
+Domínio/voleio falho: "fura" a posse, bola passa pelas costas até fim da distância, fica livre.
+Jogo sujo falho: trapaça não funciona, alvo anula o malefício, você recebe "lesionado" por d2 turnos (narrador pode dar cartão amarelo).
+Devorar falho: você recebe "ego ferido" por Ego×2 turnos; alvo original não ganha nada.
+
+PONTOS DE SORTE [PdS]
+Representam oportunidades do destino. Máximo padrão: 3.
+Adquire +1 PdS ao: tirar execução absoluta positiva em J vs J (exceto análise); dominar/voleio bola livre por coincidência; 3 jogadas bem-sucedidas seguidas (exceto análise/marcação); entrar pela 1ª vez na zona dourada (1x por partida).
+Gastando PdS (1x por turno):
+  Custo 1: +1 vantagem adicional na jogada; OU +3 fôlegos na rodada; OU +1 reação adicional.
+  Custo 2: +2 vantagens adicionais; OU +5 fôlegos na rodada; OU +1 reação e +1 ação egoísta adicional.
+  Custo 3: vitória garantida em J vs J; OU +8 fôlegos na rodada; OU +1 reação, +1 ação egoísta e +1 ação tática adicionais.
+
+ARMAS (weapons/classes)
+Representam forma de jogar / especialização / habilidade assinatura. Cada arma dá: 1 mecânica especial exclusiva; 1 habilidade só com bola; 1 habilidade só sem bola; 1 habilidade variante de uma padrão; 1 habilidade utilizável no fluxo. Personagem só pode ter 1 arma, fixa após escolha.
+
+POSIÇÕES / SETORES (4 áreas)
+- Zaga (zagueiros): defesa do gol aliado, impede avanço inimigo.
+- Meio-campo (centrais): controle de campo, prevê jogadas inimigas, apura passes.
+- Laterais (pontas): avanço da equipe de forma inteligente, prepara terreno pros atacantes.
+- Ataque (atacantes): avança e marca gols, papel principal na vitória.
+Posição escolhida na criação afeta diretamente a zona dourada.
+
+ZONA DOURADA
+Pequena área na posição de especialização; dentro dela, potencial aumenta muito.
+Escolhe um bloco na área de especialização. Tamanho depende do atributo Ego:
+  +1/+2 Ego = 1x1 | +3 Ego = 2x2 | +4 Ego = 3x3
+Dentro dela: todas perícias duplicadas (ex: +3 Agilidade → +6); dependendo da classe, ganha habilidade variável disponível.
+Ativando: precisa reativar periodicamente; só no setor da posição (ex: ponta=lateral); só no próprio turno; opcionalmente +1 PdE a cada 2 turnos ligada (pode anular -1 PdE gastando 1 PdS); pode desativar quando quiser.
+
+HABILIDADE VARIÁVEL
+Substitui a habilidade comum da classe em certas condições:
+  - Símbolo ✪: usável em forma variante se estiver dentro da zona dourada.
+  - Símbolo ❖: usável só com um aliado que tenha os requisitos, ativando "reação química".
+
+ÓTICAS
+Visões de mundo diferentes de cada jogador (equivalente aos "olhos"/ego). Escolhe 1 ótica, com 3 níveis evolutivos:
+  Nível 1: +passiva da ótica.
+  Nível 2: +melhora da passiva.
+  Nível 3: +melhora da passiva + habilidade de ótica.
+Evolui via níveis de categoria (ver "Gênios e Aprendizes"). A ótica define quais catalisadores pode escolher ao evoluir.

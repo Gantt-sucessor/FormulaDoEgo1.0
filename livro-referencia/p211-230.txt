@@ -1,0 +1,31 @@
+[PÁGINAS 211-230]
+
+VÂNDALO DUELISTA (continuação)
+  - Gyro shot ✪ (com bola) — Esf +4PdE|Dis:DdC|TdA:Ação egoísta+tática — chute curvo +4 bônus; quem interceptar testa Momento dj=Criatividadex4, falha=confuso 3 turnos+(-3 bônus interceptar, goleiros ignoram).
+  - Sword screw (variante) — Esf +4PdE|Dis:4x4m/DdC|TdA:3 reações — chute na trajetória quica; alvos em 4x4m ficam confusos 3 turnos; bola volta à trajetória +3m DdC, goleiro -3 bônus.
+  - Minha melhor performance (fluxo, 1x) — Esf +6PdE|Dis:8m/DdC|TdA:Ação egoísta+tática|G.Ex:5 fôlegos — cria "rota" de 8m, avança driblando tudo no caminho com Corte+2 vantagens; chute curvo final +3 bônus por driblado.
+
+ESQUALO SIDERAL (★★★☆☆) — "passe em grupo/orbitando". Efeito "Orbitando": ganho ao fazer passe curto/antecipado — você acompanha o movimento do receptor; ao receber passe, pode repassar em vez de dominar/voleio.
+  Habilidades: Andou na prancha, Meu sol brilhe ❖, Cardume (variante), Devorador de estrelas (fluxo).
+  - Andou na prancha (sem bola) — Esf +4PdE|Dis:3m|Dur:4 turnos|TdA:Ação egoísta+reação|G.Ex:3 fôlegos — acompanha alvo com bola por 4 turnos (ele fica flanqueado); ao fim, roubo +4 bônus.
+  - Meu sol brilhe ❖ (com bola) — Esf +2PdE(+2)|Dis:3m|TdA:3 reações|G.Ex:3 fôlegos — passe antecipado + avança 3m; aliado devolve passe antecipado, avança 3m também; interceptadores ficam confusos; repetível com o mesmo alvo.
+  - Cardume (variante) — pré-req: orbitando o alvo e ele te passar. Esf +5PdE|Dis:5m|TdA:3 reações|G.Ex:5 fôlegos — você e aliados do setor avançam 5m juntos; quem passar entre vocês fica confuso 4 turnos; passe garantido no fim.
+  - Devorador de estrelas (fluxo, 1x) — Esf +5PdE|Dis:time aliado|Dur:2 rodadas|TdA:Ação egoísta+movimento — time faz passe antecipado +3m DdP ignorando roubo declarado; inimigos que interceptam ficam confusos.
+
+CORVO PEJORATIVO (★★★★☆) — "manipulação de moral do time". Mecânica "Aceito o segundo lugar": +1 PdE soma Emocional no teste J vs J de aliado em 6x6m.
+  Habilidades: Livrar-se do estorvo, Sobrepor protagonismo ✪, Poleiro do corvo (variante), Pensa corvo, pensa corvo (fluxo).
+  - Livrar-se do estorvo (sem bola) — Esf +4PdE|Dur:Emocional+2 turnos|TdA:Ação egoísta — escolhe 2 aliados (não você): um ego ferido+confuso, outro ego alto+inspirado.
+  - Sobrepor protagonismo ✪ (com bola) — Esf +4PdE|Dur:instantâneo|TdA:Ação egoísta|G.Ex:3 fôlegos — escolhe Isca (passe longo +2m+5 bônus, força 2 oponentes adjacentes imóveis 2 turnos) ou Abutre (alvos em 2m imóveis 2 turnos, você avança 4m).
+  - Poleiro do corvo (variante) — Esf +5PdE|Dis:5x5m|Dur:Emocional+3 turnos|TdA:Ação egoísta|G.Ex:1PdS — área estática: suas interceptações garantidas, passes +2m DdP; alvos dentro: ego ferido até sair, -3 bônus em testes de Ego.
+  - Pensa corvo, pensa corvo (fluxo, 1x) — Esf +6PdE|Dur:2 rodadas|TdA:Ação egoísta — escolhe aliado (não você) = ego quebrado 2 rodadas; resto do time = inspirado 2 rodadas; você ganha ego alto por jogada bem-sucedida do time.
+
+SHINOBI ABSCONSO (★★☆☆☆) — "furtividade/velocidade". Mecânica "Kage mane no jutsu": gastar 1 fôlego adjacente a inimigo = furtivo pelos próximos 3 fôlegos; furtivo permite driblar com Destreza.
+  Habilidades: Passos sorrateiros, Bukijutsu de Shurikens ❖, Voleio de Kusarigama (variante), Centro do Mundo (fluxo).
+  - Passos sorrateiros (sem bola) — Esf +3PdE|Dis:4m|Dur:instantâneo/2 turnos|TdA:2 reações|G.Ex:2 fôlegos — ação reativa: furtivo, avança 4m, alvos no caminho +1m adicional e confuso 2 turnos; pode pedir passe e voleio +2 bônus por confuso.
+  - Bukijutsu de Shurikens ❖ (com bola) — Esf +4PdE|Dis:DdP/4m(+2m)|TdA:2 reações|G.Ex:3 fôlegos — passe adiantado +3 bônus, avança 4m(+2m lateral), furtivo por Instintos+2 turnos.
+  - Voleio de Kusarigama (variante) — pré-req: aliado em 6m sofre desarme e você furtivo. Esf +5PdE|Dis:6m/DdC|TdA:Ação egoísta+2 reações — aliado levanta bola não-interceptável; você avança, fica no ar, voleio +7 bônus.
+  - Centro do Mundo (fluxo, 1x) — Esf +6PdE|Dur:2 rodadas|TdA:Ação egoísta — furtivo, ações reativas custam 1 reação, sem malefícios de flanqueamento, primeiros 4m andados/rodada sem gastar fôlego.
+
+TREM SÔNICO (★★☆☆☆) — "velocidade explosiva/investidas". Mecânica: investidas preparáveis (+1m por turno preparado).
+  Habilidades: Corro não paro me movo ✪, Jet counter, Área de aceleração (variante), NÃO POSSO PARAR! (fluxo).
+  - Corro não paro me movo ✪ (sem bola) — Esf +4PdE|TdA:2 reações|G.Ex:3 fôlegos|Prep:P/2 turnos — 3 investidas seguidas, cada em direção diferente da anterior: 1ª=+1m, 2ª=+2m, 3ª=+3m.

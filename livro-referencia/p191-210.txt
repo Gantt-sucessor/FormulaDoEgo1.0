@@ -1,0 +1,31 @@
+[PÁGINAS 191-210]
+
+CARRASCO SINTÉTICO (continuação)
+  - Justiça na marra ✪ (com bola) — Esf +4PdE|Dis:DdC[+4m]|Dur:instantâneo|TdA:Ação egoísta+tática — escolhe perna: boa=chute de poder +4m DdC; ruim=chute regular que derruba alvos em 3x3m por 3 turnos, ignora penalidade da perna ruim.
+  - Tiro irrefreável (variante) — Esf +6PdE|Dis:2 setores|Dur:instantâneo|TdA:Ação egoísta+tática — chute de poder com 2 setores de distância; quem quiser interceptar testa Determinação dj20 antes: falha=não intercepta+lesionado d8+1 turnos; sucesso=intercepta mas lesionado d6 turnos.
+  - Brutalidade exercida (fluxo, 1x) — Esf +5PdE|Dur:Músculos rodadas|TdA:Ação egoísta|Prep:P/2 turnos — sem bola: adrenalina por Músculos rodadas, soma Músculos em qualquer teste (exceto chute/passe); pode empurrar alvos 2m gastando 2 fôlegos.
+
+GUARDIÃO SELVÁTICO (★★★☆☆) — "reflexos/reação". Mecânica "Salto, Sinapses": pode fazer jogada de reação mesmo sem reações sobrando, gastando +2 PdE, +2 bônus se usar Instintos.
+  Habilidades: Reflexo florestal ❖, Garra de urso, Caça conjunta (variante), Segunda chance (fluxo).
+  - Reflexo florestal ❖ (sem bola) — Esf +3PdE|Dis:10x10m|Dur:Instintos+2 turnos|TdA:Ação egoísta+Reação — oponente entra em 10x10m: ganha adrenalina, defesas de goleiro/interceptações podem usar Instintos, +3 bônus em Instintos.
+  - Garra de urso (com bola) — Esf +4PdE|Dis:DdP+2m/2 setores|Dur:instantâneo|TdA:2 reações — após defesa de goleiro/interceptação: passe alto +2m DdP; se na zaga/goleiro, passe garantido com 2 setores de distância.
+  - Caça conjunta (variante) — pré-req: você e aliado tentam interceptar o mesmo chute/passe. Esf +4PdE|Dis:interceptação|TdA:Ação egoísta+Reação — somam Instintos no teste, removem 2 efeitos negativos.
+  - Segunda chance (fluxo, 1x) — Esf +5PdE|TdA:Ação egoísta+3 reações — ao falhar defesa de goleiro/espalmar/interceptação: rerola com +2 vantagens ignorando 2 efeitos negativos; fica caído 1 turno depois.
+
+MURALHA TENAZ (★☆☆☆☆) — "marcação/anulação". Mecânica "MODO SEXY!": alvo gasta fôlego a 2m de você → 2 reações pra avançar e começar marcação/corta-ângulo contra ele.
+  Habilidades: Para na muralha! ✪, 0 espaço pessoal, Parados! (variante), SOU F0DA PRA C4RALHO! (fluxo).
+  - Para na muralha! ✪ (sem bola) — Esf +3PdE(+1)|Dis:adjacente|TdA:Ação tática(+reação) — marcação/corta-ângulo +3 bônus; se escapar, 1 reação+1 PdE testa Músculos dj=escape+3, ganha=volta a marcar +3 (repetível).
+  - 0 espaço pessoal (com bola) — Esf +4PdE|Dis:Músculos m|Dur:d6+1 turnos|TdA:Ação tática+egoísta|G.Ex:4 fôlegos — área de Músculos metros ao redor, oponentes dentro contam como marcados; dura até perder posse.
+  - Parados! (variante, com bola) — Esf +5PdE|Dis:3x3m|Dur:Músculos turnos|TdA:Ação tática+egoísta — 2 alvos em 3x3m ficam com ângulo cortado e imóveis.
+  - SOU F0DA PRA C4RALHO! (fluxo, 1x) — Esf +5PdE|Dis:4x4m|Dur:4 turnos|TdA:Ação tática|G.Ex:5 fôlegos — marcação garantida 4 turnos; se outro oponente passar em 4x4m enquanto marca, transfere a marcação pro novo (alvo antigo cai por 2 turnos, repetível).
+
+ARAUTO VIGILANTE (★★★☆☆) — "análise/visão de jogo". Mecânica "Acenda o farol": ao alguém entrar em 5x5m, gasta 1 reação pra analisar; o time inteiro passa a considerar o alvo analisado.
+  Habilidades: Tabuleiro ❖, Redirecionamento tático, Cobrindo brechas (variante), Olhos compartilhados (fluxo).
+  - Tabuleiro ❖ (sem bola) — Esf +5PdE|Dis:5x5m|Dur:Posicionamento+3 turnos|TdA:Ação egoísta+movimento — área estática 5x5m; se alvo com bola entrar, para a habilidade e faz roubo com 2 vantagens; aliados na área +4 bônus atributos ofensivos e Destreza.
+  - Redirecionamento tático (com bola) — Esf +5PdE|Dis:setor/DdP|TdA:Ação egoísta+2 reações|G.Ex:4 fôlegos — dois aliados no mesmo setor trocam de lugar; depois, passe +5 bônus pra um dos que se moveu.
+  - Cobrindo brechas (variante) — pré-req: aliado falhou interceptação/roubo em 4x4m. Esf +4PdE|TdA:Ação egoísta+2 reações — roubo/interceptação com 1 vantagem+2m, soma Posicionamento, inimigo fica com ângulo cortado; aliado recupera 2 reações.
+  - Olhos compartilhados (fluxo, 1x) — Esf +5PdE|Dur:2 rodadas|TdA:Ação egoísta+2 reações — sem bola: time todo soma sua Posicionamento em qualquer teste, +2m DdP; ao analisar alguém, todo o time se move 1m.
+
+VÂNDALO DUELISTA (★★★★☆) — "futebol de rua/drible ofensivo". Desbloqueia jogada especial "Corte" — Perícia:Criatividade|Dj:J vs J|Dis:Adjacente|TdA:Reação+1 fôlego — se ganhar, avança 2m, driblado fica caído 1 turno.
+  Habilidades: Corte de asfalto, Gyro shot, Sword screw (variante), Minha melhor performance (fluxo).
+  - Corte de asfalto (sem bola) — Esf +4PdE|Dis:4m/4m|TdA:Ação egoísta+2 reações|G.Ex:4 fôlegos — ao receber passe: define 2 "obstáculos" a 4m cada; ao dominar, avança e faz "Corte" com 2 vantagens contra cada um, sequencialmente.

@@ -1,0 +1,44 @@
+[PÁGINAS 111-130]
+
+=== HABILIDADES DE CATEGORIA (continuação) ===
+
+IMPROVISAÇÃO (Puro instinto/Afortunado) — Esf: +1 PdE | Dis: pessoal | Dur: instantânea | TdA: Reação — Ao falhar teste com perícia +3 ou menos, rerola com -3 bônus (substitui resultado); pode gastar 1 PdS pra rerolar sem esse malefício.
+
+RESTRIÇÃO DE LÓGICA (Puro instinto/Determinado) — Esf: +3 PdE | Dis: pessoal | Dur: Instintos+1 turnos | TdA: Ação egoísta — Ao chegar a 0 fôlegos na rodada: vira "besta insaciável", Cognição vira [-1], mas ganha: +1 reação, +3 fôlegos adicionais por rodada, +2m DdC, anula 1 efeito negativo.
+
+=== ÓTICAS (visões, 3 níveis cada + catalisadores disponíveis) ===
+
+VISÃO NEUTRA ("O básico bem feito") — Nv1: +1 em todas perícias por 1 turno no início de cada rodada. Nv2: bônus vira +2, duração 2 turnos. Nv3: bônus +3, duração 3 turnos, +1 fôlego adicional durante o benefício.
+  Habilidade Nv3 "Jogador volátil": 1 vantagem numa jogada à escolha por d4+1 turnos (ou +1 PdE p/ d6+1 turnos). Esf: +2 PdE (+1) | Dis: pessoal | TdA: Ação egoísta.
+  Catalisadores disponíveis: qualquer um da lista.
+
+VISÃO FOTOGRÁFICA ("Click Flash") — Nv1: oponente adjacente = "foto" tirada, acompanha ele por 2m andados. Nv2: corrida 3m, +1 bônus na próxima jogada contra o alvo. Nv3: corrida 4m, bônus +2, pode tentar roubar o alvo com +2 se fôlegos dele acabarem.
+  Habilidade Nv3 "Print screen": Esf: +3 PdE | Dis: setor todo | Dur: até sair do setor | TdA: Ação egoísta+Reação — tira "print" do setor (teste de momento dj15 +2 por alvo no setor); se ganhar, +2 bônus Destreza/Drible +2 fôlegos até sair do setor.
+  Catalisadores: Metavisão OU Fênix.
+
+VISÃO BERSERKER ("Eu sou... CAOS!") — Nv1: ganhar teste com maior atributo do alvo = ego alto por 2 turnos. Nv2: duração 3 turnos, ignora efeitos negativos por 1 turno. Nv3: duração do bônus 2 turnos, +1 bônus em qualquer perícia com 1+ ponto.
+  Habilidade Nv3 "Eu não me importo de morrer!": Esf: +4 PdE | Dis: pessoal | Dur: instantâneo | TdA: Ação egoísta | G.Ex: 2 fôlegos — teste J vs J com atributo que não seu maior: ignora efeitos negativos + 3 vantagens; após, fica lesionado 3 turnos.
+  Catalisadores: Impulsos destrutivos OU Olhos de predador.
+
+VISÃO METÓDICA ("Não consegue?") — Nv1: oponente falha resistência contra você = ego ferido por 2 turnos (não acumulativo). Nv2: duração 3 turnos, alvo -1 no maior atributo por 1 turno. Nv3: malefício -2 bônus/2 turnos, "Não consegue?" dura 3 turnos e vira acumulativo (só quantidade).
+  Habilidade Nv3 "Peças fora do lugar": Esf: +3 PdE | Dis: setor escolhido | Dur: Visão de jogo+1 turnos | TdA: Ação egoísta+Reação — escolhe setor inimigo: Ataque/Lateral = -4 atributos ofensivos; Zaga/Meio-campo = -4 atributos defensivos.
+  Catalisadores: Ciborgue OU Ego ensandecido.
+
+VISÃO MONSTRUOSA ("Haha trollei!") — Nv1: troca perícia de jogada de Drible por Criatividade, custa 2 fôlegos. Nv2: custo cai pra 1 fôlego, +1m adicional ao driblar alvo com o efeito ativo. Nv3: custo zero, +2m adicional.
+  Habilidade Nv3 "Transformei minha maldição em benção!": Esf: +3 PdE | Dis: pessoal | Dur: Criatividade+1 turnos | TdA: Ação egoísta | G.Ex: 1 PdS — perícias com 3+ pontos ganham 1 vantagem.
+  Catalisadores: Ginga OU Euforia.
+
+VISÃO SOMÁTICA ("GET OUT!") — Nv1: +1 bônus em Robustez por estressado acumulado contra você (até fim do efeito). Nv2: pode driblar com Robustez em vez de Drible dentro da zona dourada. Nv3: bônus dobra (Robustez +2).
+  Habilidade Nv3 "Loirinha da Noruega": Esf: +3 PdE | Dis: pessoal | Dur: Agressividade+1 turnos | TdA: Ação egoísta | G.Ex: 2 fôlegos — +2 bônus segurando em marcação; cabeceios +2m, ignoram malefícios naturais e usam Agressividade.
+  Catalisadores: Perfeição OU Deus da velocidade.
+
+VISÃO SOBERANA ("Eu sou absoluto") — Nv1: jogadas dentro da zona dourada podem trocar o atributo pedido pelo seu maior atributo. Nv2: entrar na zona dourada remove 1 efeito negativo por 2 turnos. Nv3: todos efeitos negativos removidos, duração 3 turnos; pode usar maior perícia + maior atributo juntos.
+  Habilidade Nv3 "Hizamazuke": Esf: +3 PdE | Dis: pessoal | Dur: Momento+1 turnos | TdA: Ação egoísta | G.Ex: 1 PdS — ganhar J vs J por 5+ de diferença = alvo cai, fica caído 2 turnos.
+  Catalisadores: Metavisão OU Olhos de predador.
+
+VISÃO IMPULSIVA ("Que minha alma lute!") — Nv1: anula até 1 desvantagem/-2 bônus em jogadas com reação. Nv2: +1 reação adicional se no setor da sua posição. Nv3: +1 reação em qualquer setor; anulação sobe pra 2 desvantagens/-4 bônus.
+  Habilidade Nv3 "Hiperfoco instintivo": Esf: +2 PdE | Dis: pessoal | Dur: até executar jogada com reação | TdA: Ação egoísta+Reação | G.Ex: 2 fôlegos — próxima jogada com reação (exceto gol) tem 2 vantagens, mas Cognição -1 desvantagem até executar.
+  Catalisadores: Ciborgue OU Fênix.
+
+VISÃO VELOCISTA ("Gotta go fast!") — Nv1: pode correr 1m sem gastar fôlegos no início de cada rodada. Nv2: +1 fôlego adicional na rodada se estiver na lateral no seu turno. Nv3: (texto repetido da Impulsiva no PDF, provavelmente erro de diagramação — conferir depois via thumbnail se necessário).
+  Catalisadores: Euforia OU Deus da velocidade.

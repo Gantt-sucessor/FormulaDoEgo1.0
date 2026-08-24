@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Fórmula do Ego — Mestre</title>
+<link rel="stylesheet" href="css/base.css" />
+<link rel="stylesheet" href="css/mestre.css" />
+</head>
+<body>
+  <div class="topbar">
+    <div class="logo">Fórmula do <span class="ego">Ego</span></div>
+    <a href="index.html" class="btn btn-ghost" style="padding: 8px 16px;">Sair</a>
+  </div>
+
+  <!-- Tela 1: criar campanha -->
+  <div id="tela-setup" class="setup-screen">
+    <div class="eyebrow" style="color: var(--accent-gold)">Painel do mestre</div>
+    <h2>Criar campanha</h2>
+    <p>Dê um nome pra sua campanha. Um código será gerado pra você compartilhar com os players.</p>
+    <div style="text-align: left; margin-bottom: 16px;">
+      <label for="input-nome-campanha">Nome da campanha</label>
+      <input id="input-nome-campanha" type="text" placeholder="ex: Blue Lock — Segunda Seleção" />
+    </div>
+    <button id="btn-criar-campanha" class="btn btn-gold" style="width: 100%;">Criar campanha</button>
+    <p id="erro-setup" style="color: var(--danger); display: none; margin-top: 12px;"></p>
+  </div>
+
+  <!-- Tela 2: dashboard ao vivo -->
+  <div id="tela-dashboard" style="display: none;">
+    <div class="setup-screen" style="margin: 40px auto 0;">
+      <div class="eyebrow" style="color: var(--accent-gold)">Sua campanha está pronta</div>
+      <p id="nome-campanha-display" style="color: var(--text-primary); font-weight: 600;"></p>
+      <div class="codigo-display" id="codigo-display"></div>
+      <p>Passe esse código para seus players entrarem na tela deles.</p>
+    </div>
+
+    <div class="dashboard-grid">
+      <div>
+        <h3>Fichas na campanha</h3>
+        <div id="lista-fichas"></div>
+      </div>
+      <div class="card">
+        <h3>Rolagens ao vivo</h3>
+        <div id="feed-rolagens">
+          <div class="empty-state">Aguardando a primeira rolagem dos players...</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { criarCampanha, buscarFichas } from './js/mestre/campanha.js';
+    import { escutarRolagens, buscarHistoricoRolagens } from './js/mestre/dashboard.js';
+
+    const telaSetup = document.getElementById('tela-setup');
+    const telaDashboard = document.getElementById('tela-dashboard');
+    const btnCriar = document.getElementById('btn-criar-campanha');
+    const inputNome = document.getElementById('input-nome-campanha');
+    const erroSetup = document.getElementById('erro-setup');
+
+    let campanhaAtual = null;
+
+    btnCriar.addEventListener('click', async () => {
+      const nome = inputNome.value.trim();
+      if (!nome) {
+        erroSetup.textContent = 'Dê um nome pra sua campanha antes de continuar.';
+        erroSetup.style.display = 'block';
+        return;
+      }
+      btnCriar.disabled = true;
+      btnCriar.textContent = 'Criando...';
+      try {
+        campanhaAtual = await criarCampanha(nome);
+        iniciarDashboard(campanhaAtual);
+      } catch (e) {
+        erroSetup.textContent = 'Não deu pra criar a campanha. Confira se o Supabase está configurado em js/supabase-client.js.';
+        erroSetup.style.display = 'block';
+        btnCriar.disabled = false;
+        btnCriar.textContent = 'Criar campanha';
+      }
+    });
+
+    async function iniciarDashboard(campanha) {
+      telaSetup.style.display = 'none';
+      telaDashboard.style.display = 'block';
+      document.getElementById('nome-campanha-display').textContent = campanha.nome;
+      document.getElementById('codigo-display').textContent = campanha.codigo;
+
+      await atualizarFichas();
+      await carregarHistorico();
+      escutarRolagens(campanha.id, adicionarRolagemNoFeed);
+    }
+
+    async function atualizarFichas() {
+      const fichas = await buscarFichas(campanhaAtual.id);
+      const container = document.getElementById('lista-fichas');
+      if (fichas.length === 0) {
+        container.innerHTML = '<div class="empty-state">Nenhum player entrou ainda.</div>';
+        return;
+      }
+      container.innerHTML = fichas.map((f) => `
+        <div class="ficha-item">
+          <div class="nome-personagem">${f.nome_personagem}</div>
+          <div class="nome-jogador">${f.nome_jogador}</div>
+        </div>
+      `).join('');
+    }
+
+    async function carregarHistorico() {
+      const historico = await buscarHistoricoRolagens(campanhaAtual.id);
+      const feed = document.getElementById('feed-rolagens');
+      if (historico.length === 0) return;
+      feed.innerHTML = '';
+      historico.reverse().forEach(renderRolagem);
+    }
+
+    function adicionarRolagemNoFeed(rolagem) {
+      const feed = document.getElementById('feed-rolagens');
+      const vazio = feed.querySelector('.empty-state');
+      if (vazio) vazio.remove();
+      renderRolagem(rolagem);
+      atualizarFichas();
+    }
+
+    function renderRolagem(rolagem) {
+      const feed = document.getElementById('feed-rolagens');
+      const el = document.createElement('div');
+      el.className = 'feed-rolagem';
+
+      let classeExtra = '';
+      const detalhe = rolagem.detalhe || {};
+      if (detalhe.execucaoAbsoluta?.tipo === 'positiva') classeExtra = 'absoluta-positiva';
+      if (detalhe.execucaoAbsoluta?.tipo === 'negativa') classeExtra = 'absoluta-negativa';
+
+      const hora = new Date(rolagem.criada_em).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+
+      el.innerHTML = `
+        <div class="resultado-numero ${classeExtra}">${rolagem.resultado}</div>
+        <div class="info">
+          <div class="quem">${rolagem.nome_personagem}</div>
+          <div class="jogada">${rolagem.jogada}</div>
+        </div>
+        <div class="hora">${hora}</div>
+      `;
+      feed.prepend(el);
+    }
+  </script>
+</body>
+</html>

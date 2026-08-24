@@ -1,0 +1,264 @@
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--border);
+}
+.topbar .logo { font-family: var(--font-display); text-transform: uppercase; letter-spacing: 0.06em; }
+.topbar .logo .ego { color: var(--accent-blue); }
+
+.setup-screen {
+  max-width: 420px;
+  margin: 60px auto;
+  padding: 0 24px;
+  text-align: center;
+}
+
+.ficha-screen {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+/* Lista de fichas do jogador */
+.fichas-lista {
+  display: grid;
+  gap: 12px;
+  margin: 20px 0 28px;
+}
+.ficha-card-select {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--bg-surface);
+  cursor: pointer;
+  text-align: left;
+  transition: border-color 0.15s ease;
+}
+.ficha-card-select:hover { border-color: var(--accent-blue); }
+.ficha-card-select .nome { font-weight: 600; }
+.ficha-card-select .sub { font-size: 0.8rem; color: var(--text-muted); }
+.ficha-card-select .arma-tag { font-size: 0.75rem; color: var(--accent-gold); }
+
+.btn-nova-ficha {
+  border: 1px dashed var(--border-strong);
+  background: transparent;
+  color: var(--text-secondary);
+  border-radius: var(--radius);
+  padding: 16px;
+  cursor: pointer;
+  width: 100%;
+  font-family: var(--font-body);
+}
+.btn-nova-ficha:hover { border-color: var(--accent-blue); color: var(--text-primary); }
+
+/* Formulário livre — seções sempre visíveis, nenhuma bloqueia a outra */
+.form-section {
+  margin-bottom: 28px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--border);
+}
+.form-section:last-of-type { border-bottom: none; }
+.form-section h3 { margin-bottom: 4px; display: flex; align-items: center; gap: 8px; }
+.form-section .step-desc { font-size: 0.85rem; margin-bottom: 16px; }
+.campo-opcional-tag {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+  border: 1px solid var(--border-strong);
+  border-radius: 999px;
+  padding: 2px 8px;
+}
+
+.grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+@media (max-width: 560px) { .grid-2 { grid-template-columns: 1fr; } }
+
+.campo { margin-bottom: 12px; }
+
+.selecao-info {
+  margin-top: 10px;
+  padding: 12px;
+  background: var(--bg-surface-2);
+  border-radius: var(--radius);
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  display: none;
+}
+.selecao-info.ativo { display: block; }
+.selecao-info strong { color: var(--text-primary); }
+
+/* Perícias — grid livre, sem trava de ordem */
+.pericias-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 10px;
+}
+.pericia-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  background: var(--bg-surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+.pericia-item .nome { font-size: 0.85rem; }
+.pericia-item .controles { display: flex; align-items: center; gap: 8px; }
+.pericia-item button {
+  width: 24px; height: 24px;
+  border-radius: 50%;
+  border: 1px solid var(--border-strong);
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  cursor: pointer;
+  font-size: 0.9rem;
+  line-height: 1;
+}
+.pericia-item .valor { font-family: var(--font-display); min-width: 16px; text-align: center; }
+.pericias-total {
+  margin-top: 10px;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+.pericias-total.excedido { color: var(--danger); }
+
+/* Hexágono */
+.hexagono-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+.hexagono-svg {
+  width: 100%;
+  max-width: 340px;
+}
+.hex-outline {
+  fill: rgba(59, 123, 255, 0.05);
+  stroke: var(--border-strong);
+  stroke-width: 1;
+}
+.hex-spoke {
+  stroke: var(--border);
+  stroke-width: 1;
+}
+.hex-center {
+  fill: var(--bg-surface-2);
+  stroke: var(--border-strong);
+  stroke-width: 1;
+}
+.hex-center-label {
+  fill: var(--text-muted);
+  font-family: var(--font-display);
+  font-size: 9px;
+  letter-spacing: 0.06em;
+}
+.hex-node {
+  cursor: pointer;
+}
+.hex-node circle {
+  fill: var(--bg-surface);
+  stroke: var(--border-strong);
+  stroke-width: 1.5;
+  transition: stroke 0.15s ease, fill 0.15s ease;
+}
+.hex-node:hover circle {
+  stroke: var(--accent-blue);
+}
+.hex-node.preenchido circle {
+  fill: var(--accent-blue-dim);
+  stroke: var(--accent-blue);
+}
+.hex-node-value {
+  fill: var(--accent-gold);
+  font-family: var(--font-display);
+  font-size: 16px;
+  font-weight: 600;
+}
+.hex-node-label {
+  fill: var(--text-secondary);
+  font-family: var(--font-body);
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.hex-pool {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.hex-chip {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1px solid var(--border-strong);
+  background: var(--bg-surface-2);
+  color: var(--text-primary);
+  cursor: pointer;
+}
+.hex-chip:hover:not(:disabled) { border-color: var(--accent-blue); }
+.hex-chip.selecionado {
+  background: var(--accent-blue);
+  border-color: var(--accent-blue);
+  color: #fff;
+}
+.hex-chip.usado {
+  opacity: 0.25;
+  cursor: default;
+}
+.hex-hint {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  text-align: center;
+}
+
+/* Rolagem */
+.jogada-select { margin-bottom: 12px; }
+.resultado-box {
+  text-align: center;
+  padding: 24px;
+  background: var(--bg-surface-2);
+  border-radius: var(--radius);
+  margin-top: 16px;
+}
+.resultado-box .numero-final {
+  font-family: var(--font-display);
+  font-size: 3rem;
+  color: var(--accent-blue);
+}
+.resultado-box .numero-final.absoluta-positiva { color: var(--accent-gold); }
+.resultado-box .numero-final.absoluta-negativa { color: var(--danger); }
+.resultado-box .detalhe { font-size: 0.8rem; color: var(--text-secondary); margin-top: 8px; }
+
+.ficha-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+.ficha-header .link-trocar {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  cursor: pointer;
+}
+.ficha-header .link-trocar:hover { color: var(--accent-blue); }
+
+.resumo-ficha {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 24px;
+}

@@ -1,0 +1,64 @@
+[PÁGINAS 131-150]
+
+VISÃO VELOCISTA (fim) — Nv3: corrida 1m→3m, benefício +1→+2 fôlegos.
+  Habilidade Nv3 "Corte atrás de corte": Esf +3 PdE | Dis: 4m | Dur: instantâneo | TdA: Ação de movimento | G.Ex: 2 fôlegos — avança 4m; se achar alvo no caminho, corre mais 4m pra direita/esquerda, repete até não achar mais alvos.
+  Catalisadores: Euforia OU Deus da velocidade.
+
+VISÃO GANANCIOSA ("Preço abusivo") — Nv1: +1 bônus em J vs J se o alvo tiver 3+ pontos na perícia de resistir. Nv2: bônus +2; vencer 2x o mesmo tipo de posição (ex: zagueiro x zagueiro) = -1 PdE acumulado. Nv3: só precisa vencer 1x pro benefício.
+  Habilidade Nv3 "E pro beta, o que sobrou?": Esf +2 PdE | Dur: instantâneo | TdA: Ação egoísta | G.Ex: 1 fôlego — em J vs J, alvo recebe -1 bônus acumulativo por jogada que ganhou nessa e na última rodada.
+  Catalisadores: Ginga OU Ego ensandecido.
+
+VISÃO VINGATIVA ("V de vingança") — Nv1: se alvo te vence, +1 bônus na próxima J vs J contra ele (não acumulativo). Nv2: pode somar metade da Determinação nessa jogada. Nv3: bônus +2, soma Determinação inteira, vira acumulativo (exceto a Determinação).
+  Habilidade Nv3 "Você sou eu, cara, eu sou você...": Esf +3 PdE | Dur: até ganhar do alvo | TdA: Ação egoísta — marca alvo "desprezível", ganha inspirado contra ele até vencê-lo em J vs J; cada falha soma +1 acumulação.
+  Catalisadores: Perfeição OU Impulsos destrutivos.
+
+=== TALENTOS IMPETUOSOS (compra com Pontos de Chama, 5 slots totais) ===
+4 tipos:
+- Evolutivos: únicos com várias versões/níveis. Custo: 1 chama p/ nv1, +1 chama adicional por nível seguinte (nv2 = 2 chamas total, etc). Mais forte a cada nível.
+- Simples: básicos, custam 1 ponto de chama.
+- Razoáveis: dificuldade média, custam 2 pontos de chama.
+- Complexos: quase impossíveis, custam 3 pontos de chama.
+
+--- EVOLUTIVOS ---
+ONESHOT ("Ore wa striker da!") — Esf +3PdE | Dis: DdP+2m (evolutível) | Dur: instantâneo | TdA: Ação egoísta+tática
+  Nv1: chute regular com 1 vantagem +2m DdC.
+  Nv2: escolhe chute regular ou curvo; 1 vantagem → 1 vantagem+3 bônus.
+  Nv3: inclui chute de poder; 2 vantagens+3 bônus.
+
+PASSE CELESTIAL — Esf +3PdE | Dis: DdP+2m (evolutível) | Dur: instantâneo | TdA: Ação egoísta+tática
+  Nv1: passe longo com 1 vantagem +2m DdP.
+  Nv2: alcança qualquer setor adjacente; 2 vantagens.
+  Nv3: qualquer distância, garantido, vira passe alto.
+
+DESTRONE O ATAQUE — Esf +2PdE | Dis: adjacente | Dur: instantâneo | TdA: Ação egoísta | G.Ex: 2 fôlegos
+  Nv1: roubo com 1 vantagem; se ganhar, avança 2m.
+  Nv2: 1 vantagem+3 bônus; avança 3m; retira 2 fôlegos do roubado.
+  Nv3: 2 vantagens+3 bônus; avança 4m; passe curto garantido ao final (opcional).
+
+ALA MESSI — Esf +4PdE | Dis: pessoal | Dur: Drible turnos (evolutível) | TdA: Ação egoísta | G.Ex: 3 fôlegos
+  Nv1: 1 vantagem numa perícia de Drible à escolha, por Drible turnos.
+  Nv2: 1 vantagem+3 bônus; 2 perícias; Drible+1 turnos.
+  Nv3: 2 vantagens+3 bônus; todas perícias de Drible; Drible+2 turnos.
+
+INÚTIL INÚTIL INÚTIL! — Esf +2PdE | Dis: pessoal | Dur: Emocional turnos (evolutível) | TdA: Ação egoísta
+  Nv1: trash talk com 1 vantagem; se ganhar, alvo recebe ego ferido por Emocional turnos.
+  Nv2: 1 vantagem+3 bônus; Emocional+1 turnos.
+  Nv3: 2 vantagens+3 bônus; Emocional+2 turnos; ego ferido x2.
+
+--- SIMPLES (1 chama) ---
+CABEÇA-DURA — Esf +3PdE | Dis: ½DdC+3m | Dur: instantâneo | TdA: Ação egoísta+Reação — cabeceio ofensivo com +3 bônus, ignora malefícios de não estar no ar/flanqueamento, +3m distância.
+
+JUDAS — Esf +3PdE | Dis: DdP/pessoal | Dur: d4+2/d6+1 turnos | TdA: Ação egoísta+tática — passe longo pra um INIMIGO; se ele dominar sem interceptação: você ganha ego alto x2 por d4+2 turnos, resto do time recebe ego ferido por d6+1 turnos.
+
+PONTO CEGO+SEM BOLA — Esf +2PdE | Dis: pessoal | Dur: Posicionamento+1 turnos | TdA: Ação egoísta | Prep: P/2 turnos — sem a bola: +2 fôlegos na rodada, +3 bônus escapar de marcação/roubo, fica furtivo. Acaba ao ganhar posse de bola.
+
+À GASOLINA — Esf +3PdE | Dis: Investida+1m | Dur: instantâneo | TdA: Reação | G.Ex: 3 fôlegos — investida +1m; se achar alvo e ele tentar roubar, drible usa Destreza em vez do atributo padrão.
+
+ZERO RESET TURN — Esf +2PdE | Dis: 3m/2m | Dur: instantâneo | TdA: 2 reações | G.Ex: 3 fôlegos — ao ser flanqueado, avança 3m pra frente saindo do flanqueamento (não pode ser roubado nesse movimento); pode passar pra aliado na distância, que avança 2m se dominar.
+
+--- RAZOÁVEIS (2 chamas) ---
+FINTA IMPREVISÍVEL — Esf +4PdE | Dis: pessoal | Dur: instantâneo | TdA: 2 reações | G.Ex: 3 fôlegos — se declarar chute e alguém declarar interceptação, finta (chute não ocorre), anda 1m, faz novo chute/passe; interceptador recebe 2 desvantagens em interceptar naquele turno.
+
+CALCANHAR DE AQUILES — Esf +4PdE | Dis: DdC[-3m] | Dur: instantâneo | TdA: Ação egoísta+tática — com bola + ângulo cortado/flanqueado: chute remove um dos malefícios da perna ruim, flanqueadores não podem interceptar, sem malefícios de voleio fora do ar.
+
+PISAR NA BOLA — Esf +4PdE | Dis: 4m/DdP | Dur: instantâneo/3 turnos | TdA: Ação de movimento — gasta ação de movimento; todos aliados avançam 4m; escolhe um na DdP e faz passe +3; se dominar, recebe inspirado por 3 turnos.

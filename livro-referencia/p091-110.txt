@@ -1,0 +1,69 @@
+[PÁGINAS 91-110]
+
+=== TENDÊNCIAS (continuação) ===
+
+CORINGA — Dom "Sem ocasiões ruins": ao entrar em novo setor, +1 PdE + 1 reação pra ganhar (d4+1 turnos): Zaga = +2 bônus roubo/interceptação; Ataque = +2 bônus dribles/chutes; Lateral/Meio-campo = +2 bônus Cognição.
+  Dom 2 "Duelo de sorte": ao declarar (ou ser alvo de) J vs J, +2 PdE + 1 PdS, role d2: 1 = falha garantida; 2 = vitória garantida.
+  Perícia: a) +2 posicionamento b) +2 precisão c) +2 constância (dom1) / a) +2 determinação b) +2 posicionamento c) +2 instintos (dom2)
+
+REBELDE — (descrição temática, sem dom próprio listado na página — foco em superar os mais fortes via sorte)
+
+TENDÊNCIAS SECUNDÁRIAS (passivas, uma por tendência principal escolhida como secundária):
+- Ambidestro → Semi-balanceado: chutar com perna ruim não reduz mais distâncias de passe/chute.
+- Corpulento → Tanque de guerra: jogo de corpo retira -6 fôlegos do alvo (em vez de -5) e +1 bônus para segurar em marcação.
+- Acrobático → Propulsão calculada: gastar todos os fôlegos num turno = fica no ar por 2 turnos.
+- Incansável → Katchau!: +1 fôlego adicional na lateral ou meio-campo.
+- Trombadinha → Faz careta!: +2 bônus em qualquer teste contra alvos já estressados.
+- Antagonista → AINDA TÁ POUCO?!: 1 vantagem no próximo devorar se o alvo já marcou gol na partida ou já te devorou antes.
+- Algoz → (não especificado nesse trecho)
+- Hedonista → Insaciável: +1 turno de adrenalina por cada jogada bem-sucedida em seguida.
+- Maestro → En Passant: ao analisar aliado adjacente, ele avança 2m e +2 bônus no próximo teste (só nessa rodada).
+- Apático → P#rra nenhuma: alvos com ego ferido/quebrado têm -2 bônus em J vs J contra você.
+  (Algoz →) Última medida: +1 bônus em roubar/interceptar alvo por cada aliado que ele venceu em J vs J na última rodada.
+- Idealista → No escuro eu sigo!: ao acabar duração de ego ferido, ganha ego alto por 2 turnos; ao acabar ego quebrado, ganha ego inflado por 2 turnos.
+- Coringa → Naipe indefinido: pode ativar zona dourada em setor diferente do seu, +2 PdE adicional no 1º turno se escolher.
+- Rebelde → Contra destino: gasta 1 PdS pra remover efeito negativo dado por inimigo por 2 rodadas; começa toda partida com 1 PdS.
+
+=== CATEGORIAS: GÊNIOS E APRENDIZES ===
+
+GÊNIOS: dom congênito, evolução via instinto próprio; raramente aprendem armas novas, aprimoram a que já nasceram usando.
+Arquétipos de Gênio:
+- Genes abençoados: corpo excepcional (músculos, fôlego, saltos) — vitórias por genética.
+- Puro instinto: joga sem pensar/calcular, guiado por instinto de vitória.
+- Arquiteto: gênio com raciocínio lógico acima da média, joga calculado.
+
+Evolução Gênio:
+  Nv1: Criação de personagem + 1 nível de ótica.
+  Nv2: +2 pontos de perícia.
+  Nv3: +1 habilidade de categoria + 1 ponto de perícia.
+  Nv4: +2 pontos de perícia.
+  Nv5: +2 pontos de perícia + 1 habilidade de categoria + 1 nível de ótica.
+
+APRENDIZES: sem dom nato, mas com adaptabilidade; aprendem coisas novas constantemente.
+Arquétipos de Aprendiz:
+- Talentoso: talento não é fixo, muda conforme a situação (adaptação).
+- Determinado: evolui pela vontade de evoluir, sem talento nato.
+- Afortunado: a sorte guia sua evolução, ajuda "coincidências perfeitas".
+
+Evolução Aprendiz:
+  Nv1: Criação de personagem + 1 Ponto de chama.
+  Nv2: +1 Ponto de chama.
+  Nv3: +1 nível de ótica + 1 habilidade de categoria.
+  Nv4: +2 pontos de chama + 1 nível de ótica.
+  Nv5: +2 pontos de chama + 2 pontos de perícia distribuíveis.
+
+HABILIDADES DE CATEGORIA — exclusivas de gênio/aprendiz, só pega se seu arquétipo estiver na lista da habilidade. Começa com 0 habilidades de categoria.
+
+COMPLEIÇÃO DESGASTANTE (Genes abençoados/Talentoso) — Esf: +3 PdE | Dis: pessoal | Dur: 1d4+1 turnos | TdA: Ação egoísta+Reação — Com 0 PdE acumulados, ativa no turno: +2 fôlegos até fim da rodada + adrenalina por d4+1 turnos. Ao fim, fica exausto por 3 turnos.
+
+FORÇANDO DESTINO (Genes absurdos/Afortunado) — Esf: +2 PdE | Dis: pessoal | Dur: instantânea | TdA: Ação egoísta | G.Ex: 1 fôlego — Se a jogada usaria perícia com +2 ou menos, usa sua maior perícia no lugar e ignora efeitos negativos ativos (só na execução).
+
+ESFORÇO ARRISCADO (Genes abençoados/Determinado) — Esf: +2 PdE | Dis: pessoal | Dur: instantânea | TdA: Ação egoísta | G.Ex: 2 fôlegos — Faz jogada de Potência/Destreza/Robustez/passe que precisaria de ação tática mesmo sem tê-la, mas fica lesionado por d4+2 turnos.
+
+PLANO: MARIONETE (Arquiteto/Talentoso) — Esf: +3 PdE | Dis: 8x8m | Dur: instantânea | TdA: Ação egoísta+Reação — Aliado com bola em 8x8m é obrigado a: a) chute à sua escolha, b) passe pra qualquer aliado (inclui você), c) avançar 4m driblando quem estiver no caminho.
+
+MAGNETISMO IMPREVISÍVEL (Arquiteto/Afortunado) — Esf: +1 PdE | Dis: 6m | Dur: instantânea | TdA: Reação — Em rebote/fim de passe antecipado/espalmar até 6m: bola vem automaticamente até sua perna boa; pode voleio +3 bônus (com desvantagens normais se não estiver no ar) ou domínio +4 bônus.
+
+PERCEPÇÃO ESPACIAL (Arquiteto/Determinado) — Esf: +4 PdE | Dis: pessoal | Dur: Visão de jogo+1 turnos | TdA: Ação egoísta | Prep: M/3 turnos — Sem a bola, ativa "percepção total": +2m DdP, interceptar não custa PdE p/ mais distância, troca atributo de qualquer teste por Cognição, avança 1m ao fim de todo turno.
+
+MÁQUINA INUMANA (Puro instinto/Talentoso) — Esf: +2 PdE | Dis: 8x8m | Dur: d4+1 turnos | TdA: Ação egoísta+Reação — Ao ganhar J vs J, cria área estática 8x8m: quem tentar te impedir (interceptar/roubar) gasta 1 reação adicional e 1 fôlego extra.

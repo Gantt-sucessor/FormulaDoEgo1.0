@@ -1,0 +1,39 @@
+the egoist • the egoist • the egoist  the egoist • the egoist • the egoist  the egoist • the egoist • the egoist
+FÓrmuLA   do
+FÓrmuLA   do
+EGO
+EGO
+V.  1.0
+criado por: kuromi_heart
+
+SUMÁRIO
+Conceitos...[pg.4]Dados................[pg.5]Benefícios...........[pg.5]Execuções absolutas..[pg.7]Aplicando aspectos...[pg.8]Tipos de ações......[pg.10]Cálculos............[pg.11]
+
+COnceitOS
+Os dados refletem o resultado, seja ele bom ou ruim, de uma jogada feita. Seu dado base para jogadas é o d12 + [atributo x d6] + perícia. Para cada +1 no atributo pedido no teste, você tem +1D6 na jogada para tentar passar na dj [Dificuldade da Jogada] da jogada pedida. Caso possua [-1] no atributo, você deverá rodar 2D12 e pegar o menor resultado.
+DADOS
+Além de seus atributos comuns, também há benefícios externos, como vantagens ou bônus. Eles podem ser adquiridos através de habilidades, passivas, efeitos, etc. Vantagens: Dependendo da sua situação, como em habilidades, você pode receber uma quantidade de vantagens no teste. Para cada 1 vantagem acumulada, recebe +1D6 no teste.
+benefícios
+[ex: 3 vantagens = 1d12 + 3d6] O mesmo se aplica às desvantagens, as quais são malefícios que retiram seus dadas. Para cada 1 desvantagem acumulada, recebe -1D6 na jogada. [ex: 3 desvantagens = 1d12 - 3d6] Bônus: Diferentemente das vantagens e desvantagens, os bônus se aplicam tanto de maneira positiva quanto negativa na jogada.
+De acordo com o número entregue por um bônus, você aumenta ou diminui seu resultado final com base nele. [ex: +4 de bônus = 1d12 + 4 ; -4 de bônus = 1d12 - 4]
+
+EXECUÇÕES ABSOLUTAS
+Execuções absolutas são ações críticas que você ou outro jogador faz, ou seja, ela é realizada da melhor ou pior forma. Para fazer uma execução absoluta positiva, você precisa tirar o resultado 12 no d12 inicial de rolagens. Caso tire tal número, você adiciona +5 na jogada, assim também se aplicando a J vs J [exceto caso o oponente também tire uma execução absoluta positiva].
+Além disso, você também recebe +1 PdS. Porém o mesmo se aplica a execuções absolutas negativas, onde ocorre caso tire o resultado 1 no d12. Nesse caso, você adiciona -5 na jogada, assim também se aplicando a J vs J [exceto caso o oponente também tire uma execução absoluta negativa]. Além disso, você também recebe +1 PdE e -1 PdS.
+
+APLICANDO ASPECTOS
+As características do seu personagem influenciam diretamente no resultado dos seus dados.
+Atributos: De acordo com a jogada pedida, você irá utilizar o atributo necessário. Para cada +1 no atributo, você adiciona +1d6 da rolagem do teste. [ex: teste de Destreza. 3 pontos em Destreza = 1d12+3d6] [atributo com [-1] nele = 1d12-1d6]
+Perícias: Perícias também se aplicam à jogadas pedidas junto de seus atributos, com ela sendo uma pequena "especificação" do teste. Para cada +1 na perícia, você adiciona +1 na rolagem do teste. [ex: teste de passe longo. +4 em passe longo = 1d12+4].
+
+TIPOS DE AÇÃO
+As principais maneiras para realizar suas jogadas e habilidades é através das ações, gastando-as para fazer os feitos.
+Ação tática: Utilizada para jogadas diretas e comuns, sendo uma das mais fundamentais para feitos importantes do futebol. Você possui um limite de 1 ação tática por rodada, recarregando ao início de seu próximo turno.
+Ação egoísta: Utilizada para jogadas complexas e especiais, sendo perfeita para realizar feitos incríveis e decisivas. Você possui um limite de 1 ação egoísta por rodada, recarregando ao início de seu próximo turno.
+Reações: Utilizada para jogadas que necessitam de agilidade ou até mesmo instintos sobrehumanos. Você possui um limite de 4 reações por rodada, recarregando ao início de seu próximo turno.
+Ação de movimento: Utilizada para se correr pelo campo ou fazer ações que envolvam se mover. Você possui um limite de 1 ação de movimento por rodada, recarregando ao início de seu próximo turno.
+
+CÁLCULOS
+Fôlegos: Fôlegos servem para sua movimentação em jogo. Ao iniciar uma corrida com fôlegos, você gasta sua ação de movimento. Para definir quantos fôlegos você possui, calcule: 6 + constância. Cada fôlego gasto é 1 metro percorrido.
+Seus fôlegos recarregam ao início de toda nova rodada e correr na diagonal custa fôlegos x 2.
+Iniciativa: A iniciativa é onde você está na ordem de turnos entre jogadores. Quanto maior o número, maior chance de ser o primeiro na ordem. Para definir sua iniciativa, calcule: 5 + Momento. Sua iniciativa é passiva, ou seja, não precisa de ativação.

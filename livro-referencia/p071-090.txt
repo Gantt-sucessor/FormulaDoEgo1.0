@@ -1,0 +1,68 @@
+[PÁGINAS 71-90]
+
+=== CRIAÇÃO DE JOGADOR ===
+
+ASPECTOS / ATRIBUTOS (6 no total, 3 pares: ofensivo/defensivo/mental)
+6 valores pré-definidos, cada um usado uma única vez: [+4] [+3] [+2] [+1] [+0] [-1]
+
+Atributos ofensivos:
+- Potência: força e precisão em chutes (distância + velocidade).
+- Drible: criatividade e velocidade ao driblar/esquivar.
+
+Atributos defensivos:
+- Destreza: velocidade geral (agilidade em roubos e fôlego).
+- Robustez: tenacidade física (músculos, vigor constante).
+
+Atributos mentais:
+- Cognição: intelecto em jogo, estratégias visionárias.
+- Ego: instinto individualista, desejo de se destacar.
+
+PERÍCIAS (10 pontos pra distribuir na criação, máx 5 por perícia — exceto bônus de tendência que force outra escolha se já tiver 5)
+Cada perícia liga a um atributo:
+
+Perícias de Potência: Precisão (mira em locais específicos), Trajetória (chutes de ângulos/locais diferentes), Especialização (velocidade/força geral dos chutes).
+Perícias de Destreza: Agilidade (reagir rápido sem perder eficiência), Constância (vigor/persistência em corridas longas), Instintos (velocidade de pensamento mesmo sem perceber).
+Perícias de Robustez: Músculos (tenacidade/controle muscular), Agressividade (usar o corpo pra esmagar alvos), Escudo (usar o corpo como defesa da bola).
+Perícias de Cognição: Visão de jogo (analisar oportunidades), Momento (velocidade de reação mental), Posicionamento (noção de campo/setores).
+Perícias de Drible: Criatividade (formas diferentes de driblar), Pressão (lidar com pressão de vários alvos), Posse (manter a bola em posse).
+Perícias de Ego: Emocional (quebrar o emocional/mental dos outros), Consumir (vontade de ser o melhor, tomar holofotes), Determinação (força de vontade de seguir em frente).
+
+GUIA DO ZERO (ordem de criação de personagem)
+1. Aspectos pessoais (nome, história, modo de jogo)
+2. Atributos
+3. Perícias
+4. Cálculos necessários
+5. Tendência principal e secundária
+6. Posição
+7. Arma
+8. Talentos impetuosos
+9. Categoria e arquétipo (Gênio/Aprendiz)
+10. Ótica
+11. Perna dominante
+12. Marca de despertar inicial
+13. Fluxo (básico)
+
+=== TENDÊNCIAS (lista completa) ===
+Cada tendência dá: 1 Dom (habilidade ativável, principal) + escolha de 1 perícia adicional (+2, entre 3 opções, principal) ou 1 passiva (secundária).
+
+AMBIDESTRO — Dom "Controle simultâneo": +1 PdE no turno, troca perna dominante pela oposta pro resto da partida (repetível); se ângulo cortado, pode chutar/passar com a perna boa mesmo assim. Perícia: a) +2 posse b) +2 momento c) +2 trajetória.
+
+ACROBÁTICO — Dom "Proporções aéreas": gasta 3 fôlegos no turno pra "saltar": fica constância+1 turnos com efeito "no ar", +1m em interceptações sem precisar de PdE. Perícia: a) +2 agilidade b) +2 pressão c) +2 precisão.
+
+CORPULENTO — Dom "Pivô de pura fibra": +1 PdE e 2 fôlegos num teste de Drible troca o atributo por Robustez (ex: caneta = Drible+pressão → Robustez+pressão); +1 fôlego adicional troca também a perícia por uma de Robustez. Perícia: a) +2 músculos b) +2 escudo c) +2 agressividade.
+
+INCANSÁVEL — Dom "Corpo adaptado": +2 PdE troca ação tática por ação de movimento + metade dos fôlegos máximos (ou o inverso). Perícia: a) +2 constância b) +2 músculos c) +2 especialização.
+
+TROMBADINHA — Dom "Ragebait": ao ganhar J vs J, +1 PdE pra fazer trash talk contra o derrotado sem gastar ação; +1 bônus em trash talk por indivíduo estressado em campo (dobra contra aliados). Perícia: a) +2 criatividade b) +2 emocional c) +2 posse.
+
+ALGOZ — Dom "Jack, o estripador": gasta ação egoísta + 2 PdE, fica furtivo por Agilidade+1 turnos; enquanto furtivo (por esse dom ou outro) +2 bônus em roubos e +2 fôlegos adicionais. Perícia: a) +2 agilidade b) +2 instintos c) +2 momento.
+
+ANTAGONISTA — Dom "Incendiando Roma": ao devorar aliado, +2 PdE pra escolher: a) inspirado por Consumir+1 turnos, b) 1 ação egoísta adicional só nesse turno, c) +3 fôlegos na rodada, d) +2m na DdC até o fim da rodada. Perícia: a) +2 consumir b) +2 especialização c) +2 agressividade.
+
+HEDONISTA — Dom "Fiz um banquete!": ao vencer J vs J, +2 PdE pra "prazer" = inspirado por Emocional+2 turnos; vitórias seguintes no mesmo modo dão +1 PdE por +1 inspirado extra (+1 turno cada). Perícia: a) +2 determinação b) +2 criatividade c) +2 emocional.
+
+MAESTRO — Dom "Roque": análise bem-sucedida + 1 PdE faz aliados em 8x8m se moverem 3m (sem ação reativa); pode gastar 2 reações pra passe curto/longo +5 pro aliado mais próximo que se moveu. Perícia: a) +2 visão de jogo b) +2 posicionamento c) +2 pressão.
+
+APÁTICO — Dom "Você é deplorável...": ação egoísta + 2 reações, testa Emocional vs Determinação de alvo adjacente; se ganhar, alvo recebe +2 PdE e "ego ferido"+"confuso" por Emocional+1 turnos. Perícia: a) +2 emocional b) +2 visão de jogo c) +2 agilidade.
+
+IDEALISTA — Dom "Fardo de Deus": ao falhar teste com perícia própria, +2 PdE + 1 reação pra rerolar com +3 bônus; se falhar de novo, próxima jogada tem +2 bônus. Perícia: a) +2 determinação b) +2 trajetória c) +2 pressão.

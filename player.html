@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Fórmula do Ego — Player</title>
+<link rel="stylesheet" href="css/base.css" />
+<link rel="stylesheet" href="css/player.css" />
+</head>
+<body>
+  <div class="topbar">
+    <div class="logo">Fórmula do <span class="ego">Ego</span></div>
+    <a href="index.html" class="btn btn-ghost" style="padding: 8px 16px;">Sair</a>
+  </div>
+
+  <!-- Tela 1: entrar com código -->
+  <div id="tela-codigo" class="setup-screen">
+    <div class="eyebrow">Player</div>
+    <h2>Entrar na campanha</h2>
+    <p>Digite seu nome e o código de 6 caracteres que seu mestre te passou.</p>
+    <div style="text-align: left; margin-bottom: 12px;">
+      <label for="input-nome-jogador-inicial">Seu nome</label>
+      <input id="input-nome-jogador-inicial" type="text" />
+    </div>
+    <div style="text-align: left; margin-bottom: 16px;">
+      <label for="input-codigo">Código da campanha</label>
+      <input id="input-codigo" type="text" maxlength="6" placeholder="EX: 7K2QXP" style="text-transform: uppercase; text-align: center; font-family: var(--font-display); font-size: 1.3rem; letter-spacing: 0.2em;" />
+    </div>
+    <button id="btn-entrar" class="btn btn-primary" style="width: 100%;">Entrar</button>
+    <p id="erro-codigo" style="color: var(--danger); display: none; margin-top: 12px;"></p>
+  </div>
+
+  <!-- Tela 2: lista de fichas do jogador nessa campanha -->
+  <div id="tela-lista-fichas" class="ficha-screen" style="display: none;">
+    <div class="eyebrow">Minhas fichas</div>
+    <h2 id="titulo-campanha-lista"></h2>
+    <p>Escolha uma ficha pra continuar ou crie um personagem novo. Sem limite de quantas você pode ter.</p>
+    <div id="fichas-lista" class="fichas-lista"></div>
+    <button id="btn-nova-ficha" class="btn-nova-ficha">+ Criar nova ficha</button>
+  </div>
+
+  <!-- Tela 3: montar/editar ficha — tudo livre, nada trava o resto -->
+  <div id="tela-ficha" class="ficha-screen" style="display: none;">
+    <div class="ficha-header">
+      <div>
+        <div class="eyebrow">Ficha</div>
+        <h2 style="margin-bottom: 0;">Monte seu personagem</h2>
+      </div>
+      <span class="link-trocar" id="link-voltar-lista">← minhas fichas</span>
+    </div>
+    <p>Preenche na ordem que quiser — nada aqui bloqueia o resto. Salva quando quiser, e edita depois à vontade.</p>
+
+    <div class="form-section">
+      <h3>Identidade</h3>
+      <div class="grid-2">
+        <div class="campo">
+          <label for="input-nome-personagem">Nome do personagem</label>
+          <input id="input-nome-personagem" type="text" />
+        </div>
+      </div>
+    </div>
+
+    <div class="form-section">
+      <h3>Atributos <span class="campo-opcional-tag">opcional</span></h3>
+      <p class="step-desc">Os 6 valores (+4, +3, +2, +1, 0, -1) — cada um só pode ser usado uma vez.</p>
+      <div id="hexagono-container"></div>
+    </div>
+
+    <div class="form-section">
+      <h3>Perícias <span class="campo-opcional-tag">opcional</span></h3>
+      <p class="step-desc">Distribua livremente. O livro recomenda 10 pontos, máx. 5 por perícia — mas fica a critério do mestre.</p>
+      <div id="pericias-container"></div>
+    </div>
+
+    <div class="form-section">
+      <h3>Arma <span class="campo-opcional-tag">opcional</span></h3>
+      <select id="select-arma">
+        <option value="">— nenhuma escolhida —</option>
+      </select>
+      <div id="info-arma" class="selecao-info"></div>
+    </div>
+
+    <div class="form-section">
+      <h3>Ótica <span class="campo-opcional-tag">opcional</span></h3>
+      <select id="select-otica">
+        <option value="">— nenhuma escolhida —</option>
+      </select>
+      <div id="info-otica" class="selecao-info"></div>
+    </div>
+
+    <div class="form-section">
+      <h3>Tendências <span class="campo-opcional-tag">opcional</span></h3>
+      <div class="grid-2">
+        <div class="campo">
+          <label for="select-tendencia-principal">Principal</label>
+          <select id="select-tendencia-principal"><option value="">— nenhuma —</option></select>
+        </div>
+        <div class="campo">
+          <label for="select-tendencia-secundaria">Secundária</label>
+          <select id="select-tendencia-secundaria"><option value="">— nenhuma —</option></select>
+        </div>
+      </div>
+      <div id="info-tendencia" class="selecao-info"></div>
+    </div>
+
+    <div class="form-section">
+      <h3>Categoria <span class="campo-opcional-tag">opcional</span></h3>
+      <div class="grid-2">
+        <div class="campo">
+          <label for="select-categoria">Gênio ou Aprendiz</label>
+          <select id="select-categoria">
+            <option value="">— nenhuma —</option>
+          </select>
+        </div>
+        <div class="campo">
+          <label for="select-arquetipo">Arquétipo</label>
+          <select id="select-arquetipo"><option value="">— escolha a categoria primeiro —</option></select>
+        </div>
+      </div>
+    </div>
+
+    <button id="btn-salvar-ficha" class="btn btn-gold" style="width: 100%;">Salvar ficha</button>
+    <p id="erro-ficha" style="color: var(--danger); display: none; margin-top: 12px;"></p>
+  </div>
+
+  <!-- Tela 4: ficha pronta, rolar dados -->
+  <div id="tela-jogo" class="ficha-screen" style="display: none;">
+    <div class="ficha-header">
+      <div>
+        <div class="eyebrow">Em jogo</div>
+        <h2 id="titulo-personagem-jogo" style="margin-bottom: 0;"></h2>
+      </div>
+      <span class="link-trocar" id="link-trocar-ficha">← trocar de ficha</span>
+    </div>
+    <div class="resumo-ficha" id="resumo-ficha"></div>
+
+    <div class="card">
+      <h3>Rolar dados</h3>
+      <div class="jogada-select">
+        <label for="select-atributo">Atributo usado no teste</label>
+        <select id="select-atributo"></select>
+      </div>
+      <div class="jogada-select">
+        <label for="select-pericia-jogada">Perícia usada (opcional)</label>
+        <select id="select-pericia-jogada">
+          <option value="">— nenhuma / usar valor manual —</option>
+        </select>
+      </div>
+      <div class="jogada-select">
+        <label for="input-nome-jogada">Nome da jogada (aparece pro mestre)</label>
+        <input id="input-nome-jogada" type="text" placeholder="ex: Chute curvo" />
+      </div>
+      <button id="btn-rolar" class="btn btn-primary" style="width: 100%;">Rolar</button>
+
+      <div id="resultado-box" class="resultado-box" style="display: none;">
+        <div class="numero-final" id="numero-final"></div>
+        <div class="detalhe" id="detalhe-resultado"></div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { entrarNaCampanha, listarFichasDoJogador, criarFicha, atualizarFicha } from './js/player/ficha.js';
+    import { initHexagono } from './js/player/hexagono.js';
+    import { initPericias } from './js/player/pericias.js';
+    import { rolarEEnviar } from './js/player/rolar.js';
+    import { ATRIBUTOS } from './js/data/atributos.js';
+    import { PERICIAS } from './js/data/pericias.js';
+    import { ARMAS } from './js/data/armas.js';
+    import { OTICAS } from './js/data/oticas.js';
+    import { TENDENCIAS } from './js/data/tendencias.js';
+    import { CATEGORIAS } from './js/data/categorias.js';
+
+    let campanhaAtual = null;
+    let nomeJogador = '';
+    let fichaAtual = null;       // ficha sendo editada/criada
+    let fichaEmJogo = null;      // ficha ativa na tela de rolar dados
+    let atributosEscolhidos = {};
+    let periciasEscolhidas = {};
+
+    const telas = {
+      codigo: document.getElementById('tela-codigo'),
+      lista: document.getElementById('tela-lista-fichas'),
+      ficha: document.getElementById('tela-ficha'),
+      jogo: document.getElementById('tela-jogo'),
+    };
+    function mostrarTela(nome) {
+      Object.values(telas).forEach((t) => (t.style.display = 'none'));
+      telas[nome].style.display = 'block';
+    }
+
+    // --- Popular selects estáticos (arma, ótica, tendências, categoria) ---
+    function popularSelect(select, lista, { valorKey = 'id', labelKey = 'nome' } = {}) {
+      lista.forEach((item) => {
+        const opt = document.createElement('option');
+        opt.value = item[valorKey];
+        opt.textContent = item[labelKey];
+        select.appendChild(opt);
+      });
+    }
+    popularSelect(document.getElementById('select-arma'), ARMAS);
+    popularSelect(document.getElementById('select-otica'), OTICAS);
+    popularSelect(document.getElementById('select-tendencia-principal'), TENDENCIAS);
+    popularSelect(document.getElementById('select-tendencia-secundaria'), TENDENCIAS);
+    popularSelect(document.getElementById('select-categoria'), CATEGORIAS);
+
+    document.getElementById('select-arma').addEventListener('change', (e) => {
+      const arma = ARMAS.find((a) => a.id === e.target.value);
+      const info = document.getElementById('info-arma');
+      if (!arma) { info.classList.remove('ativo'); return; }
+      info.classList.add('ativo');
+      info.innerHTML = `<strong>${'★'.repeat(arma.dificuldade)}${'☆'.repeat(5 - arma.dificuldade)}</strong> — ${arma.tema}<br/><strong>${arma.mecanica_especial.nome}:</strong> ${arma.mecanica_especial.texto}`;
+    });
+
+    document.getElementById('select-otica').addEventListener('change', (e) => {
+      const otica = OTICAS.find((o) => o.id === e.target.value);
+      const info = document.getElementById('info-otica');
+      if (!otica) { info.classList.remove('ativo'); return; }
+      info.classList.add('ativo');
+      info.innerHTML = `${otica.tema}<br/><strong>Nível 1:</strong> ${otica.niveis[0]}`;
+    });
+
+    function atualizarInfoTendencia() {
+      const p = TENDENCIAS.find((t) => t.id === document.getElementById('select-tendencia-principal').value);
+      const s = TENDENCIAS.find((t) => t.id === document.getElementById('select-tendencia-secundaria').value);
+      const info = document.getElementById('info-tendencia');
+      let html = '';
+      if (p && p.dom) html += `<strong>Dom (${p.nome}):</strong> ${p.dom.nome} — ${p.dom.texto}<br/>`;
+      if (s && s.passiva_secundaria) html += `<strong>Passiva (${s.nome}):</strong> ${s.passiva_secundaria.nome} — ${s.passiva_secundaria.texto}`;
+      info.innerHTML = html;
+      info.classList.toggle('ativo', !!html);
+    }
+    document.getElementById('select-tendencia-principal').addEventListener('change', atualizarInfoTendencia);
+    document.getElementById('select-tendencia-secundaria').addEventListener('change', atualizarInfoTendencia);
+
+    document.getElementById('select-categoria').addEventListener('change', (e) => {
+      const cat = CATEGORIAS.find((c) => c.id === e.target.value);
+      const selectArquetipo = document.getElementById('select-arquetipo');
+      selectArquetipo.innerHTML = '<option value="">— nenhum —</option>';
+      if (cat) popularSelect(selectArquetipo, cat.arquetipos);
+    });
+
+    // --- Passo 1: nome + código ---
+    document.getElementById('btn-entrar').addEventListener('click', async () => {
+      const nome = document.getElementById('input-nome-jogador-inicial').value.trim();
+      const codigo = document.getElementById('input-codigo').value;
+      const erro = document.getElementById('erro-codigo');
+      if (!nome || !codigo) {
+        erro.textContent = 'Preenche seu nome e o código da campanha.';
+        erro.style.display = 'block';
+        return;
+      }
+      try {
+        campanhaAtual = await entrarNaCampanha(codigo);
+        nomeJogador = nome;
+        await abrirListaFichas();
+      } catch (e) {
+        erro.textContent = e.message;
+        erro.style.display = 'block';
+      }
+    });
+
+    // --- Passo 2: lista de fichas ---
+    async function abrirListaFichas() {
+      mostrarTela('lista');
+      document.getElementById('titulo-campanha-lista').textContent = campanhaAtual.nome;
+      const fichas = await listarFichasDoJogador(campanhaAtual.id, nomeJogador);
+      const container = document.getElementById('fichas-lista');
+      if (fichas.length === 0) {
+        container.innerHTML = '<p style="color: var(--text-muted); font-size: 0.85rem;">Você ainda não tem nenhuma ficha nessa campanha.</p>';
+      } else {
+        container.innerHTML = fichas.map((f) => {
+          const arma = ARMAS.find((a) => a.id === f.arma_id);
+          return `
+            <button class="ficha-card-select" data-ficha-id="${f.id}">
+              <span>
+                <div class="nome">${f.nome_personagem}</div>
+                <div class="sub">${Object.keys(f.atributos || {}).length}/6 atributos preenchidos</div>
+              </span>
+              <span class="arma-tag">${arma ? arma.nome : ''}</span>
+            </button>
+          `;
+        }).join('');
+        container.querySelectorAll('.ficha-card-select').forEach((btn) => {
+          btn.addEventListener('click', () => {
+            const ficha = fichas.find((f) => f.id === btn.dataset.fichaId);
+            abrirTelaJogo(ficha);
+          });
+        });
+      }
+    }
+
+    document.getElementById('btn-nova-ficha').addEventListener('click', () => abrirTelaFicha(null));
+    document.getElementById('link-voltar-lista').addEventListener('click', abrirListaFichas);
+    document.getElementById('link-trocar-ficha').addEventListener('click', abrirListaFichas);
+
+    // --- Passo 3: montar/editar ficha ---
+    function abrirTelaFicha(fichaExistente) {
+      fichaAtual = fichaExistente;
+      mostrarTela('ficha');
+
+      atributosEscolhidos = fichaExistente ? { ...fichaExistente.atributos } : {};
+      periciasEscolhidas = fichaExistente ? { ...fichaExistente.pericias } : {};
+
+      document.getElementById('input-nome-personagem').value = fichaExistente?.nome_personagem || '';
+      document.getElementById('select-arma').value = fichaExistente?.arma_id || '';
+      document.getElementById('select-otica').value = fichaExistente?.otica_id || '';
+      document.getElementById('select-tendencia-principal').value = fichaExistente?.tendencia_principal_id || '';
+      document.getElementById('select-tendencia-secundaria').value = fichaExistente?.tendencia_secundaria_id || '';
+      document.getElementById('select-categoria').value = fichaExistente?.categoria_id || '';
+      document.getElementById('select-arma').dispatchEvent(new Event('change'));
+      document.getElementById('select-otica').dispatchEvent(new Event('change'));
+      document.getElementById('select-categoria').dispatchEvent(new Event('change'));
+      if (fichaExistente?.arquetipo_id) {
+        setTimeout(() => { document.getElementById('select-arquetipo').value = fichaExistente.arquetipo_id; }, 0);
+      }
+      atualizarInfoTendencia();
+
+      initHexagono(document.getElementById('hexagono-container'), (atrs) => { atributosEscolhidos = atrs; }, atributosEscolhidos);
+      initPericias(document.getElementById('pericias-container'), periciasEscolhidas, (pers) => { periciasEscolhidas = pers; });
+    }
+
+    document.getElementById('btn-salvar-ficha').addEventListener('click', async () => {
+      const nomePersonagem = document.getElementById('input-nome-personagem').value.trim();
+      const erro = document.getElementById('erro-ficha');
+      if (!nomePersonagem) {
+        erro.textContent = 'Dá um nome pro personagem antes de salvar.';
+        erro.style.display = 'block';
+        return;
+      }
+      erro.style.display = 'none';
+
+      const dados = {
+        nomePersonagem,
+        atributos: atributosEscolhidos,
+        pericias: periciasEscolhidas,
+        armaId: document.getElementById('select-arma').value || null,
+        oticaId: document.getElementById('select-otica').value || null,
+        tendenciaPrincipalId: document.getElementById('select-tendencia-principal').value || null,
+        tendenciaSecundariaId: document.getElementById('select-tendencia-secundaria').value || null,
+        categoriaId: document.getElementById('select-categoria').value || null,
+        arquetipoId: document.getElementById('select-arquetipo').value || null,
+      };
+
+      try {
+        let ficha;
+        if (fichaAtual) {
+          ficha = await atualizarFicha(fichaAtual.id, {
+            nome_personagem: dados.nomePersonagem,
+            atributos: dados.atributos,
+            pericias: dados.pericias,
+            arma_id: dados.armaId,
+            otica_id: dados.oticaId,
+            tendencia_principal_id: dados.tendenciaPrincipalId,
+            tendencia_secundaria_id: dados.tendenciaSecundariaId,
+            categoria_id: dados.categoriaId,
+            arquetipo_id: dados.arquetipoId,
+          });
+        } else {
+          ficha = await criarFicha({ campanhaId: campanhaAtual.id, nomeJogador, ...dados });
+        }
+        abrirTelaJogo(ficha);
+      } catch (e) {
+        erro.textContent = 'Não deu pra salvar a ficha. Confere a configuração do Supabase.';
+        erro.style.display = 'block';
+      }
+    });
+
+    // --- Passo 4: rolar dados ---
+    function abrirTelaJogo(ficha) {
+      fichaEmJogo = ficha;
+      mostrarTela('jogo');
+      document.getElementById('titulo-personagem-jogo').textContent = ficha.nome_personagem;
+
+      const arma = ARMAS.find((a) => a.id === ficha.arma_id);
+      const otica = OTICAS.find((o) => o.id === ficha.otica_id);
+      const resumo = document.getElementById('resumo-ficha');
+      resumo.innerHTML = [
+        arma ? `<span class="badge">${arma.nome}</span>` : '',
+        otica ? `<span class="badge">${otica.nome}</span>` : '',
+      ].join('');
+
+      const selectAtributo = document.getElementById('select-atributo');
+      selectAtributo.innerHTML = ATRIBUTOS.map((a) => {
+        const valor = ficha.atributos?.[a.id];
+        return `<option value="${a.id}">${a.nome}${valor !== undefined ? ' (' + (valor > 0 ? '+' + valor : valor) + ')' : ' (sem valor definido)'}</option>`;
+      }).join('');
+
+      const selectPericia = document.getElementById('select-pericia-jogada');
+      selectPericia.innerHTML = '<option value="">— nenhuma / usar valor manual —</option>' + PERICIAS.map((p) => {
+        const valor = ficha.pericias?.[p.id] || 0;
+        return `<option value="${p.id}">${p.nome} (${valor})</option>`;
+      }).join('');
+
+      document.getElementById('editar-ficha-atual')?.remove();
+      const btnEditar = document.createElement('span');
+      btnEditar.id = 'editar-ficha-atual';
+      btnEditar.className = 'link-trocar';
+      btnEditar.style.marginLeft = '12px';
+      btnEditar.textContent = 'editar ficha';
+      btnEditar.addEventListener('click', () => abrirTelaFicha(fichaEmJogo));
+      document.getElementById('link-trocar-ficha').after(btnEditar);
+    }
+
+    document.getElementById('btn-rolar').addEventListener('click', async () => {
+      const atributoId = document.getElementById('select-atributo').value;
+      const valorAtributo = fichaEmJogo.atributos?.[atributoId] ?? 0;
+      const periciaId = document.getElementById('select-pericia-jogada').value;
+      const valorPericia = periciaId ? (fichaEmJogo.pericias?.[periciaId] || 0) : 0;
+      const nomeJogada = document.getElementById('input-nome-jogada').value.trim() || 'Jogada';
+
+      const resultado = await rolarEEnviar({
+        campanhaId: campanhaAtual.id,
+        fichaId: fichaEmJogo.id,
+        nomePersonagem: fichaEmJogo.nome_personagem,
+        nomeJogada,
+        valorAtributo,
+        valorPericia,
+      });
+
+      const box = document.getElementById('resultado-box');
+      const numero = document.getElementById('numero-final');
+      const detalhe = document.getElementById('detalhe-resultado');
+
+      numero.className = 'numero-final';
+      if (resultado.execucaoAbsoluta?.tipo === 'positiva') numero.classList.add('absoluta-positiva');
+      if (resultado.execucaoAbsoluta?.tipo === 'negativa') numero.classList.add('absoluta-negativa');
+
+      numero.textContent = resultado.resultado;
+      detalhe.textContent = resultado.execucaoAbsoluta
+        ? `${resultado.detalheBase} — Execução absoluta ${resultado.execucaoAbsoluta.tipo}! (${resultado.execucaoAbsoluta.texto})`
+        : resultado.detalheBase;
+
+      box.style.display = 'block';
+    });
+  </script>
+</body>
+</html>

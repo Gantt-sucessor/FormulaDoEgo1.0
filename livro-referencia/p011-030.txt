@@ -1,0 +1,82 @@
+[PÁGINAS 11-30]
+
+Distâncias: A distância de seus chutes ou passes refletem seus limites de força.
+Distância de chute [DdC]: O quão longe seus chutes ao gol podem chegar. Calcule: 6 + Precisão
+Distância de passe [DdP]: O quão longe seus passes chegam. Calcule: 6 + Visão de jogo
+Quando fora de uma distância, a ação de chute/passe tem 2 desvantagens e bônus/benefícios externos são anulados.
+
+Pontos de exaustão [PdE]: simbolizam seu cansaço em jogo. Começa em 0 PdE. Ao chegar a 8 PdE, role d4:
+1. Efeito exausto por d2+1 turnos
+2. Efeito exausto por d4+2 turnos
+3. Efeito exausto por d8+3 turnos
+4. Efeito caído por 2 rodadas+4 turnos
+Ao chegar no limite, volta a 7 PdE após rodar o d4. Ao fim de uma rodada, pode retirar -2 PdE.
+
+EFEITOS (temporários, alguns acumulativos com símbolo ߷)
+
+Negativos:
+- Exausto: -5 em todas perícias, -2 fôlegos máximos, -1 reação até o fim do efeito.
+- Caído/Imóvel: não pode se mover nem usar ações até o fim do efeito.
+- ߷ Lesionado: 1ª vez = 1 desvantagem em todos atributos; 2ª vez = caído por 2 turnos + 1 desvantagem em todos atributos; 3ª vez = retirado de jogo temp. ou permanentemente. Acumula só dentro da mesma duração.
+- ߷ Ego ferido: 1ª vez = -3 em Ego; 2ª vez = -3 em resistir a qualquer teste + 1 desvantagem em Ego; 3ª vez = efeito "ego quebrado" por 3 rodadas. Acumulativo até fim da cena/partida.
+- Ego quebrado: -6 em qualquer jogada, -4 fôlegos máximos, -1 reação máxima até o fim, +3 PdE.
+- ߷ Estressado: 1 desvantagem em testes de resistência, -3 em perícias de Cognição.
+- Confuso: jogadas de Destreza/Cognição/Potência são roladas 2x, pega o menor, até o fim do efeito.
+
+Positivos:
+- ߷ Inspirado: +2 em todas perícias, anula 1 desvantagem, +1 fôlego máximo até o fim.
+- Adrenalina: +4 fôlegos máximos, +1 reação adicional até o fim.
+- Furtivo: inimigos recebem 2 desvantagens contra você em jogadas com reação e não podem usar Análise contra você, até o fim.
+- No ar: domínios/interceptações recebem +4 de bônus até o fim.
+- ߷ Ego alto: 1ª vez = 1 vantagem em Ego; 2ª vez = 1 vantagem em resistir a qualquer teste + 1 vantagem em Ego; 3ª vez = efeito "ego inflado" por 3 rodadas.
+- Ego inflado: +6 em qualquer jogada, +4 fôlegos máximos, +1 reação máxima até o fim, -3 PdE.
+
+TURNOS X RODADAS
+Turno: vez individual de cada um agir (chutes, passes, mover, etc.). Só se age fora do turno com ações de reação.
+Rodada: ciclo completo — acaba quando o turno do último indivíduo termina, reinicia pela iniciativa.
+
+TALENTOS IMPETUOSOS
+Habilidades particulares obteníveis/evolutivas via Pontos de Chama.
+Pontos de Chama: adquiridos em novos estágios, servem para obter/evoluir talentos.
+Níveis de talento: até 3 níveis de evolução (ou nível padrão), influenciam mecânicas e poder.
+Limitações: 5 espaços de armazenamento para talentos impetuosos no total; cheio = não pode obter novos mesmo com pontos.
+
+TENDÊNCIAS
+Individualidades únicas do personagem. Escolhe 1 tendência principal + 1 secundária (pode repetir).
+Primária: dá um dom ativável + pode escolher 1 perícia adicional da lista da tendência.
+Secundária: dá uma passiva.
+
+TIPOS DE DJ
+DJ = Dificuldade da Jogada.
+- J vs J: Jogador vs Jogador.
+- J vs G: Jogador vs Goleiro.
+- Número: precisa passar de um valor específico.
+
+JOGADAS (testes com dj e perícia específicos)
+
+--- CHUTES ---
+Chute curvo — Perícia: trajetória | Dj: J vs G | Distância: DdC | Ação: Ação tática | Anormalidade: com a bola no ar, pode curvá-la, desviando metros p/ esquerda/direita/diagonal.
+Chute regular — Perícia: precisão | Dj: J vs G | Distância: DdC | Ação: Ação tática | Anormalidade: nenhuma.
+Chute de poder — Perícia: especialização | Dj: J vs G | Distância: DdC | Ação: Ação tática | Anormalidade: role d2 antes do teste. 1 = +1 desvantagem; 2 = +1 vantagem.
+Voleio — Perícia: instintos + precisão ÷ 2 | Dj: J vs G | Distância: DdC | Ação: 2 reações | Anormalidade: apenas como reação a um passe aliado; 2 desvantagens se não estiver no ar. (Se outro jogador quiser dominar/voleio no mesmo passe, quem tiver maior resultado faz a jogada). Atributo à escolha: a) Potência b) Destreza.
+
+--- PASSES ---
+Passe longo — Perícia: visão de jogo | Dj: 14 | Distância: DdP | Ação: Ação tática | Anormalidade: nenhuma.
+Passe curto — Perícia: momento | Dj: 8 | Distância: 3m | Ação: Ação tática | Anormalidade: nenhuma.
+Passe alto — Perícia: posicionamento | Dj: 20 | Distância: DdP | Ação: Ação tática | Anormalidade: não é interceptável.
+Passe antecipado — Perícia: momento | Dj: 16 | Distância: 6m | Ação: Ação tática | Anormalidade: todos em 3x3m do final do passe avançam até ele como reação, não precisa de alvo. [Reação] (Se mais de um jogador quiser dominar o passe, quem tiver maior resultado ganha a posse.)
+
+--- DRIBLES / ROUBO ---
+Roubo — Perícia: agilidade | Dj: J vs J | Distância: Adjacente | Ação: Ação tática OU reação (se alvo gastar fôlego ao lado) | Anormalidade: se ganhar, recebe posse e recupera ação tática.
+Jogo de corpo — Perícia: agressividade | Dj: J vs J | Distância: Adjacente | Ação: Ação tática OU reação | Anormalidade: se ganhar, recebe posse e alvo perde os 5 fôlegos da rodada.
+Elástico — Perícia: posse | Dj: J vs J | Distância: Adjacente | Ação: Reação | Anormalidade: anda 1m sem gastar fôlegos se ganhar.
+Caneta — Perícia: criatividade | Dj: J vs J | Distância: Adjacente | Ação: 2 reações | Anormalidade: vai para trás do alvo e sai do estado "flanqueado".
+Chapéu — Perícia: pressão | Dj: J vs J | Distância: Adjacente | Ação: Reação + 2 fôlegos | Anormalidade: oponentes em até 2x2m não podem te roubar como reação.
+Pedalada — Perícia: constância + pressão ÷ 2 | Dj: J vs J | Distância: 2x2m | Ação: 1 reação por alvo | Anormalidade: dribla até 3 alvos em 2x2m com um teste; após, move-se para o lado de quem ganhou. (Se perder, bola vai para o maior resultado no roubo.) Atributo: Drible.
+
+--- DOMÍNIO / DEFESA ---
+Domínio — Perícia: Agilidade | Dj: dj do passe aliado x2 - resultado do passador (dj natural 20) | Distância: pessoal | Ação: Reação | Anormalidade: pega a bola em posse via passe aliado.
+Jogo sujo — Perícia: determinação | Dj: J vs J | Distância: Adjacente | Ação: Ação tática | Anormalidade: determinação vs determinação (resistência); se ganhar, alvo recebe "lesionado" por d2+1 turnos (só efeito acumulativo).
+Interceptação — Perícia: Instintos | Dj: resultado do passe/chute | Distância: 1m | Ação: 2 reações | Anormalidade: para o passe/chute no meio e toma a posse; pode aumentar distância em +1m mas é obrigado a fazer rebote.
+Marcação — Perícia: músculos | Dj: J vs J | Distância: Adjacente | Ação: Ação tática | Anormalidade: você segue o alvo, que fica com metade dos fôlegos e não pode dominar passes; pra escapar, alvo gasta ação tática + vence Agilidade OU músculos vs músculos (resistência). [Reação] (só marca alvos sem posse de bola).
+Análise — Perícia: posicionamento | Dj: 12+ (aumenta +1 por metro de distância do alvo) | Distância: 10m | Ação: Ação tática | Anormalidade: contra oponente = +3 bônus na próxima jogada contra ele (não acumulativo); contra aliado = +1 vantagem no próximo passe pra ele (não acumulativo).

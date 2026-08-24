@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Fórmula do Ego</title>
+<link rel="stylesheet" href="css/base.css" />
+<style>
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 40px 24px;
+  }
+  .hero-title {
+    font-size: clamp(2.4rem, 8vw, 4.2rem);
+    line-height: 0.95;
+    margin-bottom: 0.2em;
+  }
+  .hero-title .ego {
+    color: var(--accent-blue);
+    text-shadow: 0 0 40px rgba(59, 123, 255, 0.5);
+  }
+  .hero-sub {
+    max-width: 480px;
+    margin-bottom: 3em;
+  }
+  .choices {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    width: 100%;
+    max-width: 560px;
+  }
+  @media (max-width: 560px) {
+    .choices { grid-template-columns: 1fr; }
+  }
+  .choice-card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 28px 20px;
+    cursor: pointer;
+    transition: border-color 0.15s ease, transform 0.15s ease;
+    text-align: left;
+  }
+  .choice-card:hover {
+    border-color: var(--accent-blue);
+    transform: translateY(-2px);
+  }
+  .choice-card h3 { margin-bottom: 8px; }
+  .choice-card p { font-size: 0.9rem; margin-bottom: 1.2em; }
+</style>
+</head>
+<body>
+  <div class="hero">
+    <div class="eyebrow">Sistema de RPG · Fórmula do Ego 1.0</div>
+    <h1 class="hero-title">FÓRMULA DO<br /><span class="ego">EGO</span></h1>
+    <p class="hero-sub">Centralize suas campanhas, gerencie fichas e veja cada rolagem de dado acontecer em tempo real.</p>
+
+    <div class="choices">
+      <div class="choice-card" onclick="window.location.href='mestre.html'">
+        <div class="eyebrow" style="color: var(--accent-gold)">Mestre</div>
+        <h3>Comandar campanha</h3>
+        <p>Crie uma campanha, gere um código de convite e acompanhe as rolagens dos jogadores ao vivo.</p>
+        <span class="btn btn-gold" style="pointer-events: none;">Sou mestre</span>
+      </div>
+
+      <div class="choice-card" onclick="window.location.href='player.html'">
+        <div class="eyebrow">Player</div>
+        <h3>Entrar em campanha</h3>
+        <p>Use o código que seu mestre te deu, monte sua ficha e role seus dados direto no navegador.</p>
+        <span class="btn btn-primary" style="pointer-events: none;">Sou player</span>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

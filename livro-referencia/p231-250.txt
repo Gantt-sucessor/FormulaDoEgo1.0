@@ -1,0 +1,31 @@
+[PÁGINAS 231-250]
+
+TREM SÔNICO (continuação)
+  - Jet counter (com bola) — Esf +4PdE|TdA:2 reações|G.Ex:3 fôlegos|Prep:P/3 turnos — prepara; se tentarem roubar durante preparo, drible Destreza+Constância (ganha=investida+3m); se completar preparo, investida x2m.
+  - Área de aceleração (variante) — Esf +5PdE|Dis:raio Constância m|Dur:2 rodadas|TdA:Ação egoísta|Prep:P/3 turnos — sem bola: área onde investidas preparatórias contam o dobro de metros.
+  - NÃO POSSO PARAR! (fluxo, 1x) — Esf +5PdE|Dis:investida x3|TdA:Ação tática|Prep:P/5 turnos — investida x3m; alvos no caminho testam Constância dj25, falha=caído 4 turnos; chute final 2 vantagens +2 bônus por alvo caído.
+
+ASTRO INABALÁVEL (★★★☆☆) — "suporte/motivação". Desbloqueia jogada "Motivar" — Perícia:Determinação|Dj:15(+3 por efeito negativo do alvo)|Dis:8m|TdA:Ação egoísta — se ganhar, aliado recebe inspirado e remove 1 efeito negativo por Determinação turnos (acumulável).
+  Habilidades: 100% de aproveitamento, Meu mérito! ❖, Centralizar protagonista (variante), Seguir ritmo (fluxo).
+  - 100% de aproveitamento (sem bola) — Esf +2PdE|Dur:Determinação+3 turnos|TdA:Ação egoísta — realoca pontos de 3 perícias suas pra outras 3 com ≤2 pontos.
+  - Meu mérito! ❖ (com bola) — Esf +4PdE|Dis:Determinação m|TdA:Ação egoísta+reação — ao ganhar J vs J: área de Determinação metros faz "Motivar" em grupo (+2 dj por alvo); passe garantido pra um afetado, que perde -2 PdE.
+  - Centralizar protagonista (variante) — pré-req: aliado com 6+ PdE. Esf +4PdE|Dis:DdP|Dur:3 rodadas|TdA:Ação egoísta+tática — passe; se dominar, time perde -1 PdE (exceto você), alvo perde -3 PdE; pode obrigar outros aliados a repassar pro alvo.
+  - Seguir ritmo (fluxo, 1x) — Esf +5PdE|Dur:3 rodadas|TdA:Ação egoísta|G.Ex:3 fôlegos — aliado com bola: soma sua Determinação em qualquer teste, metade da sua DdP soma na DdC dele, ambos ignoram desvantagens; ao fim, você fica exausto d2+1 rodadas.
+
+SADISTA FRÍGIDO (★★☆☆☆) — "passes cruéis". Desbloqueia jogada "Passe sádico" — Perícia:Visão de jogo|Dj:20|Dis:DdP(+2m)|TdA:Ação tática — receptor tem 1 desvantagem em dominar mas ganha adrenalina 3 turnos se recepcionar; +2m se você estiver flanqueado.
+  Habilidades: Frio na espinha, Quebrar o Gelo ✪, Ser imparável... (variante), NINGUÉM SEGURA! (fluxo).
+  - Frio na espinha (sem bola) — Esf +4PdE|Dis:análise|Dur:3/2 turnos|TdA:Ação egoísta+reação — analisa aliado e oponente: aliado=adrenalina 3 turnos+1 reação; oponente=imóvel 2 turnos.
+  - Quebrar o Gelo ✪ (com bola) — Esf +5PdE|Dis:Visão de jogo m|TdA:Ação egoísta+2 reações — área instantânea: alvos imóveis 3 turnos, depois passe sádico +3m DdP OU vira área estática 5 turnos.
+  - Ser imparável... (variante) — Esf +6PdE|Dis:8m|TdA:Ação egoísta|Prep:P/2 turnos(só passe) — área 8m: aliados avançam 3m, oponentes imóveis 3 turnos; depois passe sádico preparatório 2 turnos com DdP de 2 setores.
+  - NINGUÉM SEGURA! (fluxo, 1x) — Esf +6PdE|Dur:2 rodadas|TdA:Ação egoísta|Prep:P/3 turnos — analisar deixa alvo imóvel 2 turnos (exceto goleiro); driblar deixa alvo imóvel 2 turnos; passes sádicos contam como altos p/ interceptação.
+
+RITMISTA LIMÍTROFE (★★★★☆) — "passes imprevisíveis/azarão". Passiva "Balança desequilibrada": aliado que falha J vs J ganha +1 ponto de azarão (+1 bônus em passes pra ele, máx +5, sem limite de pontos); ganhar PdS remove -1 ponto de azarão.
+  Habilidades: Twist, Windmill pass ❖, Indecisão (variante), Airflare (fluxo).
+  - Twist (sem bola) — Esf +1PdE(+1)|TdA:Reação — inverte pontos de azarão entre 2 alvos; pode +1 ponto extra a um deles gastando +1PdE.
+  - Windmill pass ❖ (com bola) — Esf +3PdE|Dis:1 setor|TdA:2 reações — passe +8 bônus pro aliado do setor com MAIS pontos de azarão (não escolhido por você); se dominar, perde -1 ponto de azarão.
+  - Indecisão (variante) — pré-req: 2 aliados com diferença de até 1 ponto de azarão. Esf +5PdE|Dis:DdP+3m|TdA:Ação egoísta+tática — os 2 disputam Consumir; passe +3m DdP pro perdedor (ignora desvantagens, dobra pontos de azarão) ou vencedor (próxima jogada +8 bônus).
+  - Airflare (fluxo, 1x) — Esf +7PdE|TdA:Ação egoísta+tática|G.Ex:2PdS — ao sofrer desarme: passe ignora DdP/roubador pro aliado com mais azarão: 0-2 pontos=+3 em qualquer teste 3 turnos; 3-6=remove todos efeitos negativos; 7+=ganha +25% de fluxo.
+
+ASTRO ASCENDENTE (★★★★☆) — "cabeceios/glamour". Efeito "Enaltecido" (só via habilidades próprias): em você = cabeceios defensivos em passes altos, fica no ar, ignora bônus negativos; em aliado = ignora bônus negativos, -1 PdE ao usar habilidades.
+  Habilidades: Defesas glam! ✪, Pose glam!, Karatê glam! (variante), Perfeição glam! (fluxo).
+  - Defesas glam! ✪ (sem bola) — Esf +4PdE|Dis:3m|Dur:4 turnos|TdA:Ação egoísta+reação — passe/chute em 3m: cabeceio defensivo +3 bônus; se suceder, vira passe alto e ambos ganham Enaltecido por 4 turnos.

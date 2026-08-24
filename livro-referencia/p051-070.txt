@@ -1,0 +1,84 @@
+[PÁGINAS 51-70]
+
+FLUXO ("zona")
+Modo especial ativado por concentração/vontade de vencer, dá benefícios de acordo com a criação do fluxo (ver Criando fluxo).
+Obtendo fluxo: contado em %, ganho cumprindo requisitos das Marcas de Despertar. Ao chegar 100%, ativa no seu turno sem gastar ação. Não acumula além de 100%.
+Duração: 1 + Determinação rodadas após ativado. Ao fim, volta a 0% e recarrega do zero. Não acumula % enquanto ativo.
+
+MARCAS DE DESPERTAR
+Objetivos pessoais em jogo, ligados ao personagem. Escolhidas ao chegar em níveis específicos. Completar a marca dá % de fluxo.
+
+REAÇÃO QUÍMICA
+Estado de sincronia entre 2 jogadores. Ativado usando a habilidade variável com símbolo ❖ com um aliado, se bem-sucedida.
+Efeitos: ambos recebem "inspirado"; habilidades custam -1 PdE (exceto já custando esse valor). Dura 5 + Emocional (de ambos) turnos. Cada jogada bem-sucedida em conjunto (passes/habilidades) soma +1 turno.
+
+CATALISADORES
+Artifícios mecânicos passivos (ex: Metavisão, Olhos de Predador), só escolhíveis conforme a ótica.
+Ativação: acumula "potencial" via jogadas específicas bem-sucedidas (listadas por catalisador), +1 a +3 cada. Limite: 10 potencial.
+Ativa como ação egoísta no seu turno, gastando todo potencial acumulado de uma vez. Duração em turnos = potencial gasto (ex: 5 potencial = 5 turnos).
+Estágios do catalisador: Passiva liberada no estágio Profissional nv.5. Habilidade liberada no estágio Mestre nv.7.
+
+GÊNIOS E APRENDIZES (categorias)
+Gênios: dom congênito, quase perfeição natural. Aprendizes: evoluem com esforço/raça, sem dom nato.
+Personagem escolhe 1 categoria (5 níveis de progressão) + 1 arquétipo dela, que dá lista de habilidades à escolha.
+Arquétipos de gênio: Genes abençoados, Arquiteto, Puro instinto.
+Arquétipos de aprendiz: Talentoso, Afortunado, Determinado.
+
+PERNA DOMINANTE
+Escolhe direita ou esquerda como perna boa; a oposta é perna ruim.
+Afeta: Chute, Drible, Passe, Domínio.
+Bola na perna boa: sem efeito. Bola na perna ruim: 2 desvantagens no teste, -3m em DdC/DdP.
+Trocar a bola de lado: custa 1 fôlego, pode repetir, só no seu turno, impossível com ângulo cortado.
+
+ESTÁGIOS (evolução do personagem, 2 níveis cada)
+Iniciante:
+  Nv1: criação de personagem.
+  Nv2: +2 pontos de chama, +criação da essência de ego.
+Intermediário:
+  Nv3: +1 ponto de perícia, +liberação da zona dourada.
+  Nv4: +1 ponto de chama, +1 nível de categoria, +1 marca de despertar, +Fluxo (complexo).
+Profissional:
+  Nv5: +1 nível de categoria, +escolha/passiva do catalisador, +1 marca de despertar.
+  Nv6: +1 ponto de perícia, +1 nível de categoria, +escolha entre: a) +1m distância de passe, b) +1m distância de chute, c) +1 fôlego máximo.
+Mestre:
+  Nv7: +2 pontos de chama, +1 ponto de perícia, +habilidade do catalisador escolhido.
+  Nv8: +1 nível de categoria, +1 marca de despertar, +1 ação egoísta adicional.
+
+LENDO UMA HABILIDADE (siglas)
+Esf.: esforço = PdE ganhos ao ativar.
+Dis.: distância máxima/necessária (exceto chute/passe).
+Dur.: duração (instantânea/turnos/rodadas).
+TdA: tipo de ação gasta (tática/egoísta/reações/movimento).
+Prep.: tempo de preparação antes do efeito ativar (nem toda habilidade tem). Formato letra/tempo:
+  M = pode preparar em movimento ou parado.
+  P = só pode preparar parado até o efeito ativar.
+G.Ex.: mecânica extra gasta (ex: PdS) — nem toda habilidade tem.
+
+MECÂNICAS RELEVANTES
+Flanquear: 2+ oponentes adjacentes = flanqueado, -4 bônus em atributos ofensivos/mentais. Sai só se mover pra fora do cerco no próprio turno.
+Ações reativas: se alguém faz jogada bem-sucedida (exceto análise) ou bola fica livre em até 6x6m de você, pode gastar 2 reações pra se mover em qualquer direção (2 fôlegos por metro). Também pode gastar +2 PdE pra fazer qualquer jogada (incl. habilidades) nesse estado.
+Arredondamentos: resultado com vírgula arredonda pra cima (ex: 7,5 → 8).
+Rebote: bola fica livre sem dono. Sem ações reativas em rebotes (salvo exceções). Ocorre quando:
+  - Empate em Drible vs Roubo/Jogo de corpo: bola voa 5m, d4 define direção (1=norte,2=sul,3=leste,4=oeste). Também ocorre se o roubador ganhar e forçar rebote.
+  - Isolar: chuta a bola sem mirar no gol, ela vai até DdC metros na direção desejada (só no seu turno).
+  - Interceptar/cabecear chute/passe: escolhe manter posse ou forçar rebote (bola voa 6m dir/esq/frente).
+  - Empate chute vs defesa do goleiro: bate na trave, bola volta metade do caminho percorrido.
+
+GOLEIRO (posição alternativa)
+Sem zona dourada. Dentro do gol aliado: passes sem distância e não interceptáveis (se alvo no meio campo do próprio time). Libera: Defesa de goleiro, Espalmar, Erguer base (exclusivas). Defesa de goleiro obriga passe logo em seguida.
+
+FALTAS, LATERAIS, ESCANTEIOS E PÊNALTIS
+Falta ocorre quando: falha 3x em jogo sujo/jogo de corpo contra o mesmo alvo; OU força uma falta ao fazer jogo sujo/jogo de corpo (ganhando ou não). Falta dá cobrança pro time adversário.
+Laterais/escanteios: bola sai de campo → checa último a tocar → bola vai pro time oposto. Escanteio = cobrança na linha onde saiu.
+Cobrança: ocorre no local da falta ou onde a bola saiu. Ao início, todos (menos cobrador) se posicionam livremente.
+  Bônus do cobrador: passe curto garantido; passe alto +2; passe longo +4.
+  Quem recebe passe do cobrador: +4 em domínios, cabeceios sem malefícios naturais.
+  Cobrador anda sua quantidade de fôlegos sem gastar após o passe, só depois os turnos seguem.
+  Cobrador escolhe aliado pra tocar; passes longos/altos +3m distância (mas ainda com dj/penalidade de falha normais).
+  Cobrador pode chutar direto: +2 bônus, +1m distância, mas interceptável a 2m (em vez de 1m).
+  Kick off: cobrança do centro no início da partida.
+Pênalti: falta dentro da área adversária. Você e goleiro cara a cara na marca do pênalti, resto se reposiciona fora da linha entre vocês. Chute não interceptável, mecânica especial:
+  Você e goleiro rolam dados iguais baseados em Potência simultaneamente. Empate = ele defende com "defesa de goleiro" (pode reduzir patente do dado em -1 pra fazer "espalmar" em vez disso).
+  Dados de Potência p/ pênalti: [-1]/[0]=d2, [+1]=d4, [+2]=d6, [+3]=d8, [+4]=d10.
+  Se ele escolher espalmar e ganhar: bola volta como jogada padrão, mas todos fazem ação reativa gastando só 1 reação (em vez de 2).
+  Pode haver disputa de pênaltis no fim do jogo se empate no placar/tempo esgotado.
