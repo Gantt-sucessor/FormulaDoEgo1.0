@@ -166,3 +166,26 @@ label {
 }
 
 ::selection { background: var(--accent-blue-dim); }
+
+/* Toast — aviso flutuante de confirmação */
+.toast {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%) translateY(16px);
+  background: var(--bg-surface-2);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius);
+  padding: 12px 22px;
+  color: var(--text-primary);
+  font-size: 0.9rem;
+  opacity: 0;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+  z-index: 999;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+}
+.toast.visivel { opacity: 1; transform: translateX(-50%) translateY(0); }
+.toast-sucesso { border-color: var(--success); }
+.toast-sucesso::before { content: '✓  '; color: var(--success); font-weight: 700; }
+.toast-erro { border-color: var(--danger); }
+.toast-erro::before { content: '✕  '; color: var(--danger); font-weight: 700; }

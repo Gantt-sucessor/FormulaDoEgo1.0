@@ -79,3 +79,33 @@
   padding: 40px 20px;
   color: var(--text-muted);
 }
+
+/* Lista de campanhas do mestre (reaproveita o visual dos cards de ficha) */
+.fichas-lista {
+  display: grid;
+  gap: 10px;
+}
+.ficha-card-select {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--bg-surface);
+  cursor: pointer;
+  text-align: left;
+  color: var(--text-primary);
+  transition: border-color 0.15s ease;
+}
+.ficha-card-select:hover { border-color: var(--accent-blue); }
+.ficha-card-select .nome { font-weight: 600; }
+.ficha-card-select .sub { font-size: 0.8rem; color: var(--text-muted); }
+
+.link-trocar {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  display: inline-block;
+  margin-top: 8px;
+}
+.link-trocar:hover { color: var(--accent-blue); }

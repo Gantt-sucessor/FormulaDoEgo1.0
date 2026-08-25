@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Fórmula do Ego — Mapa</title>
+<link rel="stylesheet" href="css/base.css" />
+<link rel="stylesheet" href="css/mapa.css" />
+</head>
+<body>
+  <div class="topbar">
+    <div class="logo">Fórmula do <span class="ego">Ego</span></div>
+    <a href="index.html" class="btn btn-ghost" style="padding: 8px 16px;">Sair</a>
+  </div>
+
+  <!-- Tela 1: entrar -->
+  <div id="tela-entrar" class="setup-screen">
+    <div class="eyebrow">Mapa</div>
+    <h2>Entrar no mapa da campanha</h2>
+    <p>Digite seu nome e o código da campanha (o mesmo que você usa na ficha).</p>
+    <div style="text-align: left; margin-bottom: 12px;">
+      <label for="input-nome-mapa">Seu nome</label>
+      <input id="input-nome-mapa" type="text" />
+    </div>
+    <div style="text-align: left; margin-bottom: 16px;">
+      <label for="input-codigo-mapa">Código da campanha</label>
+      <input id="input-codigo-mapa" type="text" maxlength="6" style="text-transform: uppercase; text-align: center; font-family: var(--font-display); font-size: 1.3rem; letter-spacing: 0.2em;" />
+    </div>
+    <button id="btn-entrar-mapa" class="btn btn-primary" style="width: 100%;">Entrar no mapa</button>
+    <p id="erro-mapa" style="color: var(--danger); display: none; margin-top: 12px;"></p>
+  </div>
+
+  <!-- Tela 2: o mapa -->
+  <div id="tela-mapa" style="display: none;">
+    <div class="mapa-toolbar">
+      <button class="ferramenta-btn ativa" data-ferramenta="mover">Mover</button>
+      <button class="ferramenta-btn" data-ferramenta="regua">Régua</button>
+      <button class="ferramenta-btn" data-ferramenta="area">Área</button>
+      <button class="ferramenta-btn" data-ferramenta="nota">Nota</button>
+      <div class="mapa-toolbar-divisor"></div>
+      <button id="btn-meu-token" class="btn btn-gold" style="padding: 8px 14px; font-size: 0.8rem;">+ Meu token</button>
+      <div class="mapa-toolbar-divisor"></div>
+      <input id="input-imagem-mapa" type="text" placeholder="URL da imagem de fundo (opcional)" />
+      <button id="btn-salvar-mapa" class="btn btn-ghost" style="padding: 8px 14px; font-size: 0.8rem;">Salvar mapa</button>
+    </div>
+    <p class="mapa-legenda">Mover: arraste um token. Régua: clique e arraste pra medir. Área: clique no ponto central e digite o raio em metros. Nota: clique e escreva o texto.</p>
+    <div class="mapa-scroll">
+      <canvas id="mapa-canvas"></canvas>
+    </div>
+  </div>
+
+  <script type="module">
+    import { entrarNaCampanha } from './js/player/ficha.js';
+    import { getNomeSalvo, setNomeSalvo, getUltimoCodigoSalvo, setUltimoCodigoSalvo } from './js/player/local.js';
+    import { buscarOuCriarMapa, atualizarMapa, listarTokens, criarToken, moverToken, listarMarcadores, criarMarcador, escutarMapa } from './js/mapa/mapa.js';
+    import { initMapaCanvas } from './js/mapa/grid.js';
+
+    document.getElementById('input-nome-mapa').value = getNomeSalvo();
+    document.getElementById('input-codigo-mapa').value = getUltimoCodigoSalvo();
+
+    let campanha, mapa, tokens, marcadores, controle, meuNome;
+
+    document.getElementById('btn-entrar-mapa').addEventListener('click', async () => {
+      const nome = document.getElementById('input-nome-mapa').value.trim();
+      const codigo = document.getElementById('input-codigo-mapa').value.trim().toUpperCase();
+      const erro = document.getElementById('erro-mapa');
+      if (!nome || !codigo) {
+        erro.textContent = 'Preenche seu nome e o código da campanha.';
+        erro.style.display = 'block';
+        return;
+      }
+      try {
+        campanha = await entrarNaCampanha(codigo);
+        meuNome = nome;
+        setNomeSalvo(nome);
+        setUltimoCodigoSalvo(codigo);
+        await abrirMapa();
+      } catch (e) {
+        erro.textContent = e.message;
+        erro.style.display = 'block';
+      }
+    });
+
+    async function abrirMapa() {
+      document.getElementById('tela-entrar').style.display = 'none';
+      document.getElementById('tela-mapa').style.display = 'block';
+
+      mapa = await buscarOuCriarMapa(campanha.id);
+      tokens = await listarTokens(mapa.id);
+      marcadores = await listarMarcadores(mapa.id);
+      document.getElementById('input-imagem-mapa').value = mapa.imagem_url || '';
+
+      const canvas = document.getElementById('mapa-canvas');
+      controle = initMapaCanvas(canvas, {
+        mapa, tokens, marcadores, meuNome,
+        onMoverToken: (tokenId, x, y) => moverToken(tokenId, x, y),
+        onCriarMarcador: async (marcador) => {
+          const salvo = await criarMarcador(mapa.id, marcador);
+          marcadores = [...marcadores, salvo];
+          controle.atualizarMarcadores(marcadores);
+        },
+      });
+
+      escutarMapa(mapa.id, {
+        onToken: (payload) => {
+          if (payload.eventType === 'INSERT') tokens = [...tokens, payload.new];
+          if (payload.eventType === 'UPDATE') tokens = tokens.map((t) => (t.id === payload.new.id ? payload.new : t));
+          if (payload.eventType === 'DELETE') tokens = tokens.filter((t) => t.id !== payload.old.id);
+          controle.atualizarTokens(tokens);
+        },
+        onMarcador: (payload) => {
+          if (payload.eventType === 'INSERT') marcadores = [...marcadores, payload.new];
+          if (payload.eventType === 'DELETE') marcadores = marcadores.filter((m) => m.id !== payload.old.id);
+          controle.atualizarMarcadores(marcadores);
+        },
+      });
+    }
+
+    document.querySelectorAll('.ferramenta-btn').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.ferramenta-btn').forEach((b) => b.classList.remove('ativa'));
+        btn.classList.add('ativa');
+        controle.setFerramenta(btn.dataset.ferramenta);
+      });
+    });
+
+    document.getElementById('btn-meu-token').addEventListener('click', async () => {
+      if (tokens.some((t) => t.nome === meuNome)) {
+        alert('Você já tem um token nesse mapa — arraste ele pelo mapa.');
+        return;
+      }
+      const cores = ['#3b7bff', '#f2b705', '#33c481', '#e24b4a', '#a855f7', '#22d3ee'];
+      const cor = cores[Math.floor(Math.random() * cores.length)];
+      const x = Math.floor(mapa.largura_celulas / 2) + 0.5;
+      const y = Math.floor(mapa.altura_celulas / 2) + 0.5;
+      const novo = await criarToken(mapa.id, meuNome, cor, x, y);
+      tokens = [...tokens, novo];
+      controle.atualizarTokens(tokens);
+    });
+
+    document.getElementById('btn-salvar-mapa').addEventListener('click', async () => {
+      const imagem_url = document.getElementById('input-imagem-mapa').value.trim() || null;
+      await atualizarMapa(mapa.id, { imagem_url });
+      location.reload();
+    });
+  </script>
+</body>
+</html>

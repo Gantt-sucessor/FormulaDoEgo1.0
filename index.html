@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Fórmula do Ego</title>
 <link rel="stylesheet" href="css/base.css" />
+<link rel="stylesheet" href="css/player.css" />
 <style>
   .hero {
     min-height: 100vh;
@@ -26,7 +27,19 @@
   }
   .hero-sub {
     max-width: 480px;
-    margin-bottom: 3em;
+    margin-bottom: 2em;
+  }
+  .campo-nome-index {
+    width: 100%;
+    max-width: 360px;
+    text-align: left;
+    margin-bottom: 24px;
+  }
+  .bloco-fichas-index {
+    width: 100%;
+    max-width: 560px;
+    text-align: left;
+    margin-bottom: 8px;
   }
   .choices {
     display: grid;
@@ -61,7 +74,20 @@
     <h1 class="hero-title">FÓRMULA DO<br /><span class="ego">EGO</span></h1>
     <p class="hero-sub">Centralize suas campanhas, gerencie fichas e veja cada rolagem de dado acontecer em tempo real.</p>
 
-    <div class="choices">
+    <div class="campo-nome-index">
+      <label for="input-nome-index">Seu nome</label>
+      <input id="input-nome-index" type="text" placeholder="Como você quer ser chamado" />
+    </div>
+
+    <div id="bloco-minhas-fichas" class="bloco-fichas-index" style="display: none;">
+      <div class="eyebrow" style="color: var(--accent-gold)">Minhas fichas</div>
+      <div id="lista-fichas-index" class="fichas-lista"></div>
+      <div class="divider"></div>
+    </div>
+
+    <button id="btn-mostrar-entrada" class="btn btn-primary" style="margin-bottom: 24px;">Entrar em campanha</button>
+
+    <div id="bloco-escolha" class="choices" style="display: none;">
       <div class="choice-card" onclick="window.location.href='mestre.html'">
         <div class="eyebrow" style="color: var(--accent-gold)">Mestre</div>
         <h3>Comandar campanha</h3>
@@ -77,5 +103,63 @@
       </div>
     </div>
   </div>
+
+  <script type="module">
+    import { listarTodasFichasDoJogador, apagarFicha } from './js/player/ficha.js';
+    import { getNomeSalvo, setNomeSalvo } from './js/player/local.js';
+    import { mostrarToast } from './js/ui/toast.js';
+
+    const inputNome = document.getElementById('input-nome-index');
+    inputNome.value = getNomeSalvo();
+    carregarMinhasFichas();
+    inputNome.addEventListener('blur', () => {
+      setNomeSalvo(inputNome.value.trim());
+      carregarMinhasFichas();
+    });
+
+    async function carregarMinhasFichas() {
+      const nome = inputNome.value.trim();
+      const bloco = document.getElementById('bloco-minhas-fichas');
+      if (!nome) { bloco.style.display = 'none'; return; }
+
+      const fichas = await listarTodasFichasDoJogador(nome);
+      if (fichas.length === 0) { bloco.style.display = 'none'; return; }
+
+      bloco.style.display = 'block';
+      document.getElementById('lista-fichas-index').innerHTML = fichas.map((f) => `
+        <div class="linha-com-exclusao">
+          <button class="item-clicavel" data-ficha-id="${f.id}">
+            <span>
+              <div class="nome">${f.nome_personagem}</div>
+              <div class="sub">${f.campanhas ? f.campanhas.nome : 'sem campanha'}</div>
+            </span>
+          </button>
+          <button class="btn-excluir" data-excluir-ficha-id="${f.id}" title="Excluir ficha">✕</button>
+        </div>
+      `).join('');
+
+      document.querySelectorAll('#lista-fichas-index .item-clicavel').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          window.location.href = `player.html?ficha=${btn.dataset.fichaId}`;
+        });
+      });
+      document.querySelectorAll('#lista-fichas-index .btn-excluir').forEach((btn) => {
+        btn.addEventListener('click', async (e) => {
+          e.stopPropagation();
+          const f = fichas.find((x) => x.id === btn.dataset.excluirFichaId);
+          const confirmado = confirm(`Apagar a ficha "${f.nome_personagem}" de vez? Essa ação não pode ser desfeita.`);
+          if (!confirmado) return;
+          await apagarFicha(f.id);
+          mostrarToast('Ficha apagada.');
+          await carregarMinhasFichas();
+        });
+      });
+    }
+
+    document.getElementById('btn-mostrar-entrada').addEventListener('click', () => {
+      document.getElementById('bloco-escolha').style.display = 'grid';
+      document.getElementById('btn-mostrar-entrada').style.display = 'none';
+    });
+  </script>
 </body>
 </html>

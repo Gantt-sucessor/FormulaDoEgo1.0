@@ -1,13 +1,25 @@
 import { supabase, gerarCodigoCampanha } from '../supabase-client.js';
 
-/** Cria uma nova campanha e retorna { id, codigo, nome }. */
-export async function criarCampanha(nome) {
+/** Cria uma nova campanha e retorna { id, codigo, nome, criador_nome }. */
+export async function criarCampanha(nome, criadorNome) {
   const codigo = gerarCodigoCampanha();
   const { data, error } = await supabase
     .from('campanhas')
-    .insert({ nome, codigo })
+    .insert({ nome, codigo, criador_nome: criadorNome })
     .select()
     .single();
+
+  if (error) throw error;
+  return data;
+}
+
+/** Lista todas as campanhas que esse mestre já criou (mais recentes primeiro). */
+export async function listarCampanhasDoMestre(criadorNome) {
+  const { data, error } = await supabase
+    .from('campanhas')
+    .select('*')
+    .eq('criador_nome', criadorNome)
+    .order('criada_em', { ascending: false });
 
   if (error) throw error;
   return data;
@@ -23,4 +35,10 @@ export async function buscarFichas(campanhaId) {
 
   if (error) throw error;
   return data;
+}
+
+/** Apaga uma campanha inteira (e, em cascata, suas fichas, rolagens e mapa). */
+export async function apagarCampanha(campanhaId) {
+  const { error } = await supabase.from('campanhas').delete().eq('id', campanhaId);
+  if (error) throw error;
 }

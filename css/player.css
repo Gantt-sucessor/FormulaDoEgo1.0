@@ -54,6 +54,7 @@
   background: var(--bg-surface);
   cursor: pointer;
   text-align: left;
+  color: var(--text-primary);
   transition: border-color 0.15s ease;
 }
 .ficha-card-select:hover { border-color: var(--accent-blue); }
@@ -444,3 +445,44 @@
 
 .titulo-personagem-linha { display: flex; align-items: center; gap: 10px; }
 .badge-com-icone { display: inline-flex; align-items: center; gap: 6px; }
+
+/* Linha de ficha com botão de excluir ao lado */
+.linha-com-exclusao {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--bg-surface);
+  transition: border-color 0.15s ease;
+}
+.linha-com-exclusao:hover { border-color: var(--accent-blue); }
+.item-clicavel {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  color: inherit;
+  font: inherit;
+}
+.item-clicavel .nome { font-weight: 600; }
+.item-clicavel .sub { font-size: 0.8rem; color: var(--text-muted); }
+.btn-excluir {
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1px solid var(--border-strong);
+  background: var(--bg-surface-2);
+  color: var(--text-secondary);
+  cursor: pointer;
+  font-size: 0.9rem;
+  margin-right: 8px;
+}
+.btn-excluir:hover { border-color: var(--danger); color: var(--danger); }

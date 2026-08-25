@@ -10,14 +10,30 @@
 <body>
   <div class="topbar">
     <div class="logo">Fórmula do <span class="ego">Ego</span></div>
-    <a href="index.html" class="btn btn-ghost" style="padding: 8px 16px;">Sair</a>
+    <div style="display: flex; gap: 8px;">
+      <a href="mapa.html" class="btn btn-ghost" style="padding: 8px 16px;">Mapa</a>
+      <a href="index.html" class="btn btn-ghost" style="padding: 8px 16px;">Sair</a>
+    </div>
   </div>
 
-  <!-- Tela 1: criar campanha -->
+  <!-- Tela 1: seu nome + lista de campanhas + criar nova -->
   <div id="tela-setup" class="setup-screen">
     <div class="eyebrow" style="color: var(--accent-gold)">Painel do mestre</div>
-    <h2>Criar campanha</h2>
-    <p>Dê um nome pra sua campanha. Um código será gerado pra você compartilhar com os players.</p>
+    <h2>Suas campanhas</h2>
+
+    <div style="text-align: left; margin-bottom: 20px;">
+      <label for="input-nome-mestre">Seu nome</label>
+      <input id="input-nome-mestre" type="text" />
+    </div>
+
+    <div id="bloco-minhas-campanhas" style="display: none; text-align: left; margin-bottom: 24px;">
+      <h3 style="margin-bottom: 10px;">Minhas campanhas criadas</h3>
+      <div id="lista-minhas-campanhas" class="fichas-lista"></div>
+    </div>
+
+    <div class="divider"></div>
+
+    <p>Dê um nome pra uma campanha nova. Um código será gerado pra você compartilhar com os players.</p>
     <div style="text-align: left; margin-bottom: 16px;">
       <label for="input-nome-campanha">Nome da campanha</label>
       <input id="input-nome-campanha" type="text" placeholder="ex: Blue Lock — Segunda Seleção" />
@@ -33,6 +49,9 @@
       <p id="nome-campanha-display" style="color: var(--text-primary); font-weight: 600;"></p>
       <div class="codigo-display" id="codigo-display"></div>
       <p>Passe esse código para seus players entrarem na tela deles.</p>
+      <span class="link-trocar" id="link-voltar-campanhas" style="cursor: pointer;">← minhas campanhas</span>
+      <div class="divider"></div>
+      <button id="btn-apagar-campanha" class="btn btn-ghost" style="width: 100%; border-color: var(--danger); color: var(--danger);">Apagar esta campanha</button>
     </div>
 
     <div class="dashboard-grid">
@@ -50,28 +69,73 @@
   </div>
 
   <script type="module">
-    import { criarCampanha, buscarFichas } from './js/mestre/campanha.js';
+    import { criarCampanha, listarCampanhasDoMestre, buscarFichas, apagarCampanha } from './js/mestre/campanha.js';
     import { escutarRolagens, buscarHistoricoRolagens } from './js/mestre/dashboard.js';
+    import { getNomeSalvo, setNomeSalvo } from './js/player/local.js';
+    import { mostrarToast } from './js/ui/toast.js';
 
     const telaSetup = document.getElementById('tela-setup');
     const telaDashboard = document.getElementById('tela-dashboard');
     const btnCriar = document.getElementById('btn-criar-campanha');
-    const inputNome = document.getElementById('input-nome-campanha');
+    const inputNomeCampanha = document.getElementById('input-nome-campanha');
+    const inputNomeMestre = document.getElementById('input-nome-mestre');
     const erroSetup = document.getElementById('erro-setup');
 
     let campanhaAtual = null;
 
+    inputNomeMestre.value = getNomeSalvo();
+    carregarMinhasCampanhas();
+
+    inputNomeMestre.addEventListener('blur', carregarMinhasCampanhas);
+
+    async function carregarMinhasCampanhas() {
+      const nome = inputNomeMestre.value.trim();
+      const bloco = document.getElementById('bloco-minhas-campanhas');
+      if (!nome) { bloco.style.display = 'none'; return; }
+
+      setNomeSalvo(nome);
+      const campanhas = await listarCampanhasDoMestre(nome);
+      if (campanhas.length === 0) { bloco.style.display = 'none'; return; }
+
+      bloco.style.display = 'block';
+      const container = document.getElementById('lista-minhas-campanhas');
+      container.innerHTML = campanhas.map((c) => `
+        <button class="ficha-card-select" data-campanha-id="${c.id}">
+          <span>
+            <div class="nome">${c.nome}</div>
+            <div class="sub">código ${c.codigo}</div>
+          </span>
+        </button>
+      `).join('');
+      container.querySelectorAll('.ficha-card-select').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const c = campanhas.find((x) => x.id === btn.dataset.campanhaId);
+          campanhaAtual = c;
+          iniciarDashboard(c);
+        });
+      });
+    }
+
     btnCriar.addEventListener('click', async () => {
-      const nome = inputNome.value.trim();
+      const nomeMestre = inputNomeMestre.value.trim();
+      const nome = inputNomeCampanha.value.trim();
+      if (!nomeMestre) {
+        erroSetup.textContent = 'Preenche seu nome antes de criar a campanha.';
+        erroSetup.style.display = 'block';
+        return;
+      }
       if (!nome) {
         erroSetup.textContent = 'Dê um nome pra sua campanha antes de continuar.';
         erroSetup.style.display = 'block';
         return;
       }
+      erroSetup.style.display = 'none';
       btnCriar.disabled = true;
       btnCriar.textContent = 'Criando...';
       try {
-        campanhaAtual = await criarCampanha(nome);
+        setNomeSalvo(nomeMestre);
+        campanhaAtual = await criarCampanha(nome, nomeMestre);
+        mostrarToast('Campanha criada com sucesso!');
         iniciarDashboard(campanhaAtual);
       } catch (e) {
         erroSetup.textContent = 'Não deu pra criar a campanha. Confira se o Supabase está configurado em js/supabase-client.js.';
@@ -79,6 +143,22 @@
         btnCriar.disabled = false;
         btnCriar.textContent = 'Criar campanha';
       }
+    });
+
+    document.getElementById('link-voltar-campanhas').addEventListener('click', () => {
+      telaDashboard.style.display = 'none';
+      telaSetup.style.display = 'block';
+      carregarMinhasCampanhas();
+    });
+
+    document.getElementById('btn-apagar-campanha').addEventListener('click', async () => {
+      const confirmado = confirm(`Apagar a campanha "${campanhaAtual.nome}" de vez? Isso apaga também todas as fichas, rolagens e o mapa dela. Essa ação não pode ser desfeita.`);
+      if (!confirmado) return;
+      await apagarCampanha(campanhaAtual.id);
+      mostrarToast('Campanha apagada.');
+      telaDashboard.style.display = 'none';
+      telaSetup.style.display = 'block';
+      carregarMinhasCampanhas();
     });
 
     async function iniciarDashboard(campanha) {

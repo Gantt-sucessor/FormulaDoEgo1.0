@@ -25,9 +25,29 @@ export async function listarFichasDoJogador(campanhaId, nomeJogador) {
   return data;
 }
 
-/** Busca uma ficha específica pelo id (pra recarregar ao entrar de novo). */
+/**
+ * Lista TODAS as fichas de um jogador, em qualquer campanha (ou sem campanha),
+ * já trazendo o nome/código da campanha de cada uma. Usada pra montar os atalhos
+ * de "minhas fichas" e "minhas campanhas" (index e tela inicial do player).
+ */
+export async function listarTodasFichasDoJogador(nomeJogador) {
+  const { data, error } = await supabase
+    .from('fichas')
+    .select('*, campanhas(id, nome, codigo)')
+    .eq('nome_jogador', nomeJogador)
+    .order('criada_em', { ascending: false });
+
+  if (error) throw error;
+  return data;
+}
+
+/** Busca uma ficha específica pelo id (pra recarregar ao entrar de novo), com a campanha embutida. */
 export async function buscarFicha(fichaId) {
-  const { data, error } = await supabase.from('fichas').select('*').eq('id', fichaId).single();
+  const { data, error } = await supabase
+    .from('fichas')
+    .select('*, campanhas(id, nome, codigo)')
+    .eq('id', fichaId)
+    .single();
   if (error) throw error;
   return data;
 }
@@ -71,6 +91,19 @@ export async function atualizarFicha(fichaId, campos) {
   const { data, error } = await supabase
     .from('fichas')
     .update(campos)
+    .eq('id', fichaId)
+    .select()
+    .single();
+
+  if (error) throw error;
+  return data;
+}
+
+/** Vincula uma ficha solta (sem campanha) a uma campanha existente. */
+export async function vincularFichaACampanha(fichaId, campanhaId) {
+  const { data, error } = await supabase
+    .from('fichas')
+    .update({ campanha_id: campanhaId })
     .eq('id', fichaId)
     .select()
     .single();

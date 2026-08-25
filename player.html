@@ -10,7 +10,10 @@
 <body>
   <div class="topbar">
     <div class="logo">Fórmula do <span class="ego">Ego</span></div>
-    <a href="index.html" class="btn btn-ghost" style="padding: 8px 16px;">Sair</a>
+    <div style="display: flex; gap: 8px;">
+      <a href="mapa.html" class="btn btn-ghost" style="padding: 8px 16px;">Mapa</a>
+      <a href="index.html" class="btn btn-ghost" style="padding: 8px 16px;">Sair</a>
+    </div>
   </div>
 
   <!-- Tela 1: entrar com código -->
@@ -31,17 +34,36 @@
     <div class="divider"></div>
     <p style="font-size: 0.85rem;">Não tem código, ou só quer criar um personagem pra testar?</p>
     <button id="btn-sem-campanha" class="btn btn-ghost" style="width: 100%;">Criar ficha sem campanha</button>
+
+    <div id="bloco-atalhos">
+      <div id="secao-minhas-campanhas" style="display: none; text-align: left; margin-top: 24px;">
+        <div class="divider"></div>
+        <p style="font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 8px;">Minhas campanhas</p>
+        <div id="lista-minhas-campanhas-atalho" class="fichas-lista"></div>
+      </div>
+      <div id="secao-fichas-sem-campanha" style="display: none; text-align: left; margin-top: 24px;">
+        <div class="divider"></div>
+        <p style="font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 8px;">Fichas sem campanha</p>
+        <div id="lista-fichas-sem-campanha-atalho" class="fichas-lista"></div>
+      </div>
+    </div>
   </div>
 
   <!-- Tela 2: lista de fichas do jogador -->
+    <!-- Tela 2: lista de fichas do jogador -->
   <div id="tela-lista-fichas" class="ficha-screen" style="display: none;">
     <div class="eyebrow">Minhas fichas</div>
     <h2 id="titulo-campanha-lista"></h2>
     <p>Escolha uma ficha pra continuar ou crie um personagem novo. Sem limite de quantas você pode ter.</p>
     <div id="fichas-lista" class="fichas-lista"></div>
     <button id="btn-nova-ficha" class="btn-nova-ficha">+ Criar nova ficha</button>
-  </div>
 
+    <div id="bloco-fichas-soltas-adicionar" style="display: none; margin-top: 28px;">
+      <div class="divider"></div>
+      <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 10px;">Você tem fichas sem campanha — clica em "Adicionar" pra colocar uma delas nessa campanha:</p>
+      <div id="lista-fichas-soltas-adicionar" class="fichas-lista"></div>
+    </div>
+  </div>
   <!-- Tela 3: personagem — ficha e jogo juntos, com abas -->
   <div id="tela-personagem" class="ficha-screen ficha-screen-larga" style="display: none;">
     <div class="ficha-header">
@@ -185,11 +207,12 @@
   </div>
 
   <script type="module">
-    import { entrarNaCampanha, listarFichasDoJogador, criarFicha, atualizarFicha } from './js/player/ficha.js';
+    import { entrarNaCampanha, listarFichasDoJogador, listarTodasFichasDoJogador, criarFicha, atualizarFicha, apagarFicha, vincularFichaACampanha, buscarFicha } from './js/player/ficha.js';
     import { initHexagono } from './js/player/hexagono.js';
     import { initPericias } from './js/player/pericias.js';
     import { rolarEEnviar, buscarUltimasRolagens } from './js/player/rolar.js';
     import { getNomeSalvo, setNomeSalvo, getUltimoCodigoSalvo, setUltimoCodigoSalvo } from './js/player/local.js';
+    import { mostrarToast } from './js/ui/toast.js';
     import { iconeArmaHTML } from './js/data/icones-armas.js';
     import { ATRIBUTOS } from './js/data/atributos.js';
     import { PERICIAS } from './js/data/pericias.js';
@@ -217,6 +240,85 @@
     function mostrarTela(nome) {
       Object.values(telas).forEach((t) => (t.style.display = 'none'));
       telas[nome].style.display = 'block';
+    }
+
+    // --- Atalhos na tela inicial: minhas campanhas já visitadas + fichas sem campanha ---
+    async function carregarAtalhos() {
+      const nome = document.getElementById('input-nome-jogador-inicial').value.trim();
+      const secaoCampanhas = document.getElementById('secao-minhas-campanhas');
+      const secaoSemCampanha = document.getElementById('secao-fichas-sem-campanha');
+      if (!nome) {
+        secaoCampanhas.style.display = 'none';
+        secaoSemCampanha.style.display = 'none';
+        return;
+      }
+
+      const todasFichas = await listarTodasFichasDoJogador(nome);
+
+      const campanhasUnicas = [];
+      const idsVistos = new Set();
+      todasFichas.forEach((f) => {
+        if (f.campanhas && !idsVistos.has(f.campanhas.id)) {
+          idsVistos.add(f.campanhas.id);
+          campanhasUnicas.push(f.campanhas);
+        }
+      });
+
+      if (campanhasUnicas.length > 0) {
+        secaoCampanhas.style.display = 'block';
+        document.getElementById('lista-minhas-campanhas-atalho').innerHTML = campanhasUnicas.map((c) => `
+          <button class="ficha-card-select" data-campanha-id="${c.id}">
+            <span><div class="nome">${c.nome}</div><div class="sub">código ${c.codigo}</div></span>
+          </button>
+        `).join('');
+        document.querySelectorAll('#lista-minhas-campanhas-atalho .ficha-card-select').forEach((btn) => {
+          btn.addEventListener('click', async () => {
+            const c = campanhasUnicas.find((x) => x.id === btn.dataset.campanhaId);
+            campanhaAtual = c;
+            nomeJogador = nome;
+            setNomeSalvo(nome);
+            setUltimoCodigoSalvo(c.codigo);
+            await abrirListaFichas();
+          });
+        });
+      } else {
+        secaoCampanhas.style.display = 'none';
+      }
+
+      const fichasSemCampanha = todasFichas.filter((f) => !f.campanhas);
+      if (fichasSemCampanha.length > 0) {
+        secaoSemCampanha.style.display = 'block';
+        document.getElementById('lista-fichas-sem-campanha-atalho').innerHTML = fichasSemCampanha.map((f) => `
+          <button class="ficha-card-select" data-ficha-id="${f.id}">
+            <span><div class="nome">${f.nome_personagem}</div></span>
+          </button>
+        `).join('');
+        document.querySelectorAll('#lista-fichas-sem-campanha-atalho .ficha-card-select').forEach((btn) => {
+          btn.addEventListener('click', () => {
+            const f = fichasSemCampanha.find((x) => x.id === btn.dataset.fichaId);
+            campanhaAtual = null;
+            nomeJogador = nome;
+            setNomeSalvo(nome);
+            abrirTelaPersonagem(f);
+          });
+        });
+      } else {
+        secaoSemCampanha.style.display = 'none';
+      }
+    }
+    carregarAtalhos();
+    document.getElementById('input-nome-jogador-inicial').addEventListener('blur', carregarAtalhos);
+
+    // --- Link direto pra uma ficha (vindo do index.html) ---
+    const paramFicha = new URLSearchParams(location.search).get('ficha');
+    if (paramFicha) {
+      buscarFicha(paramFicha).then((ficha) => {
+        nomeJogador = ficha.nome_jogador;
+        setNomeSalvo(nomeJogador);
+        campanhaAtual = ficha.campanhas || null;
+        if (campanhaAtual) setUltimoCodigoSalvo(campanhaAtual.codigo);
+        abrirTelaPersonagem(ficha);
+      });
     }
 
     // --- Abas ---
@@ -327,6 +429,7 @@
         nomeJogador = nome;
         setNomeSalvo(nome);
         setUltimoCodigoSalvo(codigo);
+        mostrarToast('Campanha adicionada com sucesso!');
         await abrirListaFichas();
       } catch (e) {
         erro.textContent = e.message;
@@ -350,6 +453,7 @@
     });
 
     // --- Passo 2: lista de fichas ---
+        // --- Passo 2: lista de fichas ---
     async function abrirListaFichas() {
       mostrarTela('lista');
       document.getElementById('titulo-campanha-lista').textContent = campanhaAtual ? campanhaAtual.nome : 'Fichas sem campanha';
@@ -361,24 +465,67 @@
         container.innerHTML = fichas.map((f) => {
           const arma = ARMAS.find((a) => a.id === f.arma_id);
           return `
-            <button class="ficha-card-select" data-ficha-id="${f.id}">
-              <span>
-                <div class="nome">${f.nome_personagem}</div>
-                <div class="sub">${Object.keys(f.atributos || {}).length}/6 atributos preenchidos</div>
-              </span>
-              <span class="arma-tag">${arma ? arma.nome : ''}</span>
-            </button>
+            <div class="linha-com-exclusao">
+              <button class="item-clicavel" data-ficha-id="${f.id}">
+                <span>
+                  <div class="nome">${f.nome_personagem}</div>
+                  <div class="sub">${Object.keys(f.atributos || {}).length}/6 atributos preenchidos</div>
+                </span>
+                <span class="arma-tag">${arma ? arma.nome : ''}</span>
+              </button>
+              <button class="btn-excluir" data-excluir-ficha-id="${f.id}" title="Excluir ficha">✕</button>
+            </div>
           `;
         }).join('');
-        container.querySelectorAll('.ficha-card-select').forEach((btn) => {
+        container.querySelectorAll('.item-clicavel').forEach((btn) => {
           btn.addEventListener('click', () => {
             const ficha = fichas.find((f) => f.id === btn.dataset.fichaId);
             abrirTelaPersonagem(ficha);
           });
         });
+        container.querySelectorAll('.btn-excluir').forEach((btn) => {
+          btn.addEventListener('click', async (e) => {
+            e.stopPropagation();
+            const ficha = fichas.find((f) => f.id === btn.dataset.excluirFichaId);
+            const confirmado = confirm(`Apagar a ficha "${ficha.nome_personagem}" de vez? Essa ação não pode ser desfeita.`);
+            if (!confirmado) return;
+            await apagarFicha(ficha.id);
+            mostrarToast('Ficha apagada.');
+            await abrirListaFichas();
+          });
+        });
+      }
+
+      // Se estamos dentro de uma campanha de verdade, mostra as fichas soltas
+      // do jogador (sem campanha) com a opção de adicionar aqui.
+      const blocoSoltas = document.getElementById('bloco-fichas-soltas-adicionar');
+      if (campanhaAtual) {
+        const fichasSoltas = await listarFichasDoJogador(null, nomeJogador);
+        if (fichasSoltas.length > 0) {
+          blocoSoltas.style.display = 'block';
+          const listaSoltas = document.getElementById('lista-fichas-soltas-adicionar');
+          listaSoltas.innerHTML = fichasSoltas.map((f) => `
+            <div class="linha-com-exclusao">
+              <span class="item-clicavel" style="cursor: default;">
+                <span><div class="nome">${f.nome_personagem}</div></span>
+              </span>
+              <button class="btn btn-ghost" style="padding: 6px 12px; font-size: 0.75rem; margin-right: 8px;" data-adicionar-ficha-id="${f.id}">Adicionar</button>
+            </div>
+          `).join('');
+          listaSoltas.querySelectorAll('[data-adicionar-ficha-id]').forEach((btn) => {
+            btn.addEventListener('click', async () => {
+              await vincularFichaACampanha(btn.dataset.adicionarFichaId, campanhaAtual.id);
+              mostrarToast('Ficha adicionada à campanha!');
+              await abrirListaFichas();
+            });
+          });
+        } else {
+          blocoSoltas.style.display = 'none';
+        }
+      } else {
+        blocoSoltas.style.display = 'none';
       }
     }
-
     document.getElementById('btn-nova-ficha').addEventListener('click', () => abrirTelaPersonagem(null));
     document.getElementById('link-voltar-lista').addEventListener('click', abrirListaFichas);
 
@@ -598,6 +745,7 @@
         fichaAtual = ficha;
         document.getElementById('titulo-personagem').textContent = ficha.nome_personagem;
         document.getElementById('eyebrow-personagem').textContent = 'Ficha';
+        mostrarToast('Ficha salva com sucesso!');
         await ativarBlocoRolagem();
       } catch (e) {
         erro.textContent = 'Não deu pra salvar a ficha. Confere a configuração do Supabase.';
