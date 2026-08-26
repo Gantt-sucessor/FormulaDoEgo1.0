@@ -10,7 +10,10 @@
 <body>
   <div class="topbar">
     <div class="logo">Fórmula do <span class="ego">Ego</span></div>
-    <a href="index.html" data-sair class="btn btn-ghost" style="padding: 8px 16px;">Sair</a>
+    <div style="display: flex; gap: 8px; align-items: center;">
+      <span class="link-voltar" id="link-voltar-entrada" style="display: none;">Voltar</span>
+      <a href="index.html" data-sair class="btn btn-ghost btn-sair" style="padding: 8px 16px;">Sair da conta</a>
+    </div>
   </div>
 
   <!-- Tela 1: entrar -->
@@ -90,6 +93,7 @@
       cancelarEscutaMapa?.();
 
       mapa = await buscarOuCriarMapa(campanha.id);
+      document.getElementById('link-voltar-entrada').style.display = 'inline-flex';
       tokens = await listarTokens(mapa.id);
       marcadores = await listarMarcadores(mapa.id);
       document.getElementById('input-imagem-mapa').value = mapa.imagem_url || '';
@@ -119,6 +123,13 @@
         },
       });
     }
+
+    document.getElementById('link-voltar-entrada').addEventListener('click', () => {
+      cancelarEscutaMapa?.();
+      document.getElementById('tela-mapa').style.display = 'none';
+      document.getElementById('tela-entrar').style.display = 'block';
+      document.getElementById('link-voltar-entrada').style.display = 'none';
+    });
 
     document.querySelectorAll('.ferramenta-btn').forEach((btn) => {
       btn.addEventListener('click', () => {

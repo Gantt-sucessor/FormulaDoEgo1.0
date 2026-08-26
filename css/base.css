@@ -197,6 +197,63 @@ a { color: var(--accent-blue); text-decoration: none; }
 }
 .btn-ghost:hover { border-color: var(--accent-blue); }
 
+.btn-sair {
+  color: var(--danger);
+  border-color: rgba(226, 75, 74, 0.45);
+}
+.btn-sair:hover { color: #fff; border-color: var(--danger); background: rgba(226, 75, 74, 0.16); }
+
+.btn-voltar-topo {
+  color: var(--text-secondary);
+  border-color: var(--border-strong);
+}
+.btn-voltar-topo::first-letter { color: var(--accent-blue); }
+.btn-voltar-topo:hover { color: var(--accent-blue); border-color: var(--accent-blue); }
+
+.link-voltar {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  font: 600 0.78rem var(--font-body);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.link-voltar::before { content: '←'; color: var(--accent-blue); font-size: 1.1rem; }
+.link-voltar:hover { color: var(--accent-blue); }
+
+.navegacao-tela {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin-bottom: 20px;
+}
+.btn-voltar-tela {
+  display: inline-grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border: 1px solid var(--border-strong);
+  border-radius: 50%;
+  background: var(--bg-surface);
+  color: var(--accent-blue);
+  cursor: pointer;
+  font: 400 1.35rem/1 var(--font-body);
+  transition: border-color 0.15s ease, background 0.15s ease, transform 0.15s ease;
+}
+.btn-voltar-tela:hover {
+  border-color: var(--accent-blue);
+  background: var(--accent-blue-dim);
+  transform: translateX(-2px);
+}
+.navegacao-legenda {
+  color: var(--text-muted);
+  font: 600 0.7rem var(--font-display);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
 .btn-gold {
   background: var(--accent-gold);
   color: #241c00;

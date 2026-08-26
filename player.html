@@ -11,8 +11,9 @@
   <div class="topbar">
     <div class="logo">Fórmula do <span class="ego">Ego</span></div>
     <div style="display: flex; gap: 8px;">
+      <a href="index.html" class="btn btn-ghost btn-voltar-topo" style="padding: 8px 16px;">← Voltar</a>
       <a href="mapa.html" class="btn btn-ghost" style="padding: 8px 16px;">Mapa</a>
-      <a href="index.html" data-sair class="btn btn-ghost" style="padding: 8px 16px;">Sair</a>
+      <a href="index.html" data-sair class="btn btn-ghost btn-sair" style="padding: 8px 16px;">Sair da conta</a>
     </div>
   </div>
 
@@ -52,6 +53,10 @@
   <!-- Tela 2: lista de fichas do jogador -->
     <!-- Tela 2: lista de fichas do jogador -->
   <div id="tela-lista-fichas" class="ficha-screen" style="display: none;">
+    <div class="navegacao-tela">
+      <button id="btn-voltar-codigo" class="btn-voltar-tela" type="button" title="Voltar para entrar na campanha" aria-label="Voltar para entrar na campanha">←</button>
+      <span class="navegacao-legenda">Entrada</span>
+    </div>
     <div class="eyebrow">Minhas fichas</div>
     <h2 id="titulo-campanha-lista"></h2>
     <p>Escolha uma ficha pra continuar ou crie um personagem novo. Sem limite de quantas você pode ter.</p>
@@ -74,7 +79,7 @@
           <h2 id="titulo-personagem" style="margin-bottom: 0;">Novo personagem</h2>
         </div>
       </div>
-      <span class="link-trocar" id="link-voltar-lista">← minhas fichas</span>
+      <span class="link-voltar" id="link-voltar-lista">Voltar para minhas fichas</span>
     </div>
     <div class="resumo-ficha" id="resumo-ficha"></div>
 
@@ -240,10 +245,18 @@
       lista: document.getElementById('tela-lista-fichas'),
       personagem: document.getElementById('tela-personagem'),
     };
-    function mostrarTela(nome) {
+    const pilhaTelas = ['codigo'];
+    function mostrarTela(nome, registrar = true) {
+      if (registrar && pilhaTelas[pilhaTelas.length - 1] !== nome) pilhaTelas.push(nome);
       Object.values(telas).forEach((t) => (t.style.display = 'none'));
       telas[nome].style.display = 'block';
     }
+    function voltarTela() {
+      if (pilhaTelas.length <= 1) return;
+      pilhaTelas.pop();
+      mostrarTela(pilhaTelas[pilhaTelas.length - 1], false);
+    }
+    document.getElementById('btn-voltar-codigo').addEventListener('click', voltarTela);
 
     // --- Atalhos na tela inicial: minhas campanhas já visitadas + fichas sem campanha ---
     async function carregarAtalhos() {
@@ -530,7 +543,7 @@
       }
     }
     document.getElementById('btn-nova-ficha').addEventListener('click', () => abrirTelaPersonagem(null));
-    document.getElementById('link-voltar-lista').addEventListener('click', abrirListaFichas);
+    document.getElementById('link-voltar-lista').addEventListener('click', voltarTela);
 
     // --- Tela unificada: ficha + jogo ---
     async function abrirTelaPersonagem(fichaExistente) {
