@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700;800&family=Manrope:wght@400;500;600;700&display=swap');
 
 :root {
   --bg-void: #0a0d14;
@@ -6,10 +6,11 @@
   --bg-surface-2: #1a1f2c;
   --bg-surface-3: #222838;
 
-  --accent-blue: #3b7bff;
-  --accent-blue-dim: #1e3a6e;
+  --accent-blue: #4aa8ff;
+  --accent-blue-dim: #24527a;
   --accent-gold: #f2b705;
   --accent-gold-dim: #6e5a10;
+  --accent-rgb: 74, 168, 255;
 
   --text-primary: #eceef3;
   --text-secondary: #8b93a6;
@@ -21,8 +22,8 @@
   --danger: #e24b4a;
   --success: #33c481;
 
-  --font-display: 'Oswald', sans-serif;
-  --font-body: 'Inter', sans-serif;
+  --font-display: 'Barlow Condensed', sans-serif;
+  --font-body: 'Manrope', sans-serif;
 
   --radius: 10px;
   --radius-lg: 16px;
@@ -41,15 +42,22 @@ html, body {
 
 body {
   background-image:
-    radial-gradient(ellipse 900px 500px at 20% -10%, rgba(59, 123, 255, 0.14), transparent),
-    radial-gradient(ellipse 700px 400px at 90% 10%, rgba(242, 183, 5, 0.06), transparent);
+    radial-gradient(ellipse 900px 500px at 20% -10%, rgba(var(--accent-rgb), 0.16), transparent),
+    radial-gradient(ellipse 700px 400px at 90% 10%, rgba(242, 183, 5, 0.06), transparent),
+    linear-gradient(135deg, transparent 0 48%, rgba(255, 255, 255, 0.018) 48% 49%, transparent 49% 100%);
   background-attachment: fixed;
 }
+
+html[data-tema="sae"] { --accent-blue: #ff4f9a; --accent-blue-dim: #6e2448; --accent-rgb: 255, 79, 154; }
+html[data-tema="kaiser"] { --accent-blue: #4aa8ff; --accent-blue-dim: #24527a; --accent-rgb: 74, 168, 255; }
+html[data-tema="rin"] { --accent-blue: #8c7bff; --accent-blue-dim: #403776; --accent-rgb: 140, 123, 255; }
+html[data-tema="bachira"] { --accent-blue: #f6c945; --accent-blue-dim: #705c1c; --accent-rgb: 246, 201, 69; }
+html[data-tema="shidou"] { --accent-blue: #ff654d; --accent-blue-dim: #762f27; --accent-rgb: 255, 101, 77; }
 
 h1, h2, h3, h4 {
   font-family: var(--font-display);
   font-weight: 600;
-  letter-spacing: 0.02em;
+  letter-spacing: 0.025em;
   margin: 0 0 0.5em;
   color: var(--text-primary);
 }
@@ -82,6 +90,22 @@ a { color: var(--accent-blue); text-decoration: none; }
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
   padding: 24px;
+  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.18);
+}
+
+.card, .choice-card, .ficha-card-select, .ficha-item, .atributos-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.card::before, .choice-card::before, .ficha-card-select::before, .ficha-item::before, .atributos-card::before {
+  content: '';
+  position: absolute;
+  inset: 0 auto auto 0;
+  width: 34px;
+  height: 3px;
+  background: var(--accent-blue);
+  box-shadow: 12px 0 0 var(--accent-gold);
 }
 
 .btn {
@@ -107,7 +131,7 @@ a { color: var(--accent-blue); text-decoration: none; }
   background: var(--accent-blue);
   color: #fff;
 }
-.btn-primary:hover { background: #5590ff; }
+.btn-primary:hover { background: var(--accent-blue); filter: brightness(1.16); box-shadow: 0 0 22px rgba(var(--accent-rgb), 0.28); }
 
 .btn-ghost {
   background: transparent;
@@ -135,6 +159,59 @@ input, select, textarea {
 input:focus, select:focus, textarea:focus {
   outline: none;
   border-color: var(--accent-blue);
+  box-shadow: 0 0 0 3px rgba(var(--accent-rgb), 0.13);
+}
+
+.topbar {
+  position: relative;
+  background: rgba(10, 13, 20, 0.78);
+  backdrop-filter: blur(14px);
+  z-index: 2;
+}
+.topbar::after {
+  content: 'EGO // OVERDRIVE';
+  position: absolute;
+  left: 50%;
+  bottom: -7px;
+  transform: translateX(-50%);
+  padding: 0 10px;
+  background: var(--bg-void);
+  color: var(--accent-blue);
+  font: 600 0.62rem var(--font-display);
+  letter-spacing: 0.14em;
+}
+.tema-controle {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin-left: auto;
+  margin-right: 14px;
+  color: var(--text-secondary);
+  font: 600 0.72rem var(--font-display);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.tema-sinal { color: var(--accent-blue); font-size: 1rem; }
+.tema-controle select {
+  width: auto;
+  min-width: 132px;
+  padding: 7px 26px 7px 9px;
+  border-radius: 4px;
+  border-color: var(--border-strong);
+  font: 600 0.75rem var(--font-body);
+}
+.topbar-status {
+  margin-left: auto;
+  color: var(--text-muted);
+  font: 600 0.68rem var(--font-display);
+  letter-spacing: 0.14em;
+}
+
+@media (max-width: 560px) {
+  .topbar { padding: 16px; flex-wrap: wrap; gap: 12px; }
+  .topbar-status { display: none; }
+  .tema-controle { order: 3; width: 100%; margin: 0; justify-content: flex-end; }
+  .topbar::after { display: none; }
 }
 
 label {

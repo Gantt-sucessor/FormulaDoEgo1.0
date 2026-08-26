@@ -8,13 +8,25 @@
 <link rel="stylesheet" href="css/player.css" />
 <style>
   .hero {
-    min-height: 100vh;
+    position: relative;
+    overflow: hidden;
+    min-height: calc(100vh - 72px);
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     text-align: center;
     padding: 40px 24px;
+  }
+  .hero::before {
+    content: '01';
+    position: absolute;
+    top: 12%;
+    right: 5%;
+    color: rgba(var(--accent-rgb), 0.1);
+    font: 800 12rem/0.8 var(--font-display);
+    letter-spacing: -0.06em;
+    pointer-events: none;
   }
   .hero-title {
     font-size: clamp(2.4rem, 8vw, 4.2rem);
@@ -23,7 +35,15 @@
   }
   .hero-title .ego {
     color: var(--accent-blue);
-    text-shadow: 0 0 40px rgba(59, 123, 255, 0.5);
+    text-shadow: 0 0 40px rgba(var(--accent-rgb), 0.5);
+  }
+  .hero-title::after {
+    content: 'FIELD // EGO AWAKENING';
+    display: block;
+    margin-top: 16px;
+    color: var(--accent-gold);
+    font: 600 0.7rem var(--font-body);
+    letter-spacing: 0.2em;
   }
   .hero-sub {
     max-width: 480px;
@@ -69,6 +89,10 @@
 </style>
 </head>
 <body>
+  <div class="topbar">
+    <div class="logo">Fórmula do <span class="ego">Ego</span></div>
+    <div class="topbar-status">PROJETO // NOVA GERAÇÃO</div>
+  </div>
   <div class="hero">
     <div class="eyebrow">Sistema de RPG · Fórmula do Ego 1.0</div>
     <h1 class="hero-title">FÓRMULA DO<br /><span class="ego">EGO</span></h1>
@@ -104,6 +128,7 @@
     </div>
   </div>
 
+  <script type="module" src="./js/tema.js"></script>
   <script type="module">
     import { listarTodasFichasDoJogador, apagarFicha } from './js/player/ficha.js';
     import { getNomeSalvo, setNomeSalvo } from './js/player/local.js';
