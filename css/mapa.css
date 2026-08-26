@@ -45,6 +45,7 @@
 #mapa-canvas {
   display: block;
   cursor: crosshair;
+  touch-action: none;
 }
 
 .mapa-legenda {

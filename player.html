@@ -12,7 +12,7 @@
     <div class="logo">Fórmula do <span class="ego">Ego</span></div>
     <div style="display: flex; gap: 8px;">
       <a href="mapa.html" class="btn btn-ghost" style="padding: 8px 16px;">Mapa</a>
-      <a href="index.html" class="btn btn-ghost" style="padding: 8px 16px;">Sair</a>
+      <a href="index.html" data-sair class="btn btn-ghost" style="padding: 8px 16px;">Sair</a>
     </div>
   </div>
 
@@ -208,6 +208,7 @@
 
   <script type="module" src="./js/tema.js"></script>
   <script type="module">
+    import { exigirAutenticacao } from './js/auth.js';
     import { entrarNaCampanha, listarFichasDoJogador, listarTodasFichasDoJogador, criarFicha, atualizarFicha, apagarFicha, vincularFichaACampanha, buscarFicha } from './js/player/ficha.js';
     import { initHexagono } from './js/player/hexagono.js';
     import { initPericias } from './js/player/pericias.js';
@@ -223,6 +224,7 @@
     import { CATEGORIAS } from './js/data/categorias.js';
     import { JOGADAS } from './js/data/jogadas.js';
 
+    await exigirAutenticacao();
     let campanhaAtual = null;
     let nomeJogador = '';
     let fichaAtual = null;       // ficha sendo editada — null enquanto ainda não foi salva pela 1ª vez
@@ -611,6 +613,9 @@
       }
       if (detalhe.rolagensVantagem?.length) {
         dados += ` + ${detalhe.rolagensVantagem.length}d6 vantagem [${detalhe.rolagensVantagem.join(', ')}]`;
+      }
+      if (detalhe.rolagensDesvantagem?.length) {
+        dados += ` - ${detalhe.rolagensDesvantagem.length}d6 desvantagem [${detalhe.rolagensDesvantagem.join(', ')}]`;
       }
       if (detalhe.valorPericia) {
         dados += ` + perícia ${detalhe.valorPericia}`;

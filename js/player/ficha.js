@@ -1,15 +1,13 @@
 import { supabase } from '../supabase-client.js';
+import { usuarioAutenticado } from '../auth.js';
 
 /** Busca uma campanha pelo código digitado pelo player. */
 export async function entrarNaCampanha(codigo) {
   const { data, error } = await supabase
-    .from('campanhas')
-    .select('*')
-    .eq('codigo', codigo.toUpperCase().trim())
-    .single();
+    .rpc('entrar_campanha_por_codigo', { p_codigo: codigo });
 
-  if (error || !data) throw new Error('Código não encontrado. Confere com o mestre se está certo.');
-  return data;
+  if (error || !data?.[0]) throw new Error('Código não encontrado. Confere com o mestre se está certo.');
+  return data[0];
 }
 
 /**
@@ -17,7 +15,9 @@ export async function entrarNaCampanha(codigo) {
  * Passe campanhaId = null pra listar as fichas "soltas" (sem campanha nenhuma).
  */
 export async function listarFichasDoJogador(campanhaId, nomeJogador) {
-  let query = supabase.from('fichas').select('*').eq('nome_jogador', nomeJogador);
+  const usuario = await usuarioAutenticado();
+  if (!usuario) throw new Error('Autenticação obrigatória.');
+  let query = supabase.from('fichas').select('*').eq('jogador_id', usuario.id);
   query = campanhaId ? query.eq('campanha_id', campanhaId) : query.is('campanha_id', null);
 
   const { data, error } = await query.order('criada_em', { ascending: false });
@@ -31,10 +31,12 @@ export async function listarFichasDoJogador(campanhaId, nomeJogador) {
  * de "minhas fichas" e "minhas campanhas" (index e tela inicial do player).
  */
 export async function listarTodasFichasDoJogador(nomeJogador) {
+  const usuario = await usuarioAutenticado();
+  if (!usuario) throw new Error('Autenticação obrigatória.');
   const { data, error } = await supabase
     .from('fichas')
     .select('*, campanhas(id, nome, codigo)')
-    .eq('nome_jogador', nomeJogador)
+    .eq('jogador_id', usuario.id)
     .order('criada_em', { ascending: false });
 
   if (error) throw error;
@@ -64,10 +66,13 @@ export async function criarFicha({
   tendenciaPrincipalId = null, tendenciaSecundariaId = null,
   categoriaId = null, arquetipoId = null,
 }) {
+  const usuario = await usuarioAutenticado();
+  if (!usuario) throw new Error('Autenticação obrigatória.');
   const { data, error } = await supabase
     .from('fichas')
     .insert({
       campanha_id: campanhaId,
+      jogador_id: usuario.id,
       nome_jogador: nomeJogador,
       nome_personagem: nomePersonagem,
       atributos,

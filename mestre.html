@@ -12,7 +12,7 @@
     <div class="logo">Fórmula do <span class="ego">Ego</span></div>
     <div style="display: flex; gap: 8px;">
       <a href="mapa.html" class="btn btn-ghost" style="padding: 8px 16px;">Mapa</a>
-      <a href="index.html" class="btn btn-ghost" style="padding: 8px 16px;">Sair</a>
+      <a href="index.html" data-sair class="btn btn-ghost" style="padding: 8px 16px;">Sair</a>
     </div>
   </div>
 
@@ -70,11 +70,13 @@
 
   <script type="module" src="./js/tema.js"></script>
   <script type="module">
+    import { exigirAutenticacao } from './js/auth.js';
     import { criarCampanha, listarCampanhasDoMestre, buscarFichas, apagarCampanha } from './js/mestre/campanha.js';
     import { escutarRolagens, buscarHistoricoRolagens } from './js/mestre/dashboard.js';
     import { getNomeSalvo, setNomeSalvo } from './js/player/local.js';
     import { mostrarToast } from './js/ui/toast.js';
 
+    await exigirAutenticacao();
     const telaSetup = document.getElementById('tela-setup');
     const telaDashboard = document.getElementById('tela-dashboard');
     const btnCriar = document.getElementById('btn-criar-campanha');

@@ -35,11 +35,18 @@ export function initMapaCanvas(canvas, { mapa, tokens, marcadores, onMoverToken,
 
   function posDoEvento(e) {
     const rect = canvas.getBoundingClientRect();
-    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+    const clientX = e.clientX;
+    const clientY = e.clientY;
     return {
       x: (clientX - rect.left) * (canvas.width / rect.width),
       y: (clientY - rect.top) * (canvas.height / rect.height),
+    };
+  }
+
+  function limitarPosicao(pos) {
+    return {
+      x: Math.max(0.5, Math.min(mapa.largura_celulas - 0.5, pos.x)),
+      y: Math.max(0.5, Math.min(mapa.altura_celulas - 0.5, pos.y)),
     };
   }
 
@@ -149,7 +156,9 @@ export function initMapaCanvas(canvas, { mapa, tokens, marcadores, onMoverToken,
     return tokens.find((t) => Math.hypot(t.pos_x * cel - pos.x, t.pos_y * cel - pos.y) <= cel * 0.4);
   }
 
-  canvas.addEventListener('mousedown', (e) => {
+  canvas.addEventListener('pointerdown', (e) => {
+    canvas.setPointerCapture?.(e.pointerId);
+    e.preventDefault();
     const pos = posDoEvento(e);
     if (ferramenta === 'mover') {
       const t = tokenNaPosicao(pos);
@@ -169,18 +178,21 @@ export function initMapaCanvas(canvas, { mapa, tokens, marcadores, onMoverToken,
     }
   });
 
-  canvas.addEventListener('mousemove', (e) => {
+  canvas.addEventListener('pointermove', (e) => {
+    e.preventDefault();
     mousePos = posDoEvento(e);
     if (arrastando) {
-      arrastando.pos_x = pxParaCelula(mousePos.x);
-      arrastando.pos_y = pxParaCelula(mousePos.y);
+      const limitada = limitarPosicao({ x: pxParaCelula(mousePos.x), y: pxParaCelula(mousePos.y) });
+      arrastando.pos_x = limitada.x;
+      arrastando.pos_y = limitada.y;
       render();
     } else if (ferramenta === 'regua' && reguaInicio) {
       render();
     }
   });
 
-  canvas.addEventListener('mouseup', () => {
+  canvas.addEventListener('pointerup', (e) => {
+    canvas.releasePointerCapture?.(e.pointerId);
     if (arrastando) {
       onMoverToken(arrastando.id, arrastando.pos_x, arrastando.pos_y);
       arrastando = null;
@@ -191,7 +203,7 @@ export function initMapaCanvas(canvas, { mapa, tokens, marcadores, onMoverToken,
     }
   });
 
-  canvas.addEventListener('mouseleave', () => {
+  canvas.addEventListener('pointercancel', () => {
     if (arrastando) {
       onMoverToken(arrastando.id, arrastando.pos_x, arrastando.pos_y);
       arrastando = null;

@@ -24,14 +24,22 @@ Depois abra `http://localhost:8000`.
 
 1. Crie uma conta grátis em https://supabase.com e um novo projeto.
 2. No painel: **Settings → API**. Copie a **Project URL** e a **anon public key**.
-3. Abra `js/supabase-client.js` e cole os dois valores nas constantes `SUPABASE_URL`
+3. Em **Authentication → Providers**, habilite o provedor **Email**. Para desenvolvimento,
+   você pode desabilitar a confirmação obrigatória de e-mail; em produção, mantenha-a ligada.
+4. Abra `js/supabase-client.js` e cole os dois valores nas constantes `SUPABASE_URL`
    e `SUPABASE_ANON_KEY`.
-4. No painel: **SQL Editor → New query**. Cole todo o conteúdo de
-   `supabase-schema.sql` e rode. Isso cria as 3 tabelas (`campanhas`, `fichas`,
-   `rolagens`).
-5. No painel: **Database → Replication**. Ative o Realtime pra tabela `rolagens`
-   (é o que faz o mestre ver as rolagens aparecerem sem dar refresh).
-
+5. No painel: **SQL Editor → New query**. Cole todo o conteúdo de
+   `supabase-schema.sql` e rode. Isso cria as tabelas de campanhas, fichas,
+   rolagens e mapa (`campanhas`, `fichas`, `rolagens`, `mapas`, `tokens`,
+   `marcadores`). O script também atualiza uma instalação existente.
+6. No painel: **Database → Replication**, ative o Realtime para `rolagens`, `tokens`
+   e `marcadores`.
+7. A aplicação agora exige conta autenticada por e-mail e senha. Registros antigos
+   sem `criador_id` ou `jogador_id` ficam preservados no banco, mas não aparecem para
+   usuários autenticados até serem associados manualmente às contas corretas.
+8. As rolagens são calculadas no navegador e salvas por uma sessão autenticada.
+   Para impedir adulteração dos resultados, será necessário publicar uma Edge Function
+   no futuro; ela não faz parte da configuração atual.
 Depois disso, tudo funciona: criar campanha, entrar com código, montar ficha e
 rolar dados já vão salvar e sincronizar de verdade.
 
@@ -80,6 +88,8 @@ formula-do-ego/
 - 3 habilidades da arma "Devoto Iluminado" (a última do livro) não tinham
   texto legível nas últimas páginas do PDF original — marcadas com uma nota
   em `js/data/armas.js`. Vale conferir se você tem uma versão mais completa.
-- A política de segurança do Supabase (RLS) está aberta pra qualquer um
-  ler/escrever, o que é ok pro momento mas vale revisar antes de divulgar
-  pra estranhos de verdade.
+- O schema usa RLS baseado em usuários autenticados. Não reative policies públicas
+   com `using (true)` em produção.
+- O mapa depende das tabelas `mapas`, `tokens` e `marcadores`, incluídas no schema atual.
+- Nunca coloque a `service_role` key no navegador ou no repositório. A chave `anon`
+   pode aparecer no cliente, pois as permissões reais ficam no Auth, RLS e Edge Functions.

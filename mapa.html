@@ -10,7 +10,7 @@
 <body>
   <div class="topbar">
     <div class="logo">Fórmula do <span class="ego">Ego</span></div>
-    <a href="index.html" class="btn btn-ghost" style="padding: 8px 16px;">Sair</a>
+    <a href="index.html" data-sair class="btn btn-ghost" style="padding: 8px 16px;">Sair</a>
   </div>
 
   <!-- Tela 1: entrar -->
@@ -51,15 +51,17 @@
 
   <script type="module" src="./js/tema.js"></script>
   <script type="module">
+    import { exigirAutenticacao } from './js/auth.js';
     import { entrarNaCampanha } from './js/player/ficha.js';
     import { getNomeSalvo, setNomeSalvo, getUltimoCodigoSalvo, setUltimoCodigoSalvo } from './js/player/local.js';
     import { buscarOuCriarMapa, atualizarMapa, listarTokens, criarToken, moverToken, listarMarcadores, criarMarcador, escutarMapa } from './js/mapa/mapa.js';
     import { initMapaCanvas } from './js/mapa/grid.js';
 
+    await exigirAutenticacao();
     document.getElementById('input-nome-mapa').value = getNomeSalvo();
     document.getElementById('input-codigo-mapa').value = getUltimoCodigoSalvo();
 
-    let campanha, mapa, tokens, marcadores, controle, meuNome;
+    let campanha, mapa, tokens, marcadores, controle, meuNome, cancelarEscutaMapa;
 
     document.getElementById('btn-entrar-mapa').addEventListener('click', async () => {
       const nome = document.getElementById('input-nome-mapa').value.trim();
@@ -85,6 +87,7 @@
     async function abrirMapa() {
       document.getElementById('tela-entrar').style.display = 'none';
       document.getElementById('tela-mapa').style.display = 'block';
+      cancelarEscutaMapa?.();
 
       mapa = await buscarOuCriarMapa(campanha.id);
       tokens = await listarTokens(mapa.id);
@@ -102,15 +105,15 @@
         },
       });
 
-      escutarMapa(mapa.id, {
+      cancelarEscutaMapa = escutarMapa(mapa.id, {
         onToken: (payload) => {
-          if (payload.eventType === 'INSERT') tokens = [...tokens, payload.new];
+          if (payload.eventType === 'INSERT' && !tokens.some((t) => t.id === payload.new.id)) tokens = [...tokens, payload.new];
           if (payload.eventType === 'UPDATE') tokens = tokens.map((t) => (t.id === payload.new.id ? payload.new : t));
           if (payload.eventType === 'DELETE') tokens = tokens.filter((t) => t.id !== payload.old.id);
           controle.atualizarTokens(tokens);
         },
         onMarcador: (payload) => {
-          if (payload.eventType === 'INSERT') marcadores = [...marcadores, payload.new];
+          if (payload.eventType === 'INSERT' && !marcadores.some((m) => m.id === payload.new.id)) marcadores = [...marcadores, payload.new];
           if (payload.eventType === 'DELETE') marcadores = marcadores.filter((m) => m.id !== payload.old.id);
           controle.atualizarMarcadores(marcadores);
         },
