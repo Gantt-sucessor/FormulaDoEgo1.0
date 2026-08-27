@@ -118,6 +118,12 @@ drop policy if exists "acesso publico mapas" on mapas;
 drop policy if exists "acesso publico tokens" on tokens;
 drop policy if exists "acesso publico marcadores" on marcadores;
 drop policy if exists "jogadores criam rolagens" on rolagens;
+drop policy if exists "donos administram campanhas" on campanhas;
+drop policy if exists "jogadores acessam suas fichas" on fichas;
+drop policy if exists "participantes leem rolagens" on rolagens;
+drop policy if exists "donos administram mapas" on mapas;
+drop policy if exists "participantes administram tokens" on tokens;
+drop policy if exists "participantes administram marcadores" on marcadores;
 drop policy if exists "participantes podem ver participacoes" on participantes_campanha;
 drop policy if exists "usuarios podem entrar em campanhas" on participantes_campanha;
 
@@ -161,17 +167,25 @@ create or replace function entrar_campanha_por_codigo(p_codigo text)
 returns table (id uuid, codigo text, nome text, criador_nome text, criada_em timestamptz)
 language plpgsql
 security definer
-set search_path = public
+set search_path = public, auth
+set row_security = off
 as $$
-declare campanha_id uuid;
+declare v_campanha_id uuid;
+  campanha_codigo text;
+  campanha_nome text;
+  campanha_criador text;
+  campanha_criada_em timestamptz;
 begin
   if auth.uid() is null then raise exception 'Autenticacao obrigatoria'; end if;
-  select c.id into campanha_id from campanhas c where c.codigo = upper(trim(p_codigo));
-  if campanha_id is null then raise exception 'Codigo nao encontrado'; end if;
-  insert into participantes_campanha (campanha_id, usuario_id, nome)
-  select campanha_id, auth.uid(), 'jogador'
+  select c.id, c.codigo, c.nome, c.criador_nome, c.criada_em
+    into v_campanha_id, campanha_codigo, campanha_nome, campanha_criador, campanha_criada_em
+    from public.campanhas c
+    where c.codigo = upper(regexp_replace(trim(p_codigo), '\s+', '', 'g'));
+  if v_campanha_id is null then raise exception 'Codigo nao encontrado'; end if;
+  insert into public.participantes_campanha (campanha_id, usuario_id, nome)
+  select v_campanha_id, auth.uid(), 'jogador'
   on conflict (campanha_id, usuario_id) do nothing;
-  return query select c.id, c.codigo, c.nome, c.criador_nome, c.criada_em from campanhas c where c.id = campanha_id;
+  return query select v_campanha_id, campanha_codigo, campanha_nome, campanha_criador, campanha_criada_em;
 end;
 $$;
 revoke all on function entrar_campanha_por_codigo(text) from public;

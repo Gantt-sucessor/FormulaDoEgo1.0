@@ -3,10 +3,20 @@ import { usuarioAutenticado } from '../auth.js';
 
 /** Busca uma campanha pelo código digitado pelo player. */
 export async function entrarNaCampanha(codigo) {
+  const codigoNormalizado = String(codigo || '').replace(/\s+/g, '').toUpperCase();
+  if (!/^[A-Z0-9]{6}$/.test(codigoNormalizado)) {
+    throw new Error('O código precisa ter exatamente 6 caracteres.');
+  }
   const { data, error } = await supabase
-    .rpc('entrar_campanha_por_codigo', { p_codigo: codigo });
+    .rpc('entrar_campanha_por_codigo', { p_codigo: codigoNormalizado });
 
-  if (error || !data?.[0]) throw new Error('Código não encontrado. Confere com o mestre se está certo.');
+  if (error) {
+    console.error('Falha ao entrar na campanha:', error);
+    if (error.code === '42883') throw new Error('A função de entrada ainda não foi aplicada no Supabase. Execute o schema atualizado.');
+    if (error.code === '42501' || /autentic/i.test(error.message || '')) throw new Error('Sua sessão expirou. Saia e entre novamente na conta.');
+    throw new Error('Não foi possível consultar a campanha agora. Tente novamente.');
+  }
+  if (!data?.[0]) throw new Error('Código não encontrado. Confere com o mestre se está certo.');
   return data[0];
 }
 

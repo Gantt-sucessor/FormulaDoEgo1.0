@@ -72,3 +72,15 @@ export function rolarJogada({ valorAtributo, valorPericia = 0, vantagens = 0, de
 export function contraDj(resultado, dj) {
   return resultado >= dj;
 }
+
+/**
+ * Resolve uma jogada contra uma DJ numérica. DJs textuais ficam pendentes
+ * porque precisam do resultado ou estado de outro personagem.
+ */
+export function resolverJogada(resultado, dj) {
+  if (!Number.isFinite(dj)) {
+    return { resolvida: false, sucesso: null, margem: null, dj };
+  }
+  const sucesso = contraDj(resultado, dj);
+  return { resolvida: true, sucesso, margem: resultado - dj, dj };
+}

@@ -228,6 +228,7 @@
     import { TENDENCIAS } from './js/data/tendencias.js';
     import { CATEGORIAS } from './js/data/categorias.js';
     import { JOGADAS } from './js/data/jogadas.js';
+    import { resolverJogada } from './js/regras/dados.js';
 
     await exigirAutenticacao();
     let campanhaAtual = null;
@@ -639,6 +640,11 @@
       if (detalhe.execucaoAbsoluta) {
         dados += ` — Execução absoluta ${detalhe.execucaoAbsoluta.tipo}! (${detalhe.execucaoAbsoluta.texto})`;
       }
+      if (detalhe.resolucao?.resolvida) {
+        dados += ` — ${detalhe.resolucao.sucesso ? 'SUCESSO' : 'FALHA'} contra DJ ${detalhe.resolucao.dj} (${detalhe.resolucao.margem >= 0 ? '+' : ''}${detalhe.resolucao.margem})`;
+      } else if (detalhe.dj) {
+        dados += ` — oposição necessária: ${detalhe.dj}`;
+      }
 
       return cabecalho ? `${cabecalho} — ${dados}` : dados;
     }
@@ -675,6 +681,8 @@
                 <button class="jogada-card" data-jogada-id="${j.id}" data-grupo="${grupoId}" ${!rolavel ? 'disabled' : ''}>
                   <div class="nome">${j.nome}</div>
                   <div class="info">${rotuloPericia} · Dj ${j.dj}</div>
+                  <div class="jogada-meta">${j.acao} · ${j.distancia}</div>
+                  <div class="jogada-anormalidade">${j.anormalidade}</div>
                 </button>
               `;
             }).join('')}
@@ -691,11 +699,11 @@
           // Atributo fixo (perícia simples ou composta com atributo definido) — rola direto
           const periciaDef = PERICIAS.find((p) => p.id === jogada.pericia);
           if (periciaDef) {
-            executarRolagem(jogada.nome, atributosEscolhidos[periciaDef.atributo] || 0, valorPericia, NOMES_ATRIBUTOS_CURTO[periciaDef.atributo], periciaDef.nome);
+            executarRolagem(jogada.nome, atributosEscolhidos[periciaDef.atributo] || 0, valorPericia, NOMES_ATRIBUTOS_CURTO[periciaDef.atributo], periciaDef.nome, jogada.dj);
             return;
           }
           if (jogada.atributo) {
-            executarRolagem(jogada.nome, atributosEscolhidos[jogada.atributo] || 0, valorPericia, NOMES_ATRIBUTOS_CURTO[jogada.atributo], labelPericiaComposta(jogada));
+            executarRolagem(jogada.nome, atributosEscolhidos[jogada.atributo] || 0, valorPericia, NOMES_ATRIBUTOS_CURTO[jogada.atributo], labelPericiaComposta(jogada), jogada.dj);
             return;
           }
 
@@ -711,7 +719,7 @@
               optBtn.addEventListener('click', (ev) => {
                 ev.stopPropagation();
                 const atrId = optBtn.dataset.atributoEscolhido;
-                executarRolagem(jogada.nome, atributosEscolhidos[atrId] || 0, valorPericia, NOMES_ATRIBUTOS_CURTO[atrId], labelPericiaComposta(jogada));
+                executarRolagem(jogada.nome, atributosEscolhidos[atrId] || 0, valorPericia, NOMES_ATRIBUTOS_CURTO[atrId], labelPericiaComposta(jogada), jogada.dj);
                 renderJogadasBase(); // devolve o card ao normal
               });
             });
@@ -785,7 +793,7 @@
       }
     }
 
-    async function executarRolagem(nomeJogada, valorAtributo, valorPericia, atributoNome = null, periciaNome = null) {
+    async function executarRolagem(nomeJogada, valorAtributo, valorPericia, atributoNome = null, periciaNome = null, dj = null) {
       const resultado = await rolarEEnviar({
         campanhaId: campanhaAtual ? campanhaAtual.id : null,
         fichaId: fichaAtual.id,
@@ -796,12 +804,17 @@
         atributoNome,
         periciaNome,
       });
+      resultado.dj = dj;
+      resultado.resolucao = resolverJogada(resultado.resultado, dj);
 
       const box = document.getElementById('resultado-box');
       const numero = document.getElementById('numero-final');
       const detalhe = document.getElementById('detalhe-resultado');
 
       numero.className = 'numero-final';
+      if (resultado.resolucao?.resolvida) {
+        numero.classList.add(resultado.resolucao.sucesso ? 'jogada-sucesso' : 'jogada-falha');
+      }
       if (resultado.execucaoAbsoluta?.tipo === 'positiva') numero.classList.add('absoluta-positiva');
       if (resultado.execucaoAbsoluta?.tipo === 'negativa') numero.classList.add('absoluta-negativa');
       numero.textContent = resultado.resultado;

@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { contraDj, rolarJogada } from '../js/regras/dados.js';
+import { contraDj, rolarJogada, resolverJogada } from '../js/regras/dados.js';
 
 test('aplica a desvantagem líquida como dados subtraídos', () => {
   const resultado = rolarJogada({
@@ -36,4 +36,13 @@ test('registra execução absoluta positiva no 12 natural', () => {
 test('compara resultado com DJ', () => {
   assert.equal(contraDj(14, 14), true);
   assert.equal(contraDj(13, 14), false);
+});
+
+test('resolve sucesso e margem contra DJ numérica', () => {
+  assert.deepEqual(resolverJogada(17, 14), { resolvida: true, sucesso: true, margem: 3, dj: 14 });
+  assert.deepEqual(resolverJogada(9, 14), { resolvida: true, sucesso: false, margem: -5, dj: 14 });
+});
+
+test('mantém J vs J pendente sem alvo', () => {
+  assert.deepEqual(resolverJogada(15, 'J vs J'), { resolvida: false, sucesso: null, margem: null, dj: 'J vs J' });
 });
