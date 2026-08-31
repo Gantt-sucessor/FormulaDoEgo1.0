@@ -11,9 +11,9 @@
   <div class="topbar">
     <div class="logo">Fórmula do <span class="ego">Ego</span></div>
     <div style="display: flex; gap: 8px;">
-      <a href="index.html" class="btn btn-ghost btn-voltar-topo" style="padding: 8px 16px;">← Voltar</a>
+      <a href="sala.html" class="btn btn-ghost" style="padding: 8px 16px;">Sala</a>
       <a href="mapa.html" class="btn btn-ghost" style="padding: 8px 16px;">Mapa</a>
-      <a href="index.html" data-sair class="btn btn-ghost btn-sair" style="padding: 8px 16px;">Sair da conta</a>
+      <a href="index.html" class="btn btn-ghost" style="padding: 8px 16px;">Sair</a>
     </div>
   </div>
 
@@ -33,7 +33,14 @@
     <button id="btn-entrar" class="btn btn-primary" style="width: 100%;">Entrar</button>
     <p id="erro-codigo" style="color: var(--danger); display: none; margin-top: 12px;"></p>
     <div class="divider"></div>
-    <p style="font-size: 0.85rem;">Não tem código, ou só quer criar um personagem pra testar?</p>
+    <p style="font-size: 0.85rem;">Quer criar uma sala nova pra jogar com a galera?</p>
+    <div style="text-align: left; margin-bottom: 12px;">
+      <label for="input-nome-sala-nova">Nome da sala</label>
+      <input id="input-nome-sala-nova" type="text" placeholder="ex: Blue Lock — Segunda Seleção" />
+    </div>
+    <button id="btn-criar-sala" class="btn btn-gold" style="width: 100%;">Criar sala nova</button>
+    <div class="divider"></div>
+    <p style="font-size: 0.85rem;">Não tem sala nenhuma, ou só quer criar um personagem pra testar?</p>
     <button id="btn-sem-campanha" class="btn btn-ghost" style="width: 100%;">Criar ficha sem campanha</button>
 
     <div id="bloco-atalhos">
@@ -51,14 +58,10 @@
   </div>
 
   <!-- Tela 2: lista de fichas do jogador -->
-    <!-- Tela 2: lista de fichas do jogador -->
   <div id="tela-lista-fichas" class="ficha-screen" style="display: none;">
-    <div class="navegacao-tela">
-      <button id="btn-voltar-codigo" class="btn-voltar-tela" type="button" title="Voltar para entrar na campanha" aria-label="Voltar para entrar na campanha">←</button>
-      <span class="navegacao-legenda">Entrada</span>
-    </div>
     <div class="eyebrow">Minhas fichas</div>
     <h2 id="titulo-campanha-lista"></h2>
+    <p id="codigo-sala-lista" style="display: none; font-size: 0.85rem; color: var(--accent-gold);"></p>
     <p>Escolha uma ficha pra continuar ou crie um personagem novo. Sem limite de quantas você pode ter.</p>
     <div id="fichas-lista" class="fichas-lista"></div>
     <button id="btn-nova-ficha" class="btn-nova-ficha">+ Criar nova ficha</button>
@@ -69,6 +72,7 @@
       <div id="lista-fichas-soltas-adicionar" class="fichas-lista"></div>
     </div>
   </div>
+
   <!-- Tela 3: personagem — ficha e jogo juntos, com abas -->
   <div id="tela-personagem" class="ficha-screen ficha-screen-larga" style="display: none;">
     <div class="ficha-header">
@@ -79,13 +83,14 @@
           <h2 id="titulo-personagem" style="margin-bottom: 0;">Novo personagem</h2>
         </div>
       </div>
-      <span class="link-voltar" id="link-voltar-lista">Voltar para minhas fichas</span>
+      <span class="link-trocar" id="link-voltar-lista">← minhas fichas</span>
     </div>
     <div class="resumo-ficha" id="resumo-ficha"></div>
 
     <div class="abas-personagem">
       <button class="aba-btn ativa" data-aba="visao-geral">Visão Geral</button>
       <button class="aba-btn" data-aba="classe-habilidades">Classe &amp; Habilidades</button>
+      <button class="aba-btn" data-aba="status">Status &amp; Talentos</button>
     </div>
 
     <!-- Aba: Visão Geral -->
@@ -209,12 +214,61 @@
 
       <button id="btn-salvar-ficha-2" class="btn btn-gold" style="width: 100%;">Salvar ficha</button>
     </div>
+
+    <!-- Aba: Status & Talentos -->
+    <div class="painel-aba" id="painel-status">
+      <div class="form-section">
+        <h3>Status</h3>
+        <p class="step-desc">O máximo de fôlego é calculado sozinho (6 + Constância). O resto você controla livremente.</p>
+        <div class="status-grid">
+          <div class="status-item">
+            <label>Nível</label>
+            <div class="status-controles">
+              <button type="button" data-status="nivel" data-acao="menos">−</button>
+              <span id="valor-nivel">1</span>
+              <button type="button" data-status="nivel" data-acao="mais">+</button>
+            </div>
+          </div>
+          <div class="status-item">
+            <label>Fôlego</label>
+            <div class="status-controles">
+              <button type="button" data-status="folego" data-acao="menos">−</button>
+              <span id="valor-folego">0</span><span class="status-max">/<span id="valor-folego-max">6</span></span>
+              <button type="button" data-status="folego" data-acao="mais">+</button>
+            </div>
+          </div>
+          <div class="status-item">
+            <label>Pontos de Esforço (PdE)</label>
+            <div class="status-controles">
+              <button type="button" data-status="pde" data-acao="menos">−</button>
+              <span id="valor-pde">0</span>
+              <button type="button" data-status="pde" data-acao="mais">+</button>
+            </div>
+          </div>
+          <div class="status-item">
+            <label>Pontos de Chama</label>
+            <div class="status-controles">
+              <button type="button" data-status="chama" data-acao="menos">−</button>
+              <span id="valor-chama">0</span>
+              <button type="button" data-status="chama" data-acao="mais">+</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <h3>Talentos Impetuosos <span class="campo-opcional-tag" id="contagem-talentos">0/5 slots</span></h3>
+        <p class="step-desc">Clique pra marcar/desmarcar. Máximo de 5 talentos guardados ao mesmo tempo.</p>
+        <div id="talentos-container"></div>
+      </div>
+
+      <button id="btn-salvar-ficha-3" class="btn btn-gold" style="width: 100%;">Salvar ficha</button>
+    </div>
   </div>
 
-  <script type="module" src="./js/tema.js"></script>
   <script type="module">
-    import { exigirAutenticacao } from './js/auth.js';
     import { entrarNaCampanha, listarFichasDoJogador, listarTodasFichasDoJogador, criarFicha, atualizarFicha, apagarFicha, vincularFichaACampanha, buscarFicha } from './js/player/ficha.js';
+    import { criarCampanha } from './js/mestre/campanha.js';
     import { initHexagono } from './js/player/hexagono.js';
     import { initPericias } from './js/player/pericias.js';
     import { rolarEEnviar, buscarUltimasRolagens } from './js/player/rolar.js';
@@ -228,15 +282,20 @@
     import { TENDENCIAS } from './js/data/tendencias.js';
     import { CATEGORIAS } from './js/data/categorias.js';
     import { JOGADAS } from './js/data/jogadas.js';
-    import { resolverJogada } from './js/regras/dados.js';
+    import { TALENTOS_EVOLUTIVOS, TALENTOS_SIMPLES, TALENTOS_RAZOAVEIS, TALENTOS_COMPLEXOS, MAX_SLOTS_TALENTOS } from './js/data/talentos.js';
+    import { calcularFolegos } from './js/regras/calculos.js';
 
-    await exigirAutenticacao();
     let campanhaAtual = null;
     let nomeJogador = '';
     let fichaAtual = null;       // ficha sendo editada — null enquanto ainda não foi salva pela 1ª vez
     let atributosEscolhidos = {};
     let periciasEscolhidas = {};
     let historicoSessao = [];    // rolagens feitas nesta sessão (usado quando não há campanha)
+    let nivelAtual = 1;
+    let folegoAtual = 0;
+    let pdeAtual = 0;
+    let pontosChama = 0;
+    let talentosSelecionados = [];
 
     document.getElementById('input-nome-jogador-inicial').value = getNomeSalvo();
     document.getElementById('input-codigo').value = getUltimoCodigoSalvo();
@@ -246,18 +305,10 @@
       lista: document.getElementById('tela-lista-fichas'),
       personagem: document.getElementById('tela-personagem'),
     };
-    const pilhaTelas = ['codigo'];
-    function mostrarTela(nome, registrar = true) {
-      if (registrar && pilhaTelas[pilhaTelas.length - 1] !== nome) pilhaTelas.push(nome);
+    function mostrarTela(nome) {
       Object.values(telas).forEach((t) => (t.style.display = 'none'));
       telas[nome].style.display = 'block';
     }
-    function voltarTela() {
-      if (pilhaTelas.length <= 1) return;
-      pilhaTelas.pop();
-      mostrarTela(pilhaTelas[pilhaTelas.length - 1], false);
-    }
-    document.getElementById('btn-voltar-codigo').addEventListener('click', voltarTela);
 
     // --- Atalhos na tela inicial: minhas campanhas já visitadas + fichas sem campanha ---
     async function carregarAtalhos() {
@@ -306,17 +357,31 @@
       if (fichasSemCampanha.length > 0) {
         secaoSemCampanha.style.display = 'block';
         document.getElementById('lista-fichas-sem-campanha-atalho').innerHTML = fichasSemCampanha.map((f) => `
-          <button class="ficha-card-select" data-ficha-id="${f.id}">
-            <span><div class="nome">${f.nome_personagem}</div></span>
-          </button>
+          <div class="linha-com-exclusao">
+            <button class="item-clicavel" data-ficha-id="${f.id}">
+              <span><div class="nome">${f.nome_personagem}</div></span>
+            </button>
+            <button class="btn-excluir" data-excluir-ficha-id="${f.id}" title="Excluir ficha">✕</button>
+          </div>
         `).join('');
-        document.querySelectorAll('#lista-fichas-sem-campanha-atalho .ficha-card-select').forEach((btn) => {
+        document.querySelectorAll('#lista-fichas-sem-campanha-atalho .item-clicavel').forEach((btn) => {
           btn.addEventListener('click', () => {
             const f = fichasSemCampanha.find((x) => x.id === btn.dataset.fichaId);
             campanhaAtual = null;
             nomeJogador = nome;
             setNomeSalvo(nome);
             abrirTelaPersonagem(f);
+          });
+        });
+        document.querySelectorAll('#lista-fichas-sem-campanha-atalho .btn-excluir').forEach((btn) => {
+          btn.addEventListener('click', async (e) => {
+            e.stopPropagation();
+            const f = fichasSemCampanha.find((x) => x.id === btn.dataset.excluirFichaId);
+            const confirmado = confirm(`Apagar a ficha "${f.nome_personagem}" de vez? Essa ação não pode ser desfeita.`);
+            if (!confirmado) return;
+            await apagarFicha(f.id);
+            mostrarToast('Ficha apagada.');
+            await carregarAtalhos();
           });
         });
       } else {
@@ -390,7 +455,14 @@
       const info = document.getElementById('info-otica');
       if (!otica) { info.classList.remove('ativo'); return; }
       info.classList.add('ativo');
-      info.innerHTML = `${otica.tema}<br/><strong>Nível 1:</strong> ${otica.niveis[0]}`;
+      info.innerHTML = `
+        <div>${otica.tema}</div>
+        <div class="arma-bloco">
+          ${otica.niveis.map((texto, i) => `<div style="margin-bottom:6px;"><strong>Nível ${i + 1}:</strong> ${texto}</div>`).join('')}
+        </div>
+        <div class="arma-bloco"><strong>Habilidade (Nível 3) — ${otica.habilidade_nv3.nome}:</strong> ${otica.habilidade_nv3.texto}</div>
+        <div class="arma-bloco"><strong>Catalisadores:</strong> ${otica.catalisadores}</div>
+      `;
       atualizarBadgesResumo();
     });
 
@@ -469,11 +541,45 @@
       await abrirListaFichas();
     });
 
+    document.getElementById('btn-criar-sala').addEventListener('click', async () => {
+      const nome = document.getElementById('input-nome-jogador-inicial').value.trim();
+      const nomeSala = document.getElementById('input-nome-sala-nova').value.trim();
+      const erro = document.getElementById('erro-codigo');
+      if (!nome) {
+        erro.textContent = 'Preenche seu nome antes de criar a sala.';
+        erro.style.display = 'block';
+        return;
+      }
+      if (!nomeSala) {
+        erro.textContent = 'Dá um nome pra sua sala antes de continuar.';
+        erro.style.display = 'block';
+        return;
+      }
+      erro.style.display = 'none';
+      try {
+        campanhaAtual = await criarCampanha(nomeSala, nome);
+        nomeJogador = nome;
+        setNomeSalvo(nome);
+        setUltimoCodigoSalvo(campanhaAtual.codigo);
+        mostrarToast('Sala criada com sucesso!');
+        await abrirListaFichas();
+      } catch (e) {
+        erro.textContent = 'Não deu pra criar a sala. Confere a configuração do Supabase.';
+        erro.style.display = 'block';
+      }
+    });
+
     // --- Passo 2: lista de fichas ---
-        // --- Passo 2: lista de fichas ---
     async function abrirListaFichas() {
       mostrarTela('lista');
       document.getElementById('titulo-campanha-lista').textContent = campanhaAtual ? campanhaAtual.nome : 'Fichas sem campanha';
+      const codigoDisplay = document.getElementById('codigo-sala-lista');
+      if (campanhaAtual) {
+        codigoDisplay.textContent = `Código da sala: ${campanhaAtual.codigo} — veja o painel compartilhado em "Sala" no topo.`;
+        codigoDisplay.style.display = 'block';
+      } else {
+        codigoDisplay.style.display = 'none';
+      }
       const fichas = await listarFichasDoJogador(campanhaAtual ? campanhaAtual.id : null, nomeJogador);
       const container = document.getElementById('fichas-lista');
       if (fichas.length === 0) {
@@ -543,8 +649,9 @@
         blocoSoltas.style.display = 'none';
       }
     }
+
     document.getElementById('btn-nova-ficha').addEventListener('click', () => abrirTelaPersonagem(null));
-    document.getElementById('link-voltar-lista').addEventListener('click', voltarTela);
+    document.getElementById('link-voltar-lista').addEventListener('click', abrirListaFichas);
 
     // --- Tela unificada: ficha + jogo ---
     async function abrirTelaPersonagem(fichaExistente) {
@@ -559,6 +666,11 @@
 
       atributosEscolhidos = fichaExistente ? { ...fichaExistente.atributos } : {};
       periciasEscolhidas = fichaExistente ? { ...fichaExistente.pericias } : {};
+      nivelAtual = fichaExistente?.nivel ?? 1;
+      folegoAtual = fichaExistente?.folego_atual ?? 0;
+      pdeAtual = fichaExistente?.pde_atual ?? 0;
+      pontosChama = fichaExistente?.pontos_chama ?? 0;
+      talentosSelecionados = fichaExistente?.talentos ? [...fichaExistente.talentos] : [];
 
       document.getElementById('titulo-personagem').textContent = fichaExistente?.nome_personagem || 'Novo personagem';
       document.getElementById('eyebrow-personagem').textContent = fichaExistente ? 'Ficha' : 'Novo personagem';
@@ -584,11 +696,14 @@
       initPericias(document.getElementById('pericias-container'), periciasEscolhidas, (pers) => {
         periciasEscolhidas = pers;
         renderSelectPericiaManual();
+        renderStatus();
       });
 
       renderSelectAtributoManual();
       renderSelectPericiaManual();
       renderJogadasBase();
+      renderStatus();
+      renderTalentos();
 
       if (fichaExistente) {
         await ativarBlocoRolagem();
@@ -617,6 +732,74 @@
       if (atual) select.value = atual;
     }
 
+    // --- Status: nível, fôlego, PdE, pontos de chama ---
+    function renderStatus() {
+      const constancia = periciasEscolhidas['constancia'] || 0;
+      const folegoMax = calcularFolegos(constancia);
+      folegoAtual = Math.min(folegoAtual, folegoMax);
+      document.getElementById('valor-nivel').textContent = nivelAtual;
+      document.getElementById('valor-folego').textContent = folegoAtual;
+      document.getElementById('valor-folego-max').textContent = folegoMax;
+      document.getElementById('valor-pde').textContent = pdeAtual;
+      document.getElementById('valor-chama').textContent = pontosChama;
+    }
+
+    document.getElementById('painel-status').addEventListener('click', (e) => {
+      const btn = e.target.closest('button[data-status]');
+      if (!btn) return;
+      const tipo = btn.dataset.status;
+      const delta = btn.dataset.acao === 'mais' ? 1 : -1;
+      if (tipo === 'nivel') nivelAtual = Math.min(8, Math.max(1, nivelAtual + delta));
+      if (tipo === 'folego') {
+        const max = calcularFolegos(periciasEscolhidas['constancia'] || 0);
+        folegoAtual = Math.min(max, Math.max(0, folegoAtual + delta));
+      }
+      if (tipo === 'pde') pdeAtual = Math.max(0, pdeAtual + delta);
+      if (tipo === 'chama') pontosChama = Math.max(0, pontosChama + delta);
+      renderStatus();
+    });
+
+    // --- Talentos impetuosos (até 5 slots) ---
+    function renderTalentos() {
+      const grupos = [
+        { titulo: 'Evolutivos (1 chama/nível)', lista: TALENTOS_EVOLUTIVOS },
+        { titulo: 'Simples (1 chama)', lista: TALENTOS_SIMPLES },
+        { titulo: 'Razoáveis (2 chamas)', lista: TALENTOS_RAZOAVEIS },
+        { titulo: 'Complexos (3 chamas)', lista: TALENTOS_COMPLEXOS },
+      ];
+      const container = document.getElementById('talentos-container');
+      container.innerHTML = grupos.map((g) => `
+        <div class="jogadas-grupo">
+          <div class="jogadas-grupo-titulo">${g.titulo}</div>
+          <div class="jogadas-grid">
+            ${g.lista.map((t) => `
+              <button type="button" class="jogada-card ${talentosSelecionados.includes(t.id) ? 'talento-selecionado' : ''}" data-talento-id="${t.id}">
+                <div class="nome">${t.nome}</div>
+                <div class="info">${t.texto || (t.niveis ? t.niveis[0] : '')}</div>
+              </button>
+            `).join('')}
+          </div>
+        </div>
+      `).join('');
+      document.getElementById('contagem-talentos').textContent = `${talentosSelecionados.length}/${MAX_SLOTS_TALENTOS} slots`;
+
+      container.querySelectorAll('[data-talento-id]').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const id = btn.dataset.talentoId;
+          if (talentosSelecionados.includes(id)) {
+            talentosSelecionados = talentosSelecionados.filter((x) => x !== id);
+          } else {
+            if (talentosSelecionados.length >= MAX_SLOTS_TALENTOS) {
+              alert('Você já preencheu os 5 espaços de talentos impetuosos.');
+              return;
+            }
+            talentosSelecionados.push(id);
+          }
+          renderTalentos();
+        });
+      });
+    }
+
     // --- Formata o detalhe de uma rolagem (dados usados, atributo/perícia, execução absoluta) ---
     function formatarDetalhe(detalhe) {
       const cabecalho = [detalhe.atributoNome, detalhe.periciaNome].filter(Boolean).join(' · ');
@@ -628,9 +811,6 @@
       if (detalhe.rolagensVantagem?.length) {
         dados += ` + ${detalhe.rolagensVantagem.length}d6 vantagem [${detalhe.rolagensVantagem.join(', ')}]`;
       }
-      if (detalhe.rolagensDesvantagem?.length) {
-        dados += ` - ${detalhe.rolagensDesvantagem.length}d6 desvantagem [${detalhe.rolagensDesvantagem.join(', ')}]`;
-      }
       if (detalhe.valorPericia) {
         dados += ` + perícia ${detalhe.valorPericia}`;
       }
@@ -639,11 +819,6 @@
       }
       if (detalhe.execucaoAbsoluta) {
         dados += ` — Execução absoluta ${detalhe.execucaoAbsoluta.tipo}! (${detalhe.execucaoAbsoluta.texto})`;
-      }
-      if (detalhe.resolucao?.resolvida) {
-        dados += ` — ${detalhe.resolucao.sucesso ? 'SUCESSO' : 'FALHA'} contra DJ ${detalhe.resolucao.dj} (${detalhe.resolucao.margem >= 0 ? '+' : ''}${detalhe.resolucao.margem})`;
-      } else if (detalhe.dj) {
-        dados += ` — oposição necessária: ${detalhe.dj}`;
       }
 
       return cabecalho ? `${cabecalho} — ${dados}` : dados;
@@ -681,8 +856,6 @@
                 <button class="jogada-card" data-jogada-id="${j.id}" data-grupo="${grupoId}" ${!rolavel ? 'disabled' : ''}>
                   <div class="nome">${j.nome}</div>
                   <div class="info">${rotuloPericia} · Dj ${j.dj}</div>
-                  <div class="jogada-meta">${j.acao} · ${j.distancia}</div>
-                  <div class="jogada-anormalidade">${j.anormalidade}</div>
                 </button>
               `;
             }).join('')}
@@ -699,11 +872,11 @@
           // Atributo fixo (perícia simples ou composta com atributo definido) — rola direto
           const periciaDef = PERICIAS.find((p) => p.id === jogada.pericia);
           if (periciaDef) {
-            executarRolagem(jogada.nome, atributosEscolhidos[periciaDef.atributo] || 0, valorPericia, NOMES_ATRIBUTOS_CURTO[periciaDef.atributo], periciaDef.nome, jogada.dj);
+            executarRolagem(jogada.nome, atributosEscolhidos[periciaDef.atributo] || 0, valorPericia, NOMES_ATRIBUTOS_CURTO[periciaDef.atributo], periciaDef.nome);
             return;
           }
           if (jogada.atributo) {
-            executarRolagem(jogada.nome, atributosEscolhidos[jogada.atributo] || 0, valorPericia, NOMES_ATRIBUTOS_CURTO[jogada.atributo], labelPericiaComposta(jogada), jogada.dj);
+            executarRolagem(jogada.nome, atributosEscolhidos[jogada.atributo] || 0, valorPericia, NOMES_ATRIBUTOS_CURTO[jogada.atributo], labelPericiaComposta(jogada));
             return;
           }
 
@@ -719,7 +892,7 @@
               optBtn.addEventListener('click', (ev) => {
                 ev.stopPropagation();
                 const atrId = optBtn.dataset.atributoEscolhido;
-                executarRolagem(jogada.nome, atributosEscolhidos[atrId] || 0, valorPericia, NOMES_ATRIBUTOS_CURTO[atrId], labelPericiaComposta(jogada), jogada.dj);
+                executarRolagem(jogada.nome, atributosEscolhidos[atrId] || 0, valorPericia, NOMES_ATRIBUTOS_CURTO[atrId], labelPericiaComposta(jogada));
                 renderJogadasBase(); // devolve o card ao normal
               });
             });
@@ -750,6 +923,11 @@
         tendenciaSecundariaId: document.getElementById('select-tendencia-secundaria').value || null,
         categoriaId: document.getElementById('select-categoria').value || null,
         arquetipoId: document.getElementById('select-arquetipo').value || null,
+        nivel: nivelAtual,
+        folegoAtual,
+        pdeAtual,
+        pontosChama,
+        talentos: talentosSelecionados,
       };
 
       try {
@@ -765,6 +943,11 @@
             tendencia_secundaria_id: dados.tendenciaSecundariaId,
             categoria_id: dados.categoriaId,
             arquetipo_id: dados.arquetipoId,
+            nivel: dados.nivel,
+            folego_atual: dados.folegoAtual,
+            pde_atual: dados.pdeAtual,
+            pontos_chama: dados.pontosChama,
+            talentos: dados.talentos,
           });
         } else {
           ficha = await criarFicha({ campanhaId: campanhaAtual ? campanhaAtual.id : null, nomeJogador, ...dados });
@@ -781,6 +964,7 @@
     }
     document.getElementById('btn-salvar-ficha').addEventListener('click', salvarFicha);
     document.getElementById('btn-salvar-ficha-2').addEventListener('click', salvarFicha);
+    document.getElementById('btn-salvar-ficha-3').addEventListener('click', salvarFicha);
 
     // --- Bloco de rolagem só aparece depois que a ficha existe salva (precisa de um id) ---
     async function ativarBlocoRolagem() {
@@ -793,7 +977,7 @@
       }
     }
 
-    async function executarRolagem(nomeJogada, valorAtributo, valorPericia, atributoNome = null, periciaNome = null, dj = null) {
+    async function executarRolagem(nomeJogada, valorAtributo, valorPericia, atributoNome = null, periciaNome = null) {
       const resultado = await rolarEEnviar({
         campanhaId: campanhaAtual ? campanhaAtual.id : null,
         fichaId: fichaAtual.id,
@@ -804,17 +988,12 @@
         atributoNome,
         periciaNome,
       });
-      resultado.dj = dj;
-      resultado.resolucao = resolverJogada(resultado.resultado, dj);
 
       const box = document.getElementById('resultado-box');
       const numero = document.getElementById('numero-final');
       const detalhe = document.getElementById('detalhe-resultado');
 
       numero.className = 'numero-final';
-      if (resultado.resolucao?.resolvida) {
-        numero.classList.add(resultado.resolucao.sucesso ? 'jogada-sucesso' : 'jogada-falha');
-      }
       if (resultado.execucaoAbsoluta?.tipo === 'positiva') numero.classList.add('absoluta-positiva');
       if (resultado.execucaoAbsoluta?.tipo === 'negativa') numero.classList.add('absoluta-negativa');
       numero.textContent = resultado.resultado;

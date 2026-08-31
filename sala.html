@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Fórmula do Ego — Sala</title>
+<link rel="stylesheet" href="css/base.css" />
+<link rel="stylesheet" href="css/mestre.css" />
+</head>
+<body>
+  <div class="topbar">
+    <div class="logo">Fórmula do <span class="ego">Ego</span></div>
+    <div style="display: flex; gap: 8px;">
+      <a href="player.html" class="btn btn-ghost" style="padding: 8px 16px;">Fichas</a>
+      <a href="mapa.html" class="btn btn-ghost" style="padding: 8px 16px;">Mapa</a>
+      <a href="index.html" class="btn btn-ghost" style="padding: 8px 16px;">Sair</a>
+    </div>
+  </div>
+
+  <!-- Tela 1: entrar -->
+  <div id="tela-entrar" class="setup-screen">
+    <div class="eyebrow" style="color: var(--accent-gold)">Sala</div>
+    <h2>Painel compartilhado</h2>
+    <p>Aqui todo mundo vê as fichas e as rolagens de todo mundo, em tempo real — não tem "mestre" nem ficha escondida.</p>
+
+    <div style="text-align: left; margin-bottom: 12px;">
+      <label for="input-nome-sala">Seu nome</label>
+      <input id="input-nome-sala" type="text" />
+    </div>
+    <div style="text-align: left; margin-bottom: 16px;">
+      <label for="input-codigo-sala">Código da sala</label>
+      <input id="input-codigo-sala" type="text" maxlength="6" placeholder="EX: 7K2QXP" style="text-transform: uppercase; text-align: center; font-family: var(--font-display); font-size: 1.3rem; letter-spacing: 0.2em;" />
+    </div>
+    <button id="btn-entrar-sala" class="btn btn-primary" style="width: 100%;">Entrar</button>
+    <p id="erro-sala" style="color: var(--danger); display: none; margin-top: 12px;"></p>
+    <div class="divider"></div>
+    <p style="font-size: 0.85rem;">Ainda não tem uma sala? <a href="player.html">Crie uma na tela de fichas</a>.</p>
+  </div>
+
+  <!-- Tela 2: painel compartilhado -->
+  <div id="tela-painel" style="display: none;">
+    <div class="setup-screen" style="margin: 40px auto 0;">
+      <div class="eyebrow" style="color: var(--accent-gold)">Sala aberta</div>
+      <p id="nome-sala-display" style="color: var(--text-primary); font-weight: 600;"></p>
+      <div class="codigo-display" id="codigo-sala-display"></div>
+      <p>Compartilhe esse código pra mais gente entrar. Todo mundo aqui vê tudo.</p>
+      <button id="btn-apagar-sala" class="btn btn-ghost" style="display: none; width: 100%; border-color: var(--danger); color: var(--danger); margin-top: 8px;">Apagar esta sala</button>
+    </div>
+
+    <div class="dashboard-grid">
+      <div>
+        <h3>Fichas na sala</h3>
+        <div id="lista-fichas-sala"></div>
+      </div>
+      <div class="card">
+        <h3>Rolagens ao vivo</h3>
+        <div id="feed-rolagens-sala">
+          <div class="empty-state">Aguardando a primeira rolagem de alguém...</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { entrarNaCampanha } from './js/player/ficha.js';
+    import { buscarFichas, apagarCampanha } from './js/mestre/campanha.js';
+    import { escutarRolagens, buscarHistoricoRolagens } from './js/mestre/dashboard.js';
+    import { getNomeSalvo, setNomeSalvo, getUltimoCodigoSalvo, setUltimoCodigoSalvo } from './js/player/local.js';
+    import { mostrarToast } from './js/ui/toast.js';
+
+    document.getElementById('input-nome-sala').value = getNomeSalvo();
+    document.getElementById('input-codigo-sala').value = getUltimoCodigoSalvo();
+
+    let campanhaAtual = null;
+    let meuNome = '';
+
+    document.getElementById('btn-entrar-sala').addEventListener('click', async () => {
+      const nome = document.getElementById('input-nome-sala').value.trim();
+      const codigo = document.getElementById('input-codigo-sala').value.trim().toUpperCase();
+      const erro = document.getElementById('erro-sala');
+      if (!nome || !codigo) {
+        erro.textContent = 'Preenche seu nome e o código da sala.';
+        erro.style.display = 'block';
+        return;
+      }
+      try {
+        campanhaAtual = await entrarNaCampanha(codigo);
+        meuNome = nome;
+        setNomeSalvo(nome);
+        setUltimoCodigoSalvo(codigo);
+        await abrirPainel();
+      } catch (e) {
+        erro.textContent = e.message;
+        erro.style.display = 'block';
+      }
+    });
+
+    async function abrirPainel() {
+      document.getElementById('tela-entrar').style.display = 'none';
+      document.getElementById('tela-painel').style.display = 'block';
+      document.getElementById('nome-sala-display').textContent = campanhaAtual.nome;
+      document.getElementById('codigo-sala-display').textContent = campanhaAtual.codigo;
+
+      // Quem criou a sala pode apagá-la — não é "poder de mestre" sobre as fichas dos
+      // outros, só uma faxina de quem começou a sala.
+      if (campanhaAtual.criador_nome === meuNome) {
+        document.getElementById('btn-apagar-sala').style.display = 'block';
+      }
+
+      await atualizarFichas();
+      await carregarHistorico();
+      escutarRolagens(campanhaAtual.id, adicionarRolagemNoFeed);
+    }
+
+    document.getElementById('btn-apagar-sala').addEventListener('click', async () => {
+      const confirmado = confirm(`Apagar a sala "${campanhaAtual.nome}" de vez? Isso apaga também todas as fichas, rolagens e o mapa dela. Essa ação não pode ser desfeita.`);
+      if (!confirmado) return;
+      await apagarCampanha(campanhaAtual.id);
+      mostrarToast('Sala apagada.');
+      window.location.href = 'index.html';
+    });
+
+    async function atualizarFichas() {
+      const fichas = await buscarFichas(campanhaAtual.id);
+      const container = document.getElementById('lista-fichas-sala');
+      if (fichas.length === 0) {
+        container.innerHTML = '<div class="empty-state">Ninguém entrou ainda.</div>';
+        return;
+      }
+      container.innerHTML = fichas.map((f) => `
+        <div class="ficha-item">
+          <div class="nome-personagem">${f.nome_personagem}</div>
+          <div class="nome-jogador">${f.nome_jogador}</div>
+        </div>
+      `).join('');
+    }
+
+    async function carregarHistorico() {
+      const historico = await buscarHistoricoRolagens(campanhaAtual.id);
+      const feed = document.getElementById('feed-rolagens-sala');
+      if (historico.length === 0) return;
+      feed.innerHTML = '';
+      historico.reverse().forEach(renderRolagem);
+    }
+
+    function adicionarRolagemNoFeed(rolagem) {
+      const feed = document.getElementById('feed-rolagens-sala');
+      const vazio = feed.querySelector('.empty-state');
+      if (vazio) vazio.remove();
+      renderRolagem(rolagem);
+      atualizarFichas();
+    }
+
+    function renderRolagem(rolagem) {
+      const feed = document.getElementById('feed-rolagens-sala');
+      const el = document.createElement('div');
+      el.className = 'feed-rolagem';
+
+      let classeExtra = '';
+      const detalhe = rolagem.detalhe || {};
+      if (detalhe.execucaoAbsoluta?.tipo === 'positiva') classeExtra = 'absoluta-positiva';
+      if (detalhe.execucaoAbsoluta?.tipo === 'negativa') classeExtra = 'absoluta-negativa';
+
+      const hora = new Date(rolagem.criada_em).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+
+      el.innerHTML = `
+        <div class="resultado-numero ${classeExtra}">${rolagem.resultado}</div>
+        <div class="info">
+          <div class="quem">${rolagem.nome_personagem}</div>
+          <div class="jogada">${rolagem.jogada}</div>
+        </div>
+        <div class="hora">${hora}</div>
+      `;
+      feed.prepend(el);
+    }
+  </script>
+</body>
+</html>

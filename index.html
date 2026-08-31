@@ -8,25 +8,13 @@
 <link rel="stylesheet" href="css/player.css" />
 <style>
   .hero {
-    position: relative;
-    overflow: hidden;
-    min-height: calc(100vh - 72px);
+    min-height: 100vh;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     text-align: center;
     padding: 40px 24px;
-  }
-  .hero::before {
-    content: '01';
-    position: absolute;
-    top: 12%;
-    right: 5%;
-    color: rgba(var(--accent-rgb), 0.1);
-    font: 800 12rem/0.8 var(--font-display);
-    letter-spacing: -0.06em;
-    pointer-events: none;
   }
   .hero-title {
     font-size: clamp(2.4rem, 8vw, 4.2rem);
@@ -35,15 +23,7 @@
   }
   .hero-title .ego {
     color: var(--accent-blue);
-    text-shadow: 0 0 40px rgba(var(--accent-rgb), 0.5);
-  }
-  .hero-title::after {
-    content: 'FIELD // EGO AWAKENING';
-    display: block;
-    margin-top: 16px;
-    color: var(--accent-gold);
-    font: 600 0.7rem var(--font-body);
-    letter-spacing: 0.2em;
+    text-shadow: 0 0 40px rgba(59, 123, 255, 0.5);
   }
   .hero-sub {
     max-width: 480px;
@@ -89,10 +69,6 @@
 </style>
 </head>
 <body>
-  <div class="topbar">
-    <div class="logo">Fórmula do <span class="ego">Ego</span></div>
-    <div class="topbar-status">PROJETO // NOVA GERAÇÃO</div>
-  </div>
   <div class="hero">
     <div class="eyebrow">Sistema de RPG · Fórmula do Ego 1.0</div>
     <h1 class="hero-title">FÓRMULA DO<br /><span class="ego">EGO</span></h1>
@@ -109,33 +85,14 @@
       <div class="divider"></div>
     </div>
 
-    <button id="btn-mostrar-entrada" class="btn btn-primary" style="margin-bottom: 24px;">Entrar em campanha</button>
-
-    <div id="bloco-escolha" class="choices" style="display: none;">
-      <div class="choice-card" onclick="window.location.href='mestre.html'">
-        <div class="eyebrow" style="color: var(--accent-gold)">Mestre</div>
-        <h3>Comandar campanha</h3>
-        <p>Crie uma campanha, gere um código de convite e acompanhe as rolagens dos jogadores ao vivo.</p>
-        <span class="btn btn-gold" style="pointer-events: none;">Sou mestre</span>
-      </div>
-
-      <div class="choice-card" onclick="window.location.href='player.html'">
-        <div class="eyebrow">Player</div>
-        <h3>Entrar em campanha</h3>
-        <p>Use o código que seu mestre te deu, monte sua ficha e role seus dados direto no navegador.</p>
-        <span class="btn btn-primary" style="pointer-events: none;">Sou player</span>
-      </div>
-    </div>
+    <button id="btn-mostrar-entrada" class="btn btn-primary" style="margin-bottom: 24px;" onclick="window.location.href='player.html'">Entrar / Criar sala</button>
   </div>
 
-  <script type="module" src="./js/tema.js"></script>
   <script type="module">
-    import { exigirAutenticacao } from './js/auth.js';
     import { listarTodasFichasDoJogador, apagarFicha } from './js/player/ficha.js';
     import { getNomeSalvo, setNomeSalvo } from './js/player/local.js';
     import { mostrarToast } from './js/ui/toast.js';
 
-    await exigirAutenticacao();
     const inputNome = document.getElementById('input-nome-index');
     inputNome.value = getNomeSalvo();
     carregarMinhasFichas();
@@ -182,11 +139,6 @@
         });
       });
     }
-
-    document.getElementById('btn-mostrar-entrada').addEventListener('click', () => {
-      document.getElementById('bloco-escolha').style.display = 'grid';
-      document.getElementById('btn-mostrar-entrada').style.display = 'none';
-    });
   </script>
 </body>
 </html>

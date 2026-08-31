@@ -328,7 +328,6 @@
 .resultado-box .numero-final.absoluta-positiva { color: var(--accent-gold); }
 .resultado-box .numero-final.absoluta-negativa { color: var(--danger); }
 .resultado-box .detalhe { font-size: 0.8rem; color: var(--text-secondary); margin-top: 8px; }
-.resultado-box .detalhe strong { color: var(--accent-blue); }
 
 .ficha-header {
   display: flex;
@@ -405,25 +404,6 @@
 .jogada-card:disabled { opacity: 0.4; cursor: default; }
 .jogada-card .nome { font-weight: 600; font-size: 0.9rem; margin-bottom: 2px; }
 .jogada-card .info { font-size: 0.75rem; color: var(--text-muted); }
-.jogada-card .jogada-meta {
-  margin-top: 8px;
-  color: var(--accent-gold);
-  font: 600 0.68rem var(--font-display);
-  letter-spacing: 0.03em;
-  text-transform: uppercase;
-}
-.jogada-card .jogada-anormalidade {
-  display: -webkit-box;
-  margin-top: 5px;
-  overflow: hidden;
-  color: var(--text-secondary);
-  font-size: 0.7rem;
-  line-height: 1.35;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 3;
-}
-.resultado-box .numero-final.jogada-sucesso { color: var(--success); }
-.resultado-box .numero-final.jogada-falha { color: var(--danger); }
 
 /* Histórico de rolagens */
 .historico-lista { display: flex; flex-direction: column; gap: 8px; margin-top: 12px; }
@@ -446,6 +426,19 @@
 }
 .historico-item .resultado.absoluta-positiva { color: var(--accent-gold); }
 .historico-item .resultado.absoluta-negativa { color: var(--danger); }
+
+/* Ícones das armas */
+.icone-arma-svg { width: 100%; height: 100%; display: block; color: var(--accent-gold); }
+.icone-arma-fundo { fill: var(--bg-surface-2); stroke: var(--border-strong); stroke-width: 1; }
+.icone-arma-letra { fill: var(--accent-gold); font-family: var(--font-display); font-size: 15px; font-weight: 600; }
+.icone-arma-img { width: 100%; height: 100%; display: block; object-fit: cover; border-radius: 50%; border: 1px solid var(--border-strong); }
+
+.arma-icone-grande { width: 64px; height: 64px; flex-shrink: 0; }
+.arma-icone-pequeno { width: 28px; height: 28px; flex-shrink: 0; }
+.arma-icone-mini { width: 18px; height: 18px; flex-shrink: 0; display: inline-block; vertical-align: middle; }
+
+.titulo-personagem-linha { display: flex; align-items: center; gap: 10px; }
+.badge-com-icone { display: inline-flex; align-items: center; gap: 6px; }
 .historico-detalhe {
   margin-top: 6px;
   padding-top: 6px;
@@ -453,18 +446,6 @@
   font-size: 0.75rem;
   color: var(--text-secondary);
 }
-/* Ícones das armas */
-.icone-arma-svg { width: 100%; height: 100%; display: block; color: var(--accent-gold); }
-.icone-arma-fundo { fill: var(--bg-surface-2); stroke: var(--border-strong); stroke-width: 1; }
-.icone-arma-letra { fill: var(--accent-gold); font-family: var(--font-display); font-size: 15px; font-weight: 600; }
-.icone-arma-img { width: 100%; height: 100%; display: block; object-fit: cover; border-radius: 50%; border: 1px solid var(--border-strong); }
-
-.arma-icone-grande { width: 84px; height: 84px; flex-shrink: 0; }
-.arma-icone-pequeno { width: 48px; height: 48px; flex-shrink: 0; }
-.arma-icone-mini { width: 18px; height: 18px; flex-shrink: 0; display: inline-block; vertical-align: middle; }
-
-.titulo-personagem-linha { display: flex; align-items: center; gap: 10px; }
-.badge-com-icone { display: inline-flex; align-items: center; gap: 6px; }
 
 /* Linha de ficha com botão de excluir ao lado */
 .linha-com-exclusao {
@@ -506,3 +487,48 @@
   margin-right: 8px;
 }
 .btn-excluir:hover { border-color: var(--danger); color: var(--danger); }
+
+/* Cartão de status: nível, fôlego, PdE, pontos de chama */
+.status-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 12px;
+}
+.status-item {
+  background: var(--bg-surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px;
+  text-align: center;
+}
+.status-item label {
+  margin-bottom: 8px;
+}
+.status-controles {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  color: var(--accent-gold);
+}
+.status-controles button {
+  width: 26px; height: 26px;
+  border-radius: 50%;
+  border: 1px solid var(--border-strong);
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  cursor: pointer;
+  font-size: 0.9rem;
+  line-height: 1;
+  font-family: var(--font-body);
+}
+.status-controles button:hover { border-color: var(--accent-blue); }
+.status-max { font-size: 0.85rem; color: var(--text-muted); }
+
+/* Talentos selecionáveis (reaproveita o visual de jogada-card) */
+.jogada-card.talento-selecionado {
+  border-color: var(--accent-gold);
+  background: rgba(242, 183, 5, 0.08);
+}
