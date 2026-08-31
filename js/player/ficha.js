@@ -58,7 +58,7 @@ export async function buscarFicha(fichaId) {
  * preenchido aos poucos, na ordem que o jogador quiser.
  */
 export async function criarFicha({
-  campanhaId = null, nomeJogador, nomePersonagem,
+  campanhaId = null, jogadorId, nomeJogador, nomePersonagem,
   atributos = {}, pericias = {},
   armaId = null, oticaId = null,
   tendenciaPrincipalId = null, tendenciaSecundariaId = null,
@@ -69,6 +69,7 @@ export async function criarFicha({
     .from('fichas')
     .insert({
       campanha_id: campanhaId,
+      jogador_id: jogadorId,
       nome_jogador: nomeJogador,
       nome_personagem: nomePersonagem,
       atributos,

@@ -267,6 +267,7 @@
   </div>
 
   <script type="module">
+    import { exigirAutenticacao } from './js/auth.js';
     import { entrarNaCampanha, listarFichasDoJogador, listarTodasFichasDoJogador, criarFicha, atualizarFicha, apagarFicha, vincularFichaACampanha, buscarFicha } from './js/player/ficha.js';
     import { criarCampanha } from './js/mestre/campanha.js';
     import { initHexagono } from './js/player/hexagono.js';
@@ -284,6 +285,8 @@
     import { JOGADAS } from './js/data/jogadas.js';
     import { TALENTOS_EVOLUTIVOS, TALENTOS_SIMPLES, TALENTOS_RAZOAVEIS, TALENTOS_COMPLEXOS, MAX_SLOTS_TALENTOS } from './js/data/talentos.js';
     import { calcularFolegos } from './js/regras/calculos.js';
+
+    const usuarioLogado = await exigirAutenticacao();
 
     let campanhaAtual = null;
     let nomeJogador = '';
@@ -950,7 +953,7 @@
             talentos: dados.talentos,
           });
         } else {
-          ficha = await criarFicha({ campanhaId: campanhaAtual ? campanhaAtual.id : null, nomeJogador, ...dados });
+          ficha = await criarFicha({ campanhaId: campanhaAtual ? campanhaAtual.id : null, jogadorId: usuarioLogado.id, nomeJogador, ...dados });
         }
         fichaAtual = ficha;
         document.getElementById('titulo-personagem').textContent = ficha.nome_personagem;
