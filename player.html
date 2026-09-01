@@ -382,9 +382,13 @@
             const f = fichasSemCampanha.find((x) => x.id === btn.dataset.excluirFichaId);
             const confirmado = confirm(`Apagar a ficha "${f.nome_personagem}" de vez? Essa ação não pode ser desfeita.`);
             if (!confirmado) return;
-            await apagarFicha(f.id);
-            mostrarToast('Ficha apagada.');
-            await carregarAtalhos();
+            try {
+              await apagarFicha(f.id);
+              mostrarToast('Ficha apagada.');
+              await carregarAtalhos();
+            } catch (err) {
+              mostrarToast(err.message, 'erro');
+            }
           });
         });
       } else {
@@ -615,9 +619,13 @@
             const ficha = fichas.find((f) => f.id === btn.dataset.excluirFichaId);
             const confirmado = confirm(`Apagar a ficha "${ficha.nome_personagem}" de vez? Essa ação não pode ser desfeita.`);
             if (!confirmado) return;
-            await apagarFicha(ficha.id);
-            mostrarToast('Ficha apagada.');
-            await abrirListaFichas();
+            try {
+              await apagarFicha(ficha.id);
+              mostrarToast('Ficha apagada.');
+              await abrirListaFichas();
+            } catch (err) {
+              mostrarToast(err.message, 'erro');
+            }
           });
         });
       }

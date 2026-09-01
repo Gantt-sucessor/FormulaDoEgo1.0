@@ -121,6 +121,10 @@ export async function vincularFichaACampanha(fichaId, campanhaId) {
 
 /** Apaga uma ficha (o jogador decidiu recomeçar aquele personagem). */
 export async function apagarFicha(fichaId) {
-  const { error } = await supabase.from('fichas').delete().eq('id', fichaId);
+  const { data, error } = await supabase.from('fichas').delete().eq('id', fichaId).select();
   if (error) throw error;
+  // O Supabase não avisa quando o RLS bloqueia silenciosamente: se nada voltou, nada foi apagado de verdade.
+  if (!data || data.length === 0) {
+    throw new Error('Essa ficha não pôde ser apagada (sem permissão, ou ela é de antes do login — fala com o mestre).');
+  }
 }

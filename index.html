@@ -8,6 +8,7 @@
 <link rel="stylesheet" href="css/player.css" />
 <style>
   .hero {
+    position: relative;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
@@ -70,6 +71,7 @@
 </head>
 <body>
   <div class="hero">
+    <a href="index.html" data-sair class="btn btn-ghost btn-sair" style="position: absolute; top: 16px; right: 16px; padding: 8px 16px;">Sair da conta</a>
     <div class="eyebrow">Sistema de RPG · Fórmula do Ego 1.0</div>
     <h1 class="hero-title">FÓRMULA DO<br /><span class="ego">EGO</span></h1>
     <p class="hero-sub">Centralize suas campanhas, gerencie fichas e veja cada rolagem de dado acontecer em tempo real.</p>
@@ -89,9 +91,12 @@
   </div>
 
   <script type="module">
+    import { exigirAutenticacao } from './js/auth.js';
     import { listarTodasFichasDoJogador, apagarFicha } from './js/player/ficha.js';
     import { getNomeSalvo, setNomeSalvo } from './js/player/local.js';
     import { mostrarToast } from './js/ui/toast.js';
+
+    await exigirAutenticacao();
 
     const inputNome = document.getElementById('input-nome-index');
     inputNome.value = getNomeSalvo();
@@ -133,9 +138,13 @@
           const f = fichas.find((x) => x.id === btn.dataset.excluirFichaId);
           const confirmado = confirm(`Apagar a ficha "${f.nome_personagem}" de vez? Essa ação não pode ser desfeita.`);
           if (!confirmado) return;
-          await apagarFicha(f.id);
-          mostrarToast('Ficha apagada.');
-          await carregarMinhasFichas();
+          try {
+            await apagarFicha(f.id);
+            mostrarToast('Ficha apagada.');
+            await carregarMinhasFichas();
+          } catch (err) {
+            mostrarToast(err.message, 'erro');
+          }
         });
       });
     }
