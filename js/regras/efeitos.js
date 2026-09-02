@@ -33,23 +33,61 @@ export function buscarEfeito(id) {
   return EFEITOS_NEGATIVOS[id] || EFEITOS_POSITIVOS[id] || null;
 }
 
+/** Catálogo único (negativos + positivos) pra popular a lista clicável do painel de partida. */
+export const CATALOGO_EFEITOS = [
+  ...Object.entries(EFEITOS_NEGATIVOS).map(([id, def]) => ({ id, tipo: 'negativo', ...def })),
+  ...Object.entries(EFEITOS_POSITIVOS).map(([id, def]) => ({ id, tipo: 'positivo', ...def })),
+];
+
 /**
- * Aplica um efeito a uma lista de efeitos ativos de um personagem,
- * respeitando a regra de acumulação (soma quantidade x se acumulativo).
+ * Ativa um efeito numa lista de efeitos ativos de um personagem, respeitando a regra
+ * de acumulação (soma quantidade se acumulativo). Duração é texto livre anotado pelo
+ * jogador (ex: "2 turnos", "3 rodadas") — não é controlado automaticamente.
  */
-export function aplicarEfeito(efeitosAtivos, idEfeito, duracaoTurnos) {
+export function aplicarEfeito(efeitosAtivos, idEfeito, duracao = '') {
   const existente = efeitosAtivos.find((e) => e.id === idEfeito);
   const def = buscarEfeito(idEfeito);
   if (!def) return efeitosAtivos;
 
   if (existente && def.acumulativo) {
-    existente.quantidade += 1;
-    existente.duracaoTurnos = duracaoTurnos;
-    return [...efeitosAtivos];
+    return efeitosAtivos.map((e) => (e.id === idEfeito ? { ...e, quantidade: e.quantidade + 1 } : e));
   }
   if (existente && !def.acumulativo) {
-    existente.duracaoTurnos = duracaoTurnos;
-    return [...efeitosAtivos];
+    return efeitosAtivos;
   }
-  return [...efeitosAtivos, { id: idEfeito, quantidade: 1, duracaoTurnos }];
+  return [...efeitosAtivos, { id: idEfeito, quantidade: 1, duracao }];
+}
+
+/** Remove um efeito inteiro da lista (independente da quantidade acumulada). */
+export function removerEfeito(efeitosAtivos, idEfeito) {
+  return efeitosAtivos.filter((e) => e.id !== idEfeito);
+}
+
+/**
+ * Resumo curto de status de partida de uma ficha, pra mostrar no painel do mestre/sala
+ * embaixo do nome: PdE atual, quantas das 6 ações já foram gastas na rodada e condições ativas.
+ */
+export function formatarResumoPartida(ficha) {
+  const partes = [];
+  if (typeof ficha.pde_atual === 'number') partes.push(`${ficha.pde_atual} PdE`);
+  if (typeof ficha.pontos_sorte === 'number' && ficha.pontos_sorte > 0) partes.push(`${ficha.pontos_sorte} PdS`);
+
+  const ag = ficha.acoes_gastas;
+  if (ag) {
+    const regularesGastas = (ag.regulares || []).filter(Boolean).length;
+    const totalGasto = (ag.tatica ? 1 : 0) + (ag.egoista ? 1 : 0) + regularesGastas;
+    if (totalGasto > 0) partes.push(`${totalGasto}/6 ações usadas`);
+  }
+
+  const efeitos = ficha.efeitos_ativos || [];
+  if (efeitos.length > 0) {
+    const nomes = efeitos.map((e) => {
+      const def = buscarEfeito(e.id);
+      const nome = def ? def.nome : e.id;
+      return e.quantidade > 1 ? `${nome} x${e.quantidade}` : nome;
+    });
+    partes.push(nomes.join(', '));
+  }
+
+  return partes.join(' · ');
 }

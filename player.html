@@ -11,7 +11,7 @@
   <div class="topbar">
     <div class="logo">Fórmula do <span class="ego">Ego</span></div>
     <div style="display: flex; gap: 8px;">
-      <a href="sala.html" class="btn btn-ghost" style="padding: 8px 16px;">Sala</a>
+      <a href="sala.html" id="link-sala-topbar" class="btn btn-ghost" style="padding: 8px 16px;">Sala</a>
       <a href="mapa.html" class="btn btn-ghost" style="padding: 8px 16px;">Mapa</a>
       <a href="index.html" class="btn btn-ghost" style="padding: 8px 16px;">Sair</a>
     </div>
@@ -91,6 +91,7 @@
       <button class="aba-btn ativa" data-aba="visao-geral">Visão Geral</button>
       <button class="aba-btn" data-aba="classe-habilidades">Classe &amp; Habilidades</button>
       <button class="aba-btn" data-aba="status">Status &amp; Talentos</button>
+      <button class="aba-btn" data-aba="partida">Partida</button>
     </div>
 
     <!-- Aba: Visão Geral -->
@@ -139,6 +140,20 @@
               <div class="jogada-select">
                 <label for="input-nome-jogada">Nome da jogada (aparece pro mestre)</label>
                 <input id="input-nome-jogada" type="text" placeholder="ex: Chute curvo" />
+              </div>
+              <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 12px;">
+                <div class="jogada-select" style="margin-bottom: 0;">
+                  <label for="input-vantagens">Vantagens</label>
+                  <input id="input-vantagens" type="number" min="0" value="0" />
+                </div>
+                <div class="jogada-select" style="margin-bottom: 0;">
+                  <label for="input-desvantagens">Desvantagens</label>
+                  <input id="input-desvantagens" type="number" min="0" value="0" />
+                </div>
+                <div class="jogada-select" style="margin-bottom: 0;">
+                  <label for="input-bonus-manual">Bônus (± )</label>
+                  <input id="input-bonus-manual" type="number" value="0" />
+                </div>
               </div>
               <button id="btn-rolar" class="btn btn-primary" style="width: 100%;">Rolar</button>
 
@@ -253,6 +268,14 @@
               <button type="button" data-status="chama" data-acao="mais">+</button>
             </div>
           </div>
+          <div class="status-item">
+            <label>Pontos de Sorte (PdS)</label>
+            <div class="status-controles">
+              <button type="button" data-status="sorte" data-acao="menos">−</button>
+              <span id="valor-sorte">0</span><span class="status-max">/<span id="valor-sorte-max">3</span></span>
+              <button type="button" data-status="sorte" data-acao="mais">+</button>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -263,6 +286,71 @@
       </div>
 
       <button id="btn-salvar-ficha-3" class="btn btn-gold" style="width: 100%;">Salvar ficha</button>
+    </div>
+
+    <!-- Aba: Partida — acompanhamento rápido pra usar durante a mesa -->
+    <div class="painel-aba" id="painel-partida">
+      <div class="form-section">
+        <h3>Fôlego &amp; PdE</h3>
+        <p class="step-desc">O que você mais mexe durante a partida — sem precisar trocar de aba.</p>
+        <div class="status-grid">
+          <div class="status-item">
+            <label>Fôlego</label>
+            <div class="status-controles">
+              <button type="button" data-status="folego" data-acao="menos">−</button>
+              <span id="valor-folego-partida">0</span><span class="status-max">/<span id="valor-folego-max-partida">6</span></span>
+              <button type="button" data-status="folego" data-acao="mais">+</button>
+            </div>
+          </div>
+          <div class="status-item">
+            <label>Pontos de Esforço (PdE)</label>
+            <div class="status-controles">
+              <button type="button" data-status="pde" data-acao="menos">−</button>
+              <span id="valor-pde-partida">0</span>
+              <button type="button" data-status="pde" data-acao="mais">+</button>
+            </div>
+          </div>
+          <div class="status-item">
+            <label>Pontos de Sorte (PdS)</label>
+            <div class="status-controles">
+              <button type="button" data-status="sorte" data-acao="menos">−</button>
+              <span id="valor-sorte-partida">0</span><span class="status-max">/<span id="valor-sorte-max-partida">3</span></span>
+              <button type="button" data-status="sorte" data-acao="mais">+</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <h3>Distâncias</h3>
+        <p class="step-desc">Calculadas sozinhas a partir das suas perícias — quanto maior Precisão/Visão de jogo, mais longe.</p>
+        <div class="status-grid">
+          <div class="status-item">
+            <label>Distância de chute (DdC)</label>
+            <div class="status-controles"><span id="valor-ddc">6</span><span class="status-max">m</span></div>
+          </div>
+          <div class="status-item">
+            <label>Distância de passe (DdP)</label>
+            <div class="status-controles"><span id="valor-ddp">6</span><span class="status-max">m</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 4px;">
+          <h3 style="margin-bottom: 0;">Ações da rodada</h3>
+          <button type="button" id="btn-resetar-acoes" class="btn btn-ghost" style="padding: 6px 12px; font-size: 0.8rem;">Nova rodada</button>
+        </div>
+        <p class="step-desc">Clique pra marcar o que já foi gasto. "Nova rodada" libera tudo de novo.</p>
+        <div id="acoes-rodada-container" class="jogadas-grid"></div>
+      </div>
+
+      <div class="form-section">
+        <h3>Condições</h3>
+        <p class="step-desc">Clique numa condição pra ativar (ou empilhar, quando acumulativa). Anote a duração do seu jeito — turnos, rodadas, o que fizer sentido.</p>
+        <div id="condicoes-catalogo" class="jogadas-grid"></div>
+        <div id="condicoes-ativas" class="condicoes-ativas"></div>
+      </div>
     </div>
   </div>
 
@@ -284,7 +372,8 @@
     import { CATEGORIAS } from './js/data/categorias.js';
     import { JOGADAS } from './js/data/jogadas.js';
     import { TALENTOS_EVOLUTIVOS, TALENTOS_SIMPLES, TALENTOS_RAZOAVEIS, TALENTOS_COMPLEXOS, MAX_SLOTS_TALENTOS } from './js/data/talentos.js';
-    import { calcularFolegos } from './js/regras/calculos.js';
+    import { calcularFolegos, calcularDdC, calcularDdP, MAX_PDS_PADRAO } from './js/regras/calculos.js';
+    import { CATALOGO_EFEITOS, buscarEfeito, aplicarEfeito, removerEfeito } from './js/regras/efeitos.js';
 
     const usuarioLogado = await exigirAutenticacao();
 
@@ -298,7 +387,10 @@
     let folegoAtual = 0;
     let pdeAtual = 0;
     let pontosChama = 0;
+    let pontosSorte = 0;
     let talentosSelecionados = [];
+    let efeitosAtivos = [];      // [{id, quantidade, duracao}] — painel de partida
+    let acoesGastas = { tatica: false, egoista: false, regulares: [false, false, false, false] };
 
     document.getElementById('input-nome-jogador-inicial').value = getNomeSalvo();
     document.getElementById('input-codigo').value = getUltimoCodigoSalvo();
@@ -311,6 +403,18 @@
     function mostrarTela(nome) {
       Object.values(telas).forEach((t) => (t.style.display = 'none'));
       telas[nome].style.display = 'block';
+      atualizarLinkSala();
+    }
+
+    /** Atualiza o botão "Sala" da topbar: se a ficha aberta já tem campanha, vai direto pra ela. */
+    function atualizarLinkSala() {
+      const link = document.getElementById('link-sala-topbar');
+      if (campanhaAtual) {
+        link.href = `sala.html?codigo=${campanhaAtual.codigo}`;
+        link.style.display = '';
+      } else {
+        link.style.display = 'none';
+      }
     }
 
     // --- Atalhos na tela inicial: minhas campanhas já visitadas + fichas sem campanha ---
@@ -681,7 +785,12 @@
       folegoAtual = fichaExistente?.folego_atual ?? 0;
       pdeAtual = fichaExistente?.pde_atual ?? 0;
       pontosChama = fichaExistente?.pontos_chama ?? 0;
+      pontosSorte = fichaExistente?.pontos_sorte ?? 0;
       talentosSelecionados = fichaExistente?.talentos ? [...fichaExistente.talentos] : [];
+      efeitosAtivos = fichaExistente?.efeitos_ativos ? fichaExistente.efeitos_ativos.map((e) => ({ ...e })) : [];
+      acoesGastas = fichaExistente?.acoes_gastas
+        ? { tatica: !!fichaExistente.acoes_gastas.tatica, egoista: !!fichaExistente.acoes_gastas.egoista, regulares: [...(fichaExistente.acoes_gastas.regulares || [false, false, false, false])] }
+        : { tatica: false, egoista: false, regulares: [false, false, false, false] };
 
       document.getElementById('titulo-personagem').textContent = fichaExistente?.nome_personagem || 'Novo personagem';
       document.getElementById('eyebrow-personagem').textContent = fichaExistente ? 'Ficha' : 'Novo personagem';
@@ -715,6 +824,8 @@
       renderJogadasBase();
       renderStatus();
       renderTalentos();
+      renderCondicoes();
+      renderAcoesRodada();
 
       if (fichaExistente) {
         await ativarBlocoRolagem();
@@ -753,9 +864,20 @@
       document.getElementById('valor-folego-max').textContent = folegoMax;
       document.getElementById('valor-pde').textContent = pdeAtual;
       document.getElementById('valor-chama').textContent = pontosChama;
+      document.getElementById('valor-folego-partida').textContent = folegoAtual;
+      document.getElementById('valor-folego-max-partida').textContent = folegoMax;
+      document.getElementById('valor-pde-partida').textContent = pdeAtual;
+      document.getElementById('valor-sorte').textContent = pontosSorte;
+      document.getElementById('valor-sorte-max').textContent = MAX_PDS_PADRAO;
+      document.getElementById('valor-sorte-partida').textContent = pontosSorte;
+      document.getElementById('valor-sorte-max-partida').textContent = MAX_PDS_PADRAO;
+      document.getElementById('valor-ddc').textContent = calcularDdC(periciasEscolhidas['precisao'] || 0);
+      document.getElementById('valor-ddp').textContent = calcularDdP(periciasEscolhidas['visao_de_jogo'] || 0);
+      salvarPartidaAutomatico();
     }
 
-    document.getElementById('painel-status').addEventListener('click', (e) => {
+    // Delegado no document (não só no painel-status) pra funcionar também nos controles espelhados da aba Partida.
+    document.addEventListener('click', (e) => {
       const btn = e.target.closest('button[data-status]');
       if (!btn) return;
       const tipo = btn.dataset.status;
@@ -767,6 +889,7 @@
       }
       if (tipo === 'pde') pdeAtual = Math.max(0, pdeAtual + delta);
       if (tipo === 'chama') pontosChama = Math.max(0, pontosChama + delta);
+      if (tipo === 'sorte') pontosSorte = Math.min(MAX_PDS_PADRAO, Math.max(0, pontosSorte + delta));
       renderStatus();
     });
 
@@ -807,6 +930,110 @@
             talentosSelecionados.push(id);
           }
           renderTalentos();
+        });
+      });
+    }
+
+    // --- Painel de partida: fôlego/PdE (ver renderStatus), ações da rodada e condições ---
+    let timerSalvarPartida = null;
+    function salvarPartidaAutomatico() {
+      if (!fichaAtual?.id) return;
+      clearTimeout(timerSalvarPartida);
+      timerSalvarPartida = setTimeout(async () => {
+        try {
+          await atualizarFicha(fichaAtual.id, {
+            folego_atual: folegoAtual,
+            pde_atual: pdeAtual,
+            pontos_chama: pontosChama,
+            pontos_sorte: pontosSorte,
+            efeitos_ativos: efeitosAtivos,
+            acoes_gastas: acoesGastas,
+          });
+        } catch (e) {
+          mostrarToast('Não deu pra sincronizar o painel de partida.', 'erro');
+        }
+      }, 400);
+    }
+
+    function renderAcoesRodada() {
+      const container = document.getElementById('acoes-rodada-container');
+      const slots = [
+        { label: 'Ação tática', gasta: acoesGastas.tatica, onClick: () => { acoesGastas.tatica = !acoesGastas.tatica; } },
+        { label: 'Ação egoísta', gasta: acoesGastas.egoista, onClick: () => { acoesGastas.egoista = !acoesGastas.egoista; } },
+        ...acoesGastas.regulares.map((gasta, i) => ({
+          label: `Ação ${i + 1}`,
+          gasta,
+          onClick: () => { acoesGastas.regulares[i] = !acoesGastas.regulares[i]; },
+        })),
+      ];
+      container.innerHTML = slots.map((s, i) => `
+        <button type="button" class="jogada-card acao-slot ${s.gasta ? 'acao-gasta' : ''}" data-acao-idx="${i}">
+          <div class="nome">${s.label}</div>
+          <div class="info">${s.gasta ? 'gasta' : 'disponível'}</div>
+        </button>
+      `).join('');
+      container.querySelectorAll('[data-acao-idx]').forEach((btn, i) => {
+        btn.addEventListener('click', () => {
+          slots[i].onClick();
+          renderAcoesRodada();
+          salvarPartidaAutomatico();
+        });
+      });
+    }
+
+    document.getElementById('btn-resetar-acoes').addEventListener('click', () => {
+      acoesGastas = { tatica: false, egoista: false, regulares: [false, false, false, false] };
+      renderAcoesRodada();
+      salvarPartidaAutomatico();
+    });
+
+    function renderCondicoes() {
+      const catalogo = document.getElementById('condicoes-catalogo');
+      catalogo.innerHTML = CATALOGO_EFEITOS.map((ef) => {
+        const ativo = efeitosAtivos.find((e) => e.id === ef.id);
+        return `
+        <button type="button" class="jogada-card condicao-btn ${ef.tipo === 'negativo' ? 'condicao-negativa' : 'condicao-positiva'} ${ativo ? 'condicao-ativa' : ''}" data-efeito-id="${ef.id}" title="${ef.texto}">
+          <div class="nome">${ef.nome}${ativo && ativo.quantidade > 1 ? ` x${ativo.quantidade}` : ''}</div>
+          <div class="info">${ef.acumulativo ? 'empilha' : 'clique pra ativar'}</div>
+        </button>
+      `;
+      }).join('');
+      catalogo.querySelectorAll('[data-efeito-id]').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          efeitosAtivos = aplicarEfeito(efeitosAtivos, btn.dataset.efeitoId);
+          renderCondicoes();
+          salvarPartidaAutomatico();
+        });
+      });
+
+      const ativas = document.getElementById('condicoes-ativas');
+      if (efeitosAtivos.length === 0) {
+        ativas.innerHTML = '<p style="color: var(--text-muted); font-size: 0.85rem;">Nenhuma condição ativa.</p>';
+        return;
+      }
+      ativas.innerHTML = efeitosAtivos.map((e) => {
+        const def = buscarEfeito(e.id);
+        const nome = def ? def.nome : e.id;
+        return `
+          <div class="condicao-ativa-item">
+            <span class="nome">${nome}${e.quantidade > 1 ? ` x${e.quantidade}` : ''}</span>
+            <input type="text" class="duracao-input" placeholder="duração (ex: 2 turnos)" value="${e.duracao || ''}" data-duracao-id="${e.id}" />
+            <button type="button" class="btn-excluir" data-remover-id="${e.id}" title="Remover condição">✕</button>
+          </div>
+        `;
+      }).join('');
+      ativas.querySelectorAll('[data-duracao-id]').forEach((input) => {
+        input.addEventListener('change', () => {
+          const efeito = efeitosAtivos.find((e) => e.id === input.dataset.duracaoId);
+          if (efeito) efeito.duracao = input.value;
+          salvarPartidaAutomatico();
+        });
+      });
+      ativas.querySelectorAll('[data-remover-id]').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          efeitosAtivos = removerEfeito(efeitosAtivos, btn.dataset.removerId);
+          renderCondicoes();
+          salvarPartidaAutomatico();
         });
       });
     }
@@ -938,6 +1165,7 @@
         folegoAtual,
         pdeAtual,
         pontosChama,
+        pontosSorte,
         talentos: talentosSelecionados,
       };
 
@@ -958,10 +1186,13 @@
             folego_atual: dados.folegoAtual,
             pde_atual: dados.pdeAtual,
             pontos_chama: dados.pontosChama,
+            pontos_sorte: dados.pontosSorte,
             talentos: dados.talentos,
+            efeitos_ativos: efeitosAtivos,
+            acoes_gastas: acoesGastas,
           });
         } else {
-          ficha = await criarFicha({ campanhaId: campanhaAtual ? campanhaAtual.id : null, jogadorId: usuarioLogado.id, nomeJogador, ...dados });
+          ficha = await criarFicha({ campanhaId: campanhaAtual ? campanhaAtual.id : null, jogadorId: usuarioLogado.id, nomeJogador, efeitosAtivos, acoesGastas, ...dados });
         }
         fichaAtual = ficha;
         document.getElementById('titulo-personagem').textContent = ficha.nome_personagem;
@@ -988,7 +1219,7 @@
       }
     }
 
-    async function executarRolagem(nomeJogada, valorAtributo, valorPericia, atributoNome = null, periciaNome = null) {
+    async function executarRolagem(nomeJogada, valorAtributo, valorPericia, atributoNome = null, periciaNome = null, vantagens = 0, desvantagens = 0, bonus = 0) {
       const resultado = await rolarEEnviar({
         campanhaId: campanhaAtual ? campanhaAtual.id : null,
         fichaId: fichaAtual.id,
@@ -998,6 +1229,9 @@
         valorPericia,
         atributoNome,
         periciaNome,
+        vantagens,
+        desvantagens,
+        bonus,
       });
 
       const box = document.getElementById('resultado-box');
@@ -1046,7 +1280,13 @@
       const nomeJogada = document.getElementById('input-nome-jogada').value.trim() || 'Jogada';
       const atributoNome = ATRIBUTOS.find((a) => a.id === atributoId)?.nome || null;
       const periciaNome = periciaId ? (PERICIAS.find((p) => p.id === periciaId)?.nome || null) : null;
-      await executarRolagem(nomeJogada, valorAtributo, valorPericia, atributoNome, periciaNome);
+      const vantagens = parseInt(document.getElementById('input-vantagens').value, 10) || 0;
+      const desvantagens = parseInt(document.getElementById('input-desvantagens').value, 10) || 0;
+      const bonus = parseInt(document.getElementById('input-bonus-manual').value, 10) || 0;
+      await executarRolagem(nomeJogada, valorAtributo, valorPericia, atributoNome, periciaNome, vantagens, desvantagens, bonus);
+      document.getElementById('input-vantagens').value = 0;
+      document.getElementById('input-desvantagens').value = 0;
+      document.getElementById('input-bonus-manual').value = 0;
     });
   </script>
 </body>

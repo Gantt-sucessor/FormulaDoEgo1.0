@@ -63,7 +63,8 @@ export async function criarFicha({
   armaId = null, oticaId = null,
   tendenciaPrincipalId = null, tendenciaSecundariaId = null,
   categoriaId = null, arquetipoId = null,
-  nivel = 1, folegoAtual = 0, pdeAtual = 0, pontosChama = 0, talentos = [],
+  nivel = 1, folegoAtual = 0, pdeAtual = 0, pontosChama = 0, pontosSorte = 0, talentos = [],
+  efeitosAtivos = [], acoesGastas = { tatica: false, egoista: false, regulares: [false, false, false, false] },
 }) {
   const { data, error } = await supabase
     .from('fichas')
@@ -84,7 +85,10 @@ export async function criarFicha({
       folego_atual: folegoAtual,
       pde_atual: pdeAtual,
       pontos_chama: pontosChama,
+      pontos_sorte: pontosSorte,
       talentos,
+      efeitos_ativos: efeitosAtivos,
+      acoes_gastas: acoesGastas,
     })
     .select()
     .single();

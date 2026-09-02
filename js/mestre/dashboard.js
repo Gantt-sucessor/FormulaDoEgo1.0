@@ -19,6 +19,24 @@ export function escutarRolagens(campanhaId, onNovaRolagem) {
   return () => supabase.removeChannel(canal);
 }
 
+/**
+ * Escuta mudanças nas fichas de uma campanha em tempo real (painel de partida do player:
+ * fôlego, PdE, condições, ações gastas). Chama onFichaAtualizada a cada UPDATE.
+ * @returns {() => void} função para cancelar a inscrição
+ */
+export function escutarFichas(campanhaId, onFichaAtualizada) {
+  const canal = supabase
+    .channel(`fichas-campanha-${campanhaId}`)
+    .on(
+      'postgres_changes',
+      { event: 'UPDATE', schema: 'public', table: 'fichas', filter: `campanha_id=eq.${campanhaId}` },
+      (payload) => onFichaAtualizada(payload.new)
+    )
+    .subscribe();
+
+  return () => supabase.removeChannel(canal);
+}
+
 /** Busca o histórico de rolagens já feitas nessa campanha (mais recentes primeiro). */
 export async function buscarHistoricoRolagens(campanhaId, limite = 30) {
   const { data, error } = await supabase

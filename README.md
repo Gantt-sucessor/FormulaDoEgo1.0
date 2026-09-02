@@ -32,8 +32,9 @@ Depois abra `http://localhost:8000`.
    `supabase-schema.sql` e rode. Isso cria as tabelas de campanhas, fichas,
    rolagens e mapa (`campanhas`, `fichas`, `rolagens`, `mapas`, `tokens`,
    `marcadores`). O script também atualiza uma instalação existente.
-6. No painel: **Database → Replication**, ative o Realtime para `rolagens`, `tokens`
-   e `marcadores`.
+6. No painel: **Database → Replication**, ative o Realtime para `rolagens`, `tokens`,
+   `marcadores` e `fichas` (esse último é o que faz o painel de partida do player —
+   fôlego, PdE, condições e ações gastas — aparecer ao vivo pro mestre).
 7. A aplicação agora exige conta autenticada por e-mail e senha. Registros antigos
    sem `criador_id` ou `jogador_id` ficam preservados no banco, mas não aparecem para
    usuários autenticados até serem associados manualmente às contas corretas.

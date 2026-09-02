@@ -64,9 +64,10 @@
   <script type="module">
     import { entrarNaCampanha } from './js/player/ficha.js';
     import { buscarFichas, apagarCampanha } from './js/mestre/campanha.js';
-    import { escutarRolagens, buscarHistoricoRolagens } from './js/mestre/dashboard.js';
+    import { escutarRolagens, escutarFichas, buscarHistoricoRolagens } from './js/mestre/dashboard.js';
     import { getNomeSalvo, setNomeSalvo, getUltimoCodigoSalvo, setUltimoCodigoSalvo } from './js/player/local.js';
     import { mostrarToast } from './js/ui/toast.js';
+    import { formatarResumoPartida } from './js/regras/efeitos.js';
 
     document.getElementById('input-nome-sala').value = getNomeSalvo();
     document.getElementById('input-codigo-sala').value = getUltimoCodigoSalvo();
@@ -74,9 +75,7 @@
     let campanhaAtual = null;
     let meuNome = '';
 
-    document.getElementById('btn-entrar-sala').addEventListener('click', async () => {
-      const nome = document.getElementById('input-nome-sala').value.trim();
-      const codigo = document.getElementById('input-codigo-sala').value.trim().toUpperCase();
+    async function entrarNaSala(nome, codigo) {
       const erro = document.getElementById('erro-sala');
       if (!nome || !codigo) {
         erro.textContent = 'Preenche seu nome e o código da sala.';
@@ -93,7 +92,21 @@
         erro.textContent = e.message;
         erro.style.display = 'block';
       }
+    }
+
+    document.getElementById('btn-entrar-sala').addEventListener('click', () => {
+      const nome = document.getElementById('input-nome-sala').value.trim();
+      const codigo = document.getElementById('input-codigo-sala').value.trim().toUpperCase();
+      entrarNaSala(nome, codigo);
     });
+
+    // --- Link direto vindo de uma ficha (player.html): já sabemos o código, não precisa digitar de novo ---
+    const codigoDaUrl = new URLSearchParams(location.search).get('codigo');
+    if (codigoDaUrl) {
+      document.getElementById('input-codigo-sala').value = codigoDaUrl.toUpperCase();
+      const nomeSalvo = getNomeSalvo();
+      if (nomeSalvo) entrarNaSala(nomeSalvo, codigoDaUrl.toUpperCase());
+    }
 
     async function abrirPainel() {
       document.getElementById('tela-entrar').style.display = 'none';
@@ -110,6 +123,7 @@
       await atualizarFichas();
       await carregarHistorico();
       escutarRolagens(campanhaAtual.id, adicionarRolagemNoFeed);
+      escutarFichas(campanhaAtual.id, atualizarFichas);
     }
 
     document.getElementById('btn-apagar-sala').addEventListener('click', async () => {
@@ -131,6 +145,7 @@
         <div class="ficha-item">
           <div class="nome-personagem">${f.nome_personagem}</div>
           <div class="nome-jogador">${f.nome_jogador}</div>
+          ${formatarResumoPartida(f) ? `<div class="status-partida">${formatarResumoPartida(f)}</div>` : ''}
         </div>
       `).join('');
     }

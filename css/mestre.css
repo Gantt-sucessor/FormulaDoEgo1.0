@@ -47,6 +47,7 @@
 }
 .ficha-item .nome-personagem { font-weight: 600; }
 .ficha-item .nome-jogador { font-size: 0.8rem; color: var(--text-muted); }
+.ficha-item .status-partida { font-size: 0.75rem; color: var(--accent-gold); margin-top: 4px; }
 
 .feed-rolagem {
   display: flex;
