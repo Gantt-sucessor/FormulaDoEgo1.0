@@ -137,7 +137,20 @@
           </div>
 
           <div id="bloco-rolagem" style="display: none;">
-            <div class="card">
+            <div class="jogadas-area">
+              <div class="divider"></div>
+              <h3>Jogadas</h3>
+              <p class="step-desc">Clique numa jogada do livro pra rolar direto com sua perícia/atributo salvos.</p>
+              <div id="jogadas-container"></div>
+
+              <div class="divider"></div>
+              <h3>Últimas rolagens</h3>
+              <div id="historico-container" class="historico-lista">
+                <p style="color: var(--text-muted); font-size: 0.85rem;">Nenhuma rolagem ainda.</p>
+              </div>
+            </div>
+
+            <div class="card rolagem-manual-card">
               <h3>Rolagem manual</h3>
               <p class="step-desc">Pra habilidades da arma, talentos, ou qualquer teste fora da lista de jogadas.</p>
               <div class="jogada-select">
@@ -176,16 +189,6 @@
               </div>
             </div>
 
-            <div class="divider"></div>
-            <h3>Jogadas</h3>
-            <p class="step-desc">Clique numa jogada do livro pra rolar direto com sua perícia/atributo salvos.</p>
-            <div id="jogadas-container"></div>
-
-            <div class="divider"></div>
-            <h3>Últimas rolagens</h3>
-            <div id="historico-container" class="historico-lista">
-              <p style="color: var(--text-muted); font-size: 0.85rem;">Nenhuma rolagem ainda.</p>
-            </div>
           </div>
         </div>
       </div>
@@ -1377,7 +1380,7 @@
 
     // --- Bloco de rolagem só aparece depois que a ficha existe salva (precisa de um id) ---
     async function ativarBlocoRolagem() {
-      document.getElementById('bloco-rolagem').style.display = 'block';
+      document.getElementById('bloco-rolagem').style.display = 'grid';
       if (campanhaAtual) {
         const historico = await buscarUltimasRolagens(fichaAtual.id, 10);
         renderHistorico(historico.map((r) => ({ jogada: r.jogada, resultado: r.resultado, detalhe: r.detalhe, hora: r.criada_em })));

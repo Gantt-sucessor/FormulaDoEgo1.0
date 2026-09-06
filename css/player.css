@@ -24,7 +24,7 @@
   max-width: 980px;
 }
 
-/* Visão Geral: hexágono fixo à esquerda, perícias/jogadas/rolagem empilhados à direita */
+/* Visão Geral: atributos à esquerda, perícias e jogadas lado a lado. */
 .visao-geral-grid {
   display: grid;
   grid-template-columns: 360px 1fr;
@@ -32,7 +32,14 @@
   align-items: start;
 }
 .coluna-atributos { position: sticky; top: 20px; min-width: 0; }
-.coluna-jogo { min-width: 0; }
+.coluna-jogo {
+  min-width: 0;
+  display: block;
+}
+.coluna-jogo > #bloco-rolagem { min-width: 0; display: grid; gap: 18px; }
+.jogadas-area { order: 1; min-width: 0; }
+.rolagem-manual-card { order: 2; margin: 0; }
+.jogadas-area > .divider { margin: 18px 0; }
 @media (max-width: 900px) {
   .visao-geral-grid { grid-template-columns: 1fr; }
   .coluna-atributos { position: static; }
@@ -81,7 +88,7 @@
   border-bottom: 1px solid var(--border);
 }
 .form-section:last-of-type { border-bottom: none; }
-.form-section h3 { margin-bottom: 4px; display: flex; align-items: center; gap: 8px; }
+.form-section h3 { margin-bottom: 4px; display: flex; align-items: center; gap: 8px; justify-content: center;}
 .form-section .step-desc { font-size: 0.85rem; margin-bottom: 16px; }
 .campo-opcional-tag {
   font-size: 0.65rem;
@@ -124,6 +131,7 @@
   text-align: center;
 }
 .arma-hero .arma-icone-grande { width: min(250px, 72vw); height: min(250px, 72vw); }
+.arma-identidade { text-align: center; }
 .arma-identidade h3 { margin-bottom: 4px; font-size: 1.35rem; }
 .arma-identidade p { margin: 6px auto 0; max-width: 560px; color: var(--text-secondary); font-size: 0.85rem; }
 .arma-dificuldade { color: var(--accent-gold); letter-spacing: 0.12em; }
@@ -423,23 +431,25 @@
 }
 .jogadas-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-  gap: 10px;
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  gap: 12px;
 }
 .jogada-card {
   text-align: left;
   background: var(--bg-surface);
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  padding: 12px;
+  min-height: 112px;
+  padding: 16px;
   cursor: pointer;
   color: var(--text-primary);
   font-family: var(--font-body);
 }
 .jogada-card:hover { border-color: var(--accent-blue); }
 .jogada-card:disabled { opacity: 0.4; cursor: default; }
-.jogada-card .nome { font-weight: 600; font-size: 0.9rem; margin-bottom: 2px; }
-.jogada-card .info { font-size: 0.75rem; color: var(--text-muted); }
+.jogada-card .nome { font-weight: 600; font-size: 1rem; margin-bottom: 5px; }
+.jogada-card .info { font-size: 0.84rem; color: var(--text-muted); line-height: 1.4; }
+.talento-nivel { width: 100%; margin-top: 12px; min-height: 42px; font-size: 0.95rem; }
 
 /* Histórico de rolagens */
 .historico-lista { display: flex; flex-direction: column; gap: 8px; margin-top: 12px; }
