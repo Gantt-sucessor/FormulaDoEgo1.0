@@ -104,6 +104,19 @@
             <input id="input-nome-personagem" type="text" />
           </div>
         </div>
+        <div id="habilidades-categoria-container" class="selecao-info"></div>
+      </div>
+
+      <div class="form-section">
+        <h3>Posição e perna dominante</h3>
+        <div class="grid-2">
+          <div class="campo"><label for="select-posicao">Posição principal</label><select id="select-posicao">
+            <option value="">— não definida —</option><option value="goleiro">Goleiro</option><option value="zaga">Zaga</option><option value="lateral">Lateral</option><option value="meio">Meio-campo</option><option value="ataque">Ataque</option>
+          </select></div>
+          <div class="campo"><label for="select-perna-dominante">Perna dominante</label><select id="select-perna-dominante">
+            <option value="">— não definida —</option><option value="direita">Direita</option><option value="esquerda">Esquerda</option>
+          </select></div>
+        </div>
       </div>
 
       <button id="btn-salvar-ficha" class="btn btn-gold" style="width: 100%;">Salvar ficha</button>
@@ -186,6 +199,19 @@
           <option value="">— nenhuma escolhida —</option>
         </select>
         <div id="info-arma" class="selecao-info"></div>
+      </div>
+
+      <div class="form-section">
+        <h3>Recompensas e Visões</h3>
+        <div class="grid-2">
+          <div class="campo"><label for="select-recompensa-nivel-6">Recompensa do nível 6</label><select id="select-recompensa-nivel-6">
+            <option value="">— escolher depois —</option><option value="distancia_chute">+1m de distância de chute</option><option value="distancia_passe">+1m de distância de passe</option><option value="folego">+1 fôlego máximo</option>
+          </select></div>
+          <div class="campo"><label for="select-recompensa-nivel-8">Recompensa do nível 8</label><select id="select-recompensa-nivel-8">
+            <option value="">— escolher depois —</option><option value="acao_egoista">+1 reação egoísta</option>
+          </select></div>
+        </div>
+        <div id="visoes-container" class="jogadas-grid"></div>
       </div>
 
       <div class="form-section">
@@ -323,7 +349,8 @@
 
       <div class="form-section">
         <h3>Distâncias</h3>
-        <p class="step-desc">Calculadas sozinhas a partir das suas perícias — quanto maior Precisão/Visão de jogo, mais longe.</p>
+        <p class="step-desc">Escolha a perícia usada: a distância é calculada com ela.</p>
+        <div class="grid-2"><div class="campo"><label for="select-pericia-distancia-chute">Perícia do chute</label><select id="select-pericia-distancia-chute"></select></div><div class="campo"><label for="select-pericia-distancia-passe">Perícia do passe</label><select id="select-pericia-distancia-passe"></select></div></div>
         <div class="status-grid">
           <div class="status-item">
             <label>Distância de chute (DdC)</label>
@@ -338,7 +365,7 @@
 
       <div class="form-section">
         <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 4px;">
-          <h3 style="margin-bottom: 0;">Ações da rodada</h3>
+          <h3 style="margin-bottom: 0;">Reações da rodada</h3>
           <button type="button" id="btn-resetar-acoes" class="btn btn-ghost" style="padding: 6px 12px; font-size: 0.8rem;">Nova rodada</button>
         </div>
         <p class="step-desc">Clique pra marcar o que já foi gasto. "Nova rodada" libera tudo de novo.</p>
@@ -369,7 +396,7 @@
     import { ARMAS } from './js/data/armas.js';
     import { OTICAS } from './js/data/oticas.js';
     import { TENDENCIAS } from './js/data/tendencias.js';
-    import { CATEGORIAS } from './js/data/categorias.js';
+    import { CATEGORIAS, HABILIDADES_DE_CATEGORIA } from './js/data/categorias.js';
     import { JOGADAS } from './js/data/jogadas.js';
     import { TALENTOS_EVOLUTIVOS, TALENTOS_SIMPLES, TALENTOS_RAZOAVEIS, TALENTOS_COMPLEXOS, MAX_SLOTS_TALENTOS } from './js/data/talentos.js';
     import { calcularFolegos, calcularDdC, calcularDdP, MAX_PDS_PADRAO } from './js/regras/calculos.js';
@@ -391,6 +418,15 @@
     let talentosSelecionados = [];
     let efeitosAtivos = [];      // [{id, quantidade, duracao}] — painel de partida
     let acoesGastas = { tatica: false, egoista: false, regulares: [false, false, false, false] };
+    let habilidadesCategoriaSelecionadas = [];
+    let visoesDesbloqueadas = [];
+    let talentosNiveis = {};
+    let recompensaNivel6 = '';
+    let recompensaNivel8 = '';
+    let posicaoAtual = '';
+    let pernaDominante = '';
+    let periciaDistanciaChute = 'precisao';
+    let periciaDistanciaPasse = 'visao_de_jogo';
 
     document.getElementById('input-nome-jogador-inicial').value = getNomeSalvo();
     document.getElementById('input-codigo').value = getUltimoCodigoSalvo();
@@ -545,19 +581,36 @@
       if (!arma) { info.classList.remove('ativo'); return; }
       info.classList.add('ativo');
       info.innerHTML = `
-        <div style="display:flex; align-items:center; gap:12px; margin-bottom: 4px;">
-          <div class="arma-icone-grande">${iconeArmaHTML(arma.id, arma.nome)}</div>
-          <div>${'★'.repeat(arma.dificuldade)}${'☆'.repeat(5 - arma.dificuldade)} — ${arma.tema}</div>
-        </div>
-        <div class="arma-bloco"><strong>Mecânica Especial — ${arma.mecanica_especial.nome}:</strong> ${arma.mecanica_especial.texto}</div>
-        <div class="arma-bloco"><strong>Passiva — ${arma.passiva.nome}:</strong> ${arma.passiva.texto}</div>
-        <div class="arma-bloco">
-          <strong>Habilidades exclusivas da sua arma:</strong>
-          <ul class="arma-habilidades-lista">
-            ${arma.habilidades.map((h) => `<li><strong>${h.nome}</strong> <span class="arma-hab-tipo">[${h.tipo}${h.simbolo ? ' ' + h.simbolo : ''}]</span> — ${h.texto}</li>`).join('')}
-          </ul>
+        <div class="arma-detalhes">
+          <div class="arma-hero">
+            <div class="arma-icone-grande">${iconeArmaHTML(arma.id, arma.nome)}</div>
+            <div class="arma-identidade">
+              <h3>${arma.nome}</h3>
+              <div class="arma-dificuldade">${'★'.repeat(arma.dificuldade)}${'☆'.repeat(5 - arma.dificuldade)}</div>
+              <p>${arma.tema}</p>
+            </div>
+          </div>
+          <div class="arma-painel">
+            <div class="arma-painel-titulo">Capacidade</div>
+            <strong>${arma.mecanica_especial.nome}</strong>
+            <p>${arma.mecanica_especial.texto}</p>
+          </div>
+          <div class="arma-painel">
+            <div class="arma-painel-titulo">Skills</div>
+            <ul class="arma-habilidades-lista">
+              ${arma.habilidades.map((h, i) => `<li><div class="arma-skill-cabecalho"><strong>${h.nome}</strong><span class="arma-hab-tipo">[${h.tipo}${h.simbolo ? ' ' + h.simbolo : ''}]</span><button type="button" class="btn btn-ghost usar-habilidade" data-arma-habilidade="${i}">Usar</button></div><p>${h.texto}</p></li>`).join('')}
+            </ul>
+          </div>
+          <div class="arma-painel arma-passiva">
+            <div class="arma-painel-titulo">Passiva</div>
+            <strong>${arma.passiva.nome}</strong>
+            <p>${arma.passiva.texto}</p>
+          </div>
         </div>
       `;
+      info.querySelectorAll('[data-arma-habilidade]').forEach((btn) => btn.addEventListener('click', () => {
+        usarHabilidade(arma.habilidades[Number(btn.dataset.armaHabilidade)]);
+      }));
       atualizarBadgesResumo();
     });
 
@@ -595,7 +648,25 @@
       const selectArquetipo = document.getElementById('select-arquetipo');
       selectArquetipo.innerHTML = '<option value="">— nenhum —</option>';
       if (cat) popularSelect(selectArquetipo, cat.arquetipos);
+      renderHabilidadesCategoria();
     });
+
+    function renderHabilidadesCategoria() {
+      const arquetipo = document.getElementById('select-arquetipo').value;
+      const disponiveis = HABILIDADES_DE_CATEGORIA.filter((h) => h.arquetipos.includes(arquetipo));
+      const container = document.getElementById('habilidades-categoria-container');
+      container.innerHTML = disponiveis.length ? `<strong>Habilidades disponíveis</strong><div class="jogadas-grid">${disponiveis.map((h, i) => `<button type="button" class="jogada-card ${habilidadesCategoriaSelecionadas.includes(h.nome) ? 'talento-selecionado' : ''}" data-categoria-habilidade="${i}"><div class="nome">${h.nome} <span class="arma-hab-tipo" data-categoria-usar="${i}">Usar</span></div><div class="info">${h.tda || ''} — ${h.texto}</div></button>`).join('')}</div>` : '<span>Escolha um arquétipo para ver as habilidades compatíveis.</span>';
+      container.querySelectorAll('[data-categoria-habilidade]').forEach((btn) => btn.addEventListener('click', () => {
+        const habilidade = disponiveis[Number(btn.dataset.categoriaHabilidade)].nome;
+        habilidadesCategoriaSelecionadas = habilidadesCategoriaSelecionadas.includes(habilidade) ? habilidadesCategoriaSelecionadas.filter((nome) => nome !== habilidade) : [...habilidadesCategoriaSelecionadas, habilidade];
+        renderHabilidadesCategoria();
+      }));
+      container.querySelectorAll('[data-categoria-usar]').forEach((btn) => btn.addEventListener('click', (event) => {
+        event.stopPropagation();
+        usarHabilidade(disponiveis[Number(btn.dataset.categoriaUsar)]);
+      }));
+    }
+    document.getElementById('select-arquetipo').addEventListener('change', renderHabilidadesCategoria);
 
     function atualizarBadgesResumo() {
       const arma = ARMAS.find((a) => a.id === document.getElementById('select-arma').value);
@@ -787,6 +858,13 @@
       pontosChama = fichaExistente?.pontos_chama ?? 0;
       pontosSorte = fichaExistente?.pontos_sorte ?? 0;
       talentosSelecionados = fichaExistente?.talentos ? [...fichaExistente.talentos] : [];
+      talentosNiveis = fichaExistente?.talentos_niveis ? { ...fichaExistente.talentos_niveis } : {};
+      habilidadesCategoriaSelecionadas = fichaExistente?.habilidades_categoria ? [...fichaExistente.habilidades_categoria] : [];
+      visoesDesbloqueadas = fichaExistente?.visoes_desbloqueadas ? [...fichaExistente.visoes_desbloqueadas] : [];
+      recompensaNivel6 = fichaExistente?.recompensa_nivel_6 || '';
+      recompensaNivel8 = fichaExistente?.recompensa_nivel_8 || '';
+      posicaoAtual = fichaExistente?.posicao || '';
+      pernaDominante = fichaExistente?.perna_dominante || '';
       efeitosAtivos = fichaExistente?.efeitos_ativos ? fichaExistente.efeitos_ativos.map((e) => ({ ...e })) : [];
       acoesGastas = fichaExistente?.acoes_gastas
         ? { tatica: !!fichaExistente.acoes_gastas.tatica, egoista: !!fichaExistente.acoes_gastas.egoista, regulares: [...(fichaExistente.acoes_gastas.regulares || [false, false, false, false])] }
@@ -800,6 +878,10 @@
       document.getElementById('select-tendencia-principal').value = fichaExistente?.tendencia_principal_id || '';
       document.getElementById('select-tendencia-secundaria').value = fichaExistente?.tendencia_secundaria_id || '';
       document.getElementById('select-categoria').value = fichaExistente?.categoria_id || '';
+      document.getElementById('select-posicao').value = posicaoAtual;
+      document.getElementById('select-perna-dominante').value = pernaDominante;
+      document.getElementById('select-recompensa-nivel-6').value = recompensaNivel6;
+      document.getElementById('select-recompensa-nivel-8').value = recompensaNivel8;
       document.getElementById('select-arma').dispatchEvent(new Event('change'));
       document.getElementById('select-otica').dispatchEvent(new Event('change'));
       document.getElementById('select-categoria').dispatchEvent(new Event('change'));
@@ -817,13 +899,15 @@
         periciasEscolhidas = pers;
         renderSelectPericiaManual();
         renderStatus();
-      });
+      }, calcularPontosPericiaMaximos());
 
       renderSelectAtributoManual();
       renderSelectPericiaManual();
       renderJogadasBase();
       renderStatus();
       renderTalentos();
+      renderVisoes();
+      renderPericiasDistancia();
       renderCondicoes();
       renderAcoesRodada();
 
@@ -854,10 +938,68 @@
       if (atual) select.value = atual;
     }
 
+    function calcularPontosPericiaMaximos() {
+      return 10 + (nivelAtual >= 3 ? 1 : 0) + (nivelAtual >= 6 ? 1 : 0) + (nivelAtual >= 7 ? 1 : 0);
+    }
+
+    function renderPericiasDistancia() {
+      const opcoes = PERICIAS.map((p) => `<option value="${p.id}">${p.nome} (${periciasEscolhidas[p.id] || 0})</option>`).join('');
+      ['select-pericia-distancia-chute', 'select-pericia-distancia-passe'].forEach((id) => {
+        const select = document.getElementById(id);
+        if (!select) return;
+        select.innerHTML = opcoes;
+      });
+      document.getElementById('select-pericia-distancia-chute').value = periciaDistanciaChute;
+      document.getElementById('select-pericia-distancia-passe').value = periciaDistanciaPasse;
+    }
+
+    function renderVisoes() {
+      const otica = OTICAS.find((o) => o.id === document.getElementById('select-otica').value);
+      const container = document.getElementById('visoes-container');
+      if (!otica) { container.innerHTML = '<span>Escolha uma ótica para marcar os níveis desbloqueados.</span>'; return; }
+      container.innerHTML = otica.niveis.map((texto, i) => `<label class="jogada-card" style="cursor:pointer; text-align:left;"><input type="checkbox" data-visao-nivel="${i + 1}" ${visoesDesbloqueadas.includes(i + 1) ? 'checked' : ''}> <strong>Nível ${i + 1}</strong><div class="info">${texto}</div></label>`).join('');
+      container.querySelectorAll('[data-visao-nivel]').forEach((input) => input.addEventListener('change', () => {
+        const nivel = Number(input.dataset.visaoNivel);
+        visoesDesbloqueadas = input.checked ? [...new Set([...visoesDesbloqueadas, nivel])] : visoesDesbloqueadas.filter((item) => item !== nivel);
+      }));
+    }
+
+    function usarHabilidade(habilidade) {
+      const esf = Number((habilidade.esf || '').match(/\d+/)?.[0] || 0);
+      const gastoFolego = Number((habilidade.gex || '').match(/(\d+)\s*fôlego/i)?.[1] || 0);
+      const gastoPds = Number((habilidade.gex || '').match(/(\d+)\s*PdS/i)?.[1] || 0);
+      if (gastoFolego > folegoAtual || gastoPds > pontosSorte) {
+        mostrarToast('Fôlego ou PdS insuficiente para essa habilidade.', 'erro');
+        return;
+      }
+      pdeAtual += esf;
+      folegoAtual -= gastoFolego;
+      pontosSorte -= gastoPds;
+      const tipoAcao = (habilidade.tda || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+      if (/egoista/i.test(tipoAcao)) acoesGastas.egoista = true;
+      if (/tatica/i.test(tipoAcao)) acoesGastas.tatica = true;
+      const reacoes = Number(tipoAcao.match(/(\d+)\s*reacoes?/i)?.[1] || (/reacao/i.test(tipoAcao) ? 1 : 0));
+      for (let i = 0; i < reacoes; i += 1) {
+        const livre = acoesGastas.regulares.findIndex((gasto) => !gasto);
+        if (livre >= 0) acoesGastas.regulares[livre] = true;
+      }
+      renderStatus();
+      renderAcoesRodada();
+      salvarPartidaAutomatico();
+      mostrarToast(`${habilidade.nome} usada.`);
+    }
+
+    document.getElementById('select-pericia-distancia-chute').addEventListener('change', (e) => { periciaDistanciaChute = e.target.value; renderStatus(); });
+    document.getElementById('select-pericia-distancia-passe').addEventListener('change', (e) => { periciaDistanciaPasse = e.target.value; renderStatus(); });
+    document.getElementById('select-posicao').addEventListener('change', (e) => { posicaoAtual = e.target.value; });
+    document.getElementById('select-perna-dominante').addEventListener('change', (e) => { pernaDominante = e.target.value; });
+    document.getElementById('select-recompensa-nivel-6').addEventListener('change', (e) => { recompensaNivel6 = e.target.value; });
+    document.getElementById('select-recompensa-nivel-8').addEventListener('change', (e) => { recompensaNivel8 = e.target.value; renderAcoesRodada(); });
+
     // --- Status: nível, fôlego, PdE, pontos de chama ---
     function renderStatus() {
       const constancia = periciasEscolhidas['constancia'] || 0;
-      const folegoMax = calcularFolegos(constancia);
+      const folegoMax = calcularFolegos(constancia) + (recompensaNivel6 === 'folego' ? 1 : 0);
       folegoAtual = Math.min(folegoAtual, folegoMax);
       document.getElementById('valor-nivel').textContent = nivelAtual;
       document.getElementById('valor-folego').textContent = folegoAtual;
@@ -871,8 +1013,8 @@
       document.getElementById('valor-sorte-max').textContent = MAX_PDS_PADRAO;
       document.getElementById('valor-sorte-partida').textContent = pontosSorte;
       document.getElementById('valor-sorte-max-partida').textContent = MAX_PDS_PADRAO;
-      document.getElementById('valor-ddc').textContent = calcularDdC(periciasEscolhidas['precisao'] || 0);
-      document.getElementById('valor-ddp').textContent = calcularDdP(periciasEscolhidas['visao_de_jogo'] || 0);
+      document.getElementById('valor-ddc').textContent = calcularDdC(periciasEscolhidas[periciaDistanciaChute] || 0, recompensaNivel6 === 'distancia_chute' ? 1 : 0);
+      document.getElementById('valor-ddp').textContent = calcularDdP(periciasEscolhidas[periciaDistanciaPasse] || 0, recompensaNivel6 === 'distancia_passe' ? 1 : 0);
       salvarPartidaAutomatico();
     }
 
@@ -882,9 +1024,12 @@
       if (!btn) return;
       const tipo = btn.dataset.status;
       const delta = btn.dataset.acao === 'mais' ? 1 : -1;
-      if (tipo === 'nivel') nivelAtual = Math.min(8, Math.max(1, nivelAtual + delta));
+      if (tipo === 'nivel') {
+        nivelAtual = Math.min(8, Math.max(1, nivelAtual + delta));
+        initPericias(document.getElementById('pericias-container'), periciasEscolhidas, (pers) => { periciasEscolhidas = pers; renderSelectPericiaManual(); renderPericiasDistancia(); renderStatus(); }, calcularPontosPericiaMaximos());
+      }
       if (tipo === 'folego') {
-        const max = calcularFolegos(periciasEscolhidas['constancia'] || 0);
+        const max = calcularFolegos(periciasEscolhidas['constancia'] || 0) + (recompensaNivel6 === 'folego' ? 1 : 0);
         folegoAtual = Math.min(max, Math.max(0, folegoAtual + delta));
       }
       if (tipo === 'pde') pdeAtual = Math.max(0, pdeAtual + delta);
@@ -909,7 +1054,8 @@
             ${g.lista.map((t) => `
               <button type="button" class="jogada-card ${talentosSelecionados.includes(t.id) ? 'talento-selecionado' : ''}" data-talento-id="${t.id}">
                 <div class="nome">${t.nome}</div>
-                <div class="info">${t.texto || (t.niveis ? t.niveis[0] : '')}</div>
+                <div class="info">${t.texto || (t.niveis ? t.niveis[talentosNiveis[t.id] - 1 || 0] : '')}</div>
+                ${t.niveis ? `<select class="talento-nivel" data-talento-nivel="${t.id}" aria-label="Nível de ${t.nome}">${t.niveis.map((_, i) => `<option value="${i + 1}" ${(talentosNiveis[t.id] || 1) === i + 1 ? 'selected' : ''}>Nível ${i + 1}</option>`).join('')}</select>` : ''}
               </button>
             `).join('')}
           </div>
@@ -929,6 +1075,13 @@
             }
             talentosSelecionados.push(id);
           }
+          renderTalentos();
+        });
+      });
+      container.querySelectorAll('[data-talento-nivel]').forEach((select) => {
+        select.addEventListener('click', (event) => event.stopPropagation());
+        select.addEventListener('change', () => {
+          talentosNiveis[select.dataset.talentoNivel] = Number(select.value);
           renderTalentos();
         });
       });
@@ -959,9 +1112,9 @@
       const container = document.getElementById('acoes-rodada-container');
       const slots = [
         { label: 'Ação tática', gasta: acoesGastas.tatica, onClick: () => { acoesGastas.tatica = !acoesGastas.tatica; } },
-        { label: 'Ação egoísta', gasta: acoesGastas.egoista, onClick: () => { acoesGastas.egoista = !acoesGastas.egoista; } },
+        { label: 'Reação egoísta', gasta: acoesGastas.egoista, onClick: () => { acoesGastas.egoista = !acoesGastas.egoista; } },
         ...acoesGastas.regulares.map((gasta, i) => ({
-          label: `Ação ${i + 1}`,
+          label: `Reação ${i + 1}`,
           gasta,
           onClick: () => { acoesGastas.regulares[i] = !acoesGastas.regulares[i]; },
         })),
@@ -1167,6 +1320,13 @@
         pontosChama,
         pontosSorte,
         talentos: talentosSelecionados,
+        habilidadesCategoria: habilidadesCategoriaSelecionadas,
+        visoesDesbloqueadas,
+        talentosNiveis,
+        recompensaNivel6,
+        recompensaNivel8,
+        posicao: posicaoAtual,
+        pernaDominante,
       };
 
       try {
@@ -1188,11 +1348,18 @@
             pontos_chama: dados.pontosChama,
             pontos_sorte: dados.pontosSorte,
             talentos: dados.talentos,
+            habilidades_categoria: dados.habilidadesCategoria,
+            visoes_desbloqueadas: dados.visoesDesbloqueadas,
+            talentos_niveis: dados.talentosNiveis,
+            recompensa_nivel_6: dados.recompensaNivel6,
+            recompensa_nivel_8: dados.recompensaNivel8,
+            posicao: dados.posicao,
+            perna_dominante: dados.pernaDominante,
             efeitos_ativos: efeitosAtivos,
             acoes_gastas: acoesGastas,
           });
         } else {
-          ficha = await criarFicha({ campanhaId: campanhaAtual ? campanhaAtual.id : null, jogadorId: usuarioLogado.id, nomeJogador, efeitosAtivos, acoesGastas, ...dados });
+          ficha = await criarFicha({ campanhaId: campanhaAtual ? campanhaAtual.id : null, jogadorId: usuarioLogado?.id || null, nomeJogador, efeitosAtivos, acoesGastas, ...dados });
         }
         fichaAtual = ficha;
         document.getElementById('titulo-personagem').textContent = ficha.nome_personagem;

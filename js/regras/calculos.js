@@ -11,13 +11,13 @@ export function calcularIniciativa(momento) {
 }
 
 /** Distância de chute (DdC) = 6 + Precisão */
-export function calcularDdC(precisao) {
-  return 6 + precisao;
+export function calcularDdC(pericia, bonus = 0) {
+  return 6 + pericia + bonus;
 }
 
 /** Distância de passe (DdP) = 6 + Visão de jogo */
-export function calcularDdP(visaoDeJogo) {
-  return 6 + visaoDeJogo;
+export function calcularDdP(pericia, bonus = 0) {
+  return 6 + pericia + bonus;
 }
 
 /** Tamanho da zona dourada de acordo com o valor final de Ego */

@@ -65,6 +65,8 @@ export async function criarFicha({
   categoriaId = null, arquetipoId = null,
   nivel = 1, folegoAtual = 0, pdeAtual = 0, pontosChama = 0, pontosSorte = 0, talentos = [],
   efeitosAtivos = [], acoesGastas = { tatica: false, egoista: false, regulares: [false, false, false, false] },
+  habilidadesCategoria = [], visoesDesbloqueadas = [], talentosNiveis = {}, recompensaNivel6 = null,
+  recompensaNivel8 = null, posicao = null, pernaDominante = null,
 }) {
   const { data, error } = await supabase
     .from('fichas')
@@ -89,6 +91,13 @@ export async function criarFicha({
       talentos,
       efeitos_ativos: efeitosAtivos,
       acoes_gastas: acoesGastas,
+      habilidades_categoria: habilidadesCategoria,
+      visoes_desbloqueadas: visoesDesbloqueadas,
+      talentos_niveis: talentosNiveis,
+      recompensa_nivel_6: recompensaNivel6,
+      recompensa_nivel_8: recompensaNivel8,
+      posicao,
+      perna_dominante: pernaDominante,
     })
     .select()
     .single();

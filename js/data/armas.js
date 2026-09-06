@@ -403,7 +403,7 @@ export const ARMAS = [
     nome: 'Nêmesis Cadavérico',
     dificuldade: 5,
     tema: 'O preço de cada um equivale a quão bem jogam — seu objetivo é caçá-los como tesouro.',
-    mecanica_especial: { nome: 'Preço do caixão', texto: 'No início da partida, distribui 10 de "valor" entre os inimigos (sem limite por alvo, sem repetir valores). Cada valor dá +1 bônus defensivo contra aquele alvo no setor dele.' },
+    mecanica_especial: { nome: 'Peso Morto', texto: 'No início da partida, distribui 10 de "valor" entre os inimigos (sem limite por alvo, sem repetir valores). Cada valor dá +1 bônus defensivo contra aquele alvo no setor dele.' },
     passiva: { nome: 'Preço do caixão', texto: 'Desbloqueia uma capacidade usável só no início da partida.' },
     habilidades: [
       { nome: 'Yo bro', tipo: 'sem bola', simbolo: '✪', texto: 'Ao alvo com bola entrar no seu setor: avança e faz roubo; ele testa Emocional antes de te driblar (mais difícil se tiver o maior valor); se falhar, seu roubo fica garantido; se te driblar, ele ganha +1 valor.' },
@@ -432,7 +432,7 @@ export const ARMAS = [
     dificuldade: 5,
     tema: 'Posição adequada — cada peça no seu devido lugar.',
     mecanica_especial: { nome: 'Posição adequada', texto: 'Alvos fora do setor da própria posição (ex: zagueiro fora da zaga) têm -3 bônus em J vs J contra você, e suas habilidades funcionam diferente contra eles.' },
-    passiva: { nome: 'Posição adequada', texto: 'Desbloqueia uma passiva inerte, sem precisar de ativação.' },
+    passiva: { nome: 'Posição adequada', texto: 'Enquanto você estiver no setor correspondente à sua própria posição, recebe os benefícios defensivos da arma. Um zagueiro funciona na zaga; um lateral, na lateral; e assim por diante.' },
     habilidades: [
       { nome: '1% sorte', tipo: 'sem bola', texto: 'Ao alvo declarar J vs J/J vs G em 6m (não contra você): ele recebe desvantagem; se falhar, perde 1 PdS (dobra se estiver fora de posição, perdendo todos os PdS).' },
       { nome: 'Gire, engrenagem', tipo: 'com bola', simbolo: '✪', texto: 'Ao sofrer desarme: empurra 3m, passa pra um aliado e testa Emocional vs Determinação do roubador; vitória dá ego ferido (falha automática se ele estiver fora de posição).' },

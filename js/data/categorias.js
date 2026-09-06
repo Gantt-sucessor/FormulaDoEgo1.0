@@ -17,6 +17,9 @@ export const CATEGORIAS = [
       { nivel: 3, ganhos: '+1 habilidade de categoria + 1 ponto de perícia' },
       { nivel: 4, ganhos: '+2 pontos de perícia' },
       { nivel: 5, ganhos: '+2 pontos de perícia + 1 habilidade de categoria + 1 nível de ótica' },
+      { nivel: 6, ganhos: '+1 habilidade de categoria' },
+      { nivel: 7, ganhos: '+1 habilidade de categoria' },
+      { nivel: 8, ganhos: '+1 nível de categoria' },
     ],
   },
   {
@@ -34,6 +37,9 @@ export const CATEGORIAS = [
       { nivel: 3, ganhos: '+1 nível de ótica + 1 habilidade de categoria' },
       { nivel: 4, ganhos: '+2 pontos de chama + 1 nível de ótica' },
       { nivel: 5, ganhos: '+2 pontos de chama + 2 pontos de perícia distribuíveis' },
+      { nivel: 6, ganhos: '+1 habilidade de categoria' },
+      { nivel: 7, ganhos: '+1 habilidade de categoria' },
+      { nivel: 8, ganhos: '+1 nível de categoria' },
     ],
   },
 ];

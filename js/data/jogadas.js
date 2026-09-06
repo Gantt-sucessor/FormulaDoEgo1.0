@@ -1,5 +1,5 @@
 // Fórmula do Ego — Jogadas base
-// Cada jogada tem: perícia usada, dj (dificuldade da jogada), distância, ação gasta, anormalidade.
+// Cada jogada tem: perícia usada, dj (dificuldade da jogada), distância, reação/ação gasta, anormalidade.
 
 export const JOGADAS = {
   chutes: [

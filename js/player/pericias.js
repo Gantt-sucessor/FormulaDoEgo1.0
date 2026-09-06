@@ -9,7 +9,7 @@ import { ATRIBUTOS } from '../data/atributos.js';
  * @param {Record<string, number>} valoresIniciais - perícias já salvas na ficha (se houver)
  * @param {(pericias: Record<string, number>) => void} onChange
  */
-export function initPericias(container, valoresIniciais, onChange) {
+export function initPericias(container, valoresIniciais, onChange, pontosMaximos = PONTOS_PERICIA_CRIACAO) {
   const valores = { ...valoresIniciais };
 
   function totalDistribuido() {
@@ -32,8 +32,8 @@ export function initPericias(container, valoresIniciais, onChange) {
         `).join('')).join('')}
       </div>
       <div class="pericias-total ${total > PONTOS_PERICIA_CRIACAO ? 'excedido' : ''}">
-        ${total} / ${PONTOS_PERICIA_CRIACAO} pontos distribuídos
-        ${total > PONTOS_PERICIA_CRIACAO ? '— acima do recomendado pro livro, mas fica a critério do mestre' : ''}
+        ${total} / ${pontosMaximos} pontos distribuídos
+        ${total > pontosMaximos ? '— acima do limite do nível' : ''}
       </div>
     `;
 
@@ -41,7 +41,7 @@ export function initPericias(container, valoresIniciais, onChange) {
       btn.addEventListener('click', () => {
         const id = btn.dataset.pericia;
         const atual = valores[id] || 0;
-        if (btn.dataset.acao === 'mais' && atual < MAX_PONTOS_PERICIA) {
+        if (btn.dataset.acao === 'mais' && atual < MAX_PONTOS_PERICIA && totalDistribuido() < pontosMaximos) {
           valores[id] = atual + 1;
         } else if (btn.dataset.acao === 'menos' && atual > 0) {
           valores[id] = atual - 1;

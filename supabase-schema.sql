@@ -38,6 +38,13 @@ alter table fichas add column if not exists efeitos_ativos jsonb not null defaul
 alter table fichas add column if not exists acoes_gastas jsonb not null default '{"tatica":false,"egoista":false,"regulares":[false,false,false,false]}';
 -- Pontos de Sorte [PdS]: "Representam oportunidades do destino. Máximo padrão: 3."
 alter table fichas add column if not exists pontos_sorte int not null default 0;
+alter table fichas add column if not exists habilidades_categoria jsonb not null default '[]';
+alter table fichas add column if not exists visoes_desbloqueadas jsonb not null default '[]';
+alter table fichas add column if not exists talentos_niveis jsonb not null default '{}';
+alter table fichas add column if not exists recompensa_nivel_6 text;
+alter table fichas add column if not exists recompensa_nivel_8 text;
+alter table fichas add column if not exists posicao text;
+alter table fichas add column if not exists perna_dominante text;
 
 create table if not exists participantes_campanha (
   campanha_id uuid not null references campanhas(id) on delete cascade,
@@ -129,6 +136,12 @@ drop policy if exists "participantes leem rolagens" on rolagens;
 drop policy if exists "donos administram mapas" on mapas;
 drop policy if exists "participantes administram tokens" on tokens;
 drop policy if exists "participantes administram marcadores" on marcadores;
+drop policy if exists "acesso publico campanhas" on campanhas;
+drop policy if exists "acesso publico fichas" on fichas;
+drop policy if exists "acesso publico rolagens" on rolagens;
+drop policy if exists "acesso publico mapas" on mapas;
+drop policy if exists "acesso publico tokens" on tokens;
+drop policy if exists "acesso publico marcadores" on marcadores;
 drop policy if exists "participantes podem ver participacoes" on participantes_campanha;
 drop policy if exists "usuarios podem entrar em campanhas" on participantes_campanha;
 
@@ -195,4 +208,20 @@ end;
 $$;
 revoke all on function entrar_campanha_por_codigo(text) from public;
 grant execute on function entrar_campanha_por_codigo(text) to authenticated;
+
+-- Fluxo público do site: o jogador entra por nome/código, sem Supabase Auth.
+drop policy if exists "donos administram campanhas" on campanhas;
+drop policy if exists "jogadores acessam suas fichas" on fichas;
+drop policy if exists "participantes leem rolagens" on rolagens;
+drop policy if exists "jogadores criam rolagens" on rolagens;
+drop policy if exists "donos administram mapas" on mapas;
+drop policy if exists "participantes administram tokens" on tokens;
+drop policy if exists "participantes administram marcadores" on marcadores;
+
+create policy "acesso publico campanhas" on campanhas for all using (true) with check (true);
+create policy "acesso publico fichas" on fichas for all using (true) with check (true);
+create policy "acesso publico rolagens" on rolagens for all using (true) with check (true);
+create policy "acesso publico mapas" on mapas for all using (true) with check (true);
+create policy "acesso publico tokens" on tokens for all using (true) with check (true);
+create policy "acesso publico marcadores" on marcadores for all using (true) with check (true);
   

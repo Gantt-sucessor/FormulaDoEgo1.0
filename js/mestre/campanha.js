@@ -1,14 +1,11 @@
 import { supabase, gerarCodigoCampanha } from '../supabase-client.js';
-import { usuarioAutenticado } from '../auth.js';
 
 /** Cria uma nova campanha e retorna { id, codigo, nome, criador_nome }. */
 export async function criarCampanha(nome, criadorNome) {
   const codigo = gerarCodigoCampanha();
-  const usuario = await usuarioAutenticado();
-  if (!usuario) throw new Error('Autenticação obrigatória.');
   const { data, error } = await supabase
     .from('campanhas')
-    .insert({ nome, codigo, criador_nome: criadorNome, criador_id: usuario.id })
+    .insert({ nome, codigo, criador_nome: criadorNome })
     .select()
     .single();
 
@@ -18,12 +15,10 @@ export async function criarCampanha(nome, criadorNome) {
 
 /** Lista todas as campanhas que esse mestre já criou (mais recentes primeiro). */
 export async function listarCampanhasDoMestre(criadorNome) {
-  const usuario = await usuarioAutenticado();
-  if (!usuario) throw new Error('Autenticação obrigatória.');
   const { data, error } = await supabase
     .from('campanhas')
     .select('*')
-    .eq('criador_id', usuario.id)
+    .eq('criador_nome', criadorNome)
     .order('criada_em', { ascending: false });
 
   if (error) throw error;
