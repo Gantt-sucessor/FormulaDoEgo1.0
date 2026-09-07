@@ -162,8 +162,8 @@ export const TENDENCIAS = [
     nome: 'Coringa',
     tema: 'Não se encaixa em nada e se encaixa em tudo.',
     dom: {
-      nome: 'Sem ocasiões ruins / Duelo de sorte',
-      texto: 'Bônus contextual por setor ao entrar nele; ou gasta 1 PdS num J vs J pra rolar d2 (1=falha garantida, 2=vitória garantida).',
+      nome: 'Sem ocasiões ruins',
+      texto: 'Ao entrar em um novo setor no campo, recebe +1 PdE e pode gastar uma reação para ganhar, por d4+1 turnos: Zaga: +2 bônus em roubo e interceptações; Ataque: +2 bônus em dribles e chutes; Lateral/Meio-campo: +2 em Cognição.',
     },
     pericia_adicional: ['posicionamento', 'precisao', 'constancia'],
     passiva_secundaria: {
@@ -175,8 +175,11 @@ export const TENDENCIAS = [
     id: 'rebelde',
     nome: 'Rebelde',
     tema: 'Limites não existem — evolui derrubando os mais fortes com sorte.',
-    dom: null,
-    pericia_adicional: [],
+    dom: {
+      nome: 'Duelo de sorte',
+      texto: 'Ao declarar ou um alvo declarar um teste de J vs J para ou contra você, pode ativar esta habilidade recebendo +2 PdE e gastando 1 PdS. Com a ativação, role d2: resultado 1 = vitória garantida; resultado 2 = derrota garantida.',
+    },
+    pericia_adicional: ['determinacao', 'posicionamento', 'instintos'],
     passiva_secundaria: {
       nome: 'Contra destino',
       texto: 'Gasta 1 PdS pra remover efeito negativo de inimigo por 2 rodadas; começa toda partida com 1 PdS.',

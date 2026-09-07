@@ -211,7 +211,7 @@
             <option value="">— escolher depois —</option><option value="distancia_chute">+1m de distância de chute</option><option value="distancia_passe">+1m de distância de passe</option><option value="folego">+1 fôlego máximo</option>
           </select></div>
           <div class="campo"><label for="select-recompensa-nivel-8">Recompensa do nível 8</label><select id="select-recompensa-nivel-8">
-            <option value="">— escolher depois —</option><option value="acao_egoista">+1 reação egoísta</option>
+            <option value="">— escolher depois —</option><option value="acao_egoista">+1 ação egoísta adicional</option>
           </select></div>
         </div>
         <div id="visoes-container" class="jogadas-grid"></div>
@@ -420,7 +420,7 @@
     let pontosSorte = 0;
     let talentosSelecionados = [];
     let efeitosAtivos = [];      // [{id, quantidade, duracao}] — painel de partida
-    let acoesGastas = { tatica: false, egoista: false, regulares: [false, false, false, false] };
+    let acoesGastas = { tatica: false, egoista: false, egoistaExtra: false, regulares: [false, false, false, false] };
     let habilidadesCategoriaSelecionadas = [];
     let visoesDesbloqueadas = [];
     let talentosNiveis = {};
@@ -870,8 +870,8 @@
       pernaDominante = fichaExistente?.perna_dominante || '';
       efeitosAtivos = fichaExistente?.efeitos_ativos ? fichaExistente.efeitos_ativos.map((e) => ({ ...e })) : [];
       acoesGastas = fichaExistente?.acoes_gastas
-        ? { tatica: !!fichaExistente.acoes_gastas.tatica, egoista: !!fichaExistente.acoes_gastas.egoista, regulares: [...(fichaExistente.acoes_gastas.regulares || [false, false, false, false])] }
-        : { tatica: false, egoista: false, regulares: [false, false, false, false] };
+        ? { tatica: !!fichaExistente.acoes_gastas.tatica, egoista: !!fichaExistente.acoes_gastas.egoista, egoistaExtra: !!fichaExistente.acoes_gastas.egoistaExtra, regulares: [...(fichaExistente.acoes_gastas.regulares || [false, false, false, false])] }
+        : { tatica: false, egoista: false, egoistaExtra: false, regulares: [false, false, false, false] };
 
       document.getElementById('titulo-personagem').textContent = fichaExistente?.nome_personagem || 'Novo personagem';
       document.getElementById('eyebrow-personagem').textContent = fichaExistente ? 'Ficha' : 'Novo personagem';
@@ -885,6 +885,7 @@
       document.getElementById('select-perna-dominante').value = pernaDominante;
       document.getElementById('select-recompensa-nivel-6').value = recompensaNivel6;
       document.getElementById('select-recompensa-nivel-8').value = recompensaNivel8;
+      atualizarRecompensasNivel();
       document.getElementById('select-arma').dispatchEvent(new Event('change'));
       document.getElementById('select-otica').dispatchEvent(new Event('change'));
       document.getElementById('select-categoria').dispatchEvent(new Event('change'));
@@ -996,13 +997,24 @@
     document.getElementById('select-pericia-distancia-passe').addEventListener('change', (e) => { periciaDistanciaPasse = e.target.value; renderStatus(); });
     document.getElementById('select-posicao').addEventListener('change', (e) => { posicaoAtual = e.target.value; });
     document.getElementById('select-perna-dominante').addEventListener('change', (e) => { pernaDominante = e.target.value; });
-    document.getElementById('select-recompensa-nivel-6').addEventListener('change', (e) => { recompensaNivel6 = e.target.value; });
+    document.getElementById('select-recompensa-nivel-6').addEventListener('change', (e) => { recompensaNivel6 = e.target.value; renderStatus(); });
     document.getElementById('select-recompensa-nivel-8').addEventListener('change', (e) => { recompensaNivel8 = e.target.value; renderAcoesRodada(); });
+
+    function atualizarRecompensasNivel() {
+      const recompensa6 = document.getElementById('select-recompensa-nivel-6');
+      const recompensa8 = document.getElementById('select-recompensa-nivel-8');
+      if (!recompensa6 || !recompensa8) return;
+      recompensa6.disabled = nivelAtual < 6;
+      recompensa8.disabled = nivelAtual < 8;
+      recompensa6.title = nivelAtual < 6 ? 'Disponível a partir do nível 6.' : 'Bônus natural permanente.';
+      recompensa8.title = nivelAtual < 8 ? 'Disponível a partir do nível 8.' : 'Ação egoísta adicional permanente.';
+    }
 
     // --- Status: nível, fôlego, PdE, pontos de chama ---
     function renderStatus() {
       const constancia = periciasEscolhidas['constancia'] || 0;
-      const folegoMax = calcularFolegos(constancia) + (recompensaNivel6 === 'folego' ? 1 : 0);
+      const bonusNivel6Ativo = nivelAtual >= 6;
+      const folegoMax = calcularFolegos(constancia) + (bonusNivel6Ativo && recompensaNivel6 === 'folego' ? 1 : 0);
       folegoAtual = Math.min(folegoAtual, folegoMax);
       document.getElementById('valor-nivel').textContent = nivelAtual;
       document.getElementById('valor-folego').textContent = folegoAtual;
@@ -1016,8 +1028,9 @@
       document.getElementById('valor-sorte-max').textContent = MAX_PDS_PADRAO;
       document.getElementById('valor-sorte-partida').textContent = pontosSorte;
       document.getElementById('valor-sorte-max-partida').textContent = MAX_PDS_PADRAO;
-      document.getElementById('valor-ddc').textContent = calcularDdC(periciasEscolhidas[periciaDistanciaChute] || 0, recompensaNivel6 === 'distancia_chute' ? 1 : 0);
-      document.getElementById('valor-ddp').textContent = calcularDdP(periciasEscolhidas[periciaDistanciaPasse] || 0, recompensaNivel6 === 'distancia_passe' ? 1 : 0);
+      document.getElementById('valor-ddc').textContent = calcularDdC(periciasEscolhidas[periciaDistanciaChute] || 0, bonusNivel6Ativo && recompensaNivel6 === 'distancia_chute' ? 1 : 0);
+      document.getElementById('valor-ddp').textContent = calcularDdP(periciasEscolhidas[periciaDistanciaPasse] || 0, bonusNivel6Ativo && recompensaNivel6 === 'distancia_passe' ? 1 : 0);
+      atualizarRecompensasNivel();
       salvarPartidaAutomatico();
     }
 
@@ -1032,7 +1045,7 @@
         initPericias(document.getElementById('pericias-container'), periciasEscolhidas, (pers) => { periciasEscolhidas = pers; renderSelectPericiaManual(); renderPericiasDistancia(); renderStatus(); }, calcularPontosPericiaMaximos());
       }
       if (tipo === 'folego') {
-        const max = calcularFolegos(periciasEscolhidas['constancia'] || 0) + (recompensaNivel6 === 'folego' ? 1 : 0);
+        const max = calcularFolegos(periciasEscolhidas['constancia'] || 0) + (nivelAtual >= 6 && recompensaNivel6 === 'folego' ? 1 : 0);
         folegoAtual = Math.min(max, Math.max(0, folegoAtual + delta));
       }
       if (tipo === 'pde') pdeAtual = Math.max(0, pdeAtual + delta);
@@ -1115,7 +1128,8 @@
       const container = document.getElementById('acoes-rodada-container');
       const slots = [
         { label: 'Ação tática', gasta: acoesGastas.tatica, onClick: () => { acoesGastas.tatica = !acoesGastas.tatica; } },
-        { label: 'Reação egoísta', gasta: acoesGastas.egoista, onClick: () => { acoesGastas.egoista = !acoesGastas.egoista; } },
+        { label: 'Ação egoísta', gasta: acoesGastas.egoista, onClick: () => { acoesGastas.egoista = !acoesGastas.egoista; } },
+        ...(nivelAtual >= 8 ? [{ label: 'Ação egoísta adicional', gasta: acoesGastas.egoistaExtra, onClick: () => { acoesGastas.egoistaExtra = !acoesGastas.egoistaExtra; } }] : []),
         ...acoesGastas.regulares.map((gasta, i) => ({
           label: `Reação ${i + 1}`,
           gasta,
@@ -1138,7 +1152,7 @@
     }
 
     document.getElementById('btn-resetar-acoes').addEventListener('click', () => {
-      acoesGastas = { tatica: false, egoista: false, regulares: [false, false, false, false] };
+      acoesGastas = { tatica: false, egoista: false, egoistaExtra: false, regulares: [false, false, false, false] };
       renderAcoesRodada();
       salvarPartidaAutomatico();
     });
