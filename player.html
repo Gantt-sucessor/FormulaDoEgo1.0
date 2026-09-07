@@ -104,7 +104,6 @@
             <input id="input-nome-personagem" type="text" />
           </div>
         </div>
-        <div id="habilidades-categoria-container" class="selecao-info"></div>
       </div>
 
       <div class="form-section">
@@ -254,6 +253,7 @@
             <select id="select-arquetipo"><option value="">— escolha a categoria primeiro —</option></select>
           </div>
         </div>
+        <div id="categoria-detalhes-container" class="categoria-detalhes"></div>
       </div>
 
       <button id="btn-salvar-ficha-2" class="btn btn-gold" style="width: 100%;">Salvar ficha</button>
@@ -655,18 +655,48 @@
     });
 
     function renderHabilidadesCategoria() {
+      const categoria = CATEGORIAS.find((c) => c.id === document.getElementById('select-categoria').value);
       const arquetipo = document.getElementById('select-arquetipo').value;
       const disponiveis = HABILIDADES_DE_CATEGORIA.filter((h) => h.arquetipos.includes(arquetipo));
-      const container = document.getElementById('habilidades-categoria-container');
-      container.innerHTML = disponiveis.length ? `<strong>Habilidades disponíveis</strong><div class="jogadas-grid">${disponiveis.map((h, i) => `<button type="button" class="jogada-card ${habilidadesCategoriaSelecionadas.includes(h.nome) ? 'talento-selecionado' : ''}" data-categoria-habilidade="${i}"><div class="nome">${h.nome} <span class="arma-hab-tipo" data-categoria-usar="${i}">Usar</span></div><div class="info">${h.tda || ''} — ${h.texto}</div></button>`).join('')}</div>` : '<span>Escolha um arquétipo para ver as habilidades compatíveis.</span>';
+      const container = document.getElementById('categoria-detalhes-container');
+      if (!container) return;
+      if (!categoria) {
+        container.innerHTML = '<p class="categoria-vazio">Escolha Gênio ou Aprendiz para ver a evolução e as habilidades da categoria.</p>';
+        return;
+      }
+      const habilidadesObtidas = categoria.evolucao.filter((item) => item.nivel <= nivelAtual && /habilidade de categoria/.test(item.ganhos)).length;
+      container.innerHTML = `
+        <div class="categoria-evolucao">
+          <div class="categoria-subtitulo">Evolução: ${categoria.nome}</div>
+          <div class="categoria-evolucao-grid">
+            ${categoria.evolucao.map((item) => `<button type="button" class="categoria-nivel ${item.nivel <= nivelAtual ? 'ativo' : ''}" data-categoria-nivel="${item.nivel}"><strong>Nível ${item.nivel}</strong><span>${item.ganhos}</span><small>${item.nivel <= nivelAtual ? 'alcançado' : 'clique para alcançar'}</small></button>`).join('')}
+          </div>
+        </div>
+        <div class="categoria-habilidades">
+          <div class="categoria-subtitulo">Habilidades de categoria <span class="campo-opcional-tag">${habilidadesCategoriaSelecionadas.length}/${habilidadesObtidas} escolhidas</span></div>
+          ${disponiveis.length ? `<div class="jogadas-grid">${disponiveis.map((h, i) => `<button type="button" class="jogada-card categoria-habilidade-card ${habilidadesCategoriaSelecionadas.includes(h.nome) ? 'talento-selecionado' : ''}" data-categoria-habilidade="${i}"><div class="nome">${h.nome}</div><div class="info"><strong>Arquétipos:</strong> ${h.arquetipos.join(' / ')}<br><strong>Esf.:</strong> ${h.esf || '—'} · <strong>Dis.:</strong> ${h.dis || '—'}<br><strong>Dur.:</strong> ${h.dur || '—'} · <strong>TdA:</strong> ${h.tda || '—'}${h.gex ? `<br><strong>G.Ex.:</strong> ${h.gex}` : ''}<br><span>${h.texto}</span></div></button>`).join('')}</div>` : '<p class="categoria-vazio">Escolha um arquétipo para ver as habilidades compatíveis.</p>'}
+        </div>
+      `;
       container.querySelectorAll('[data-categoria-habilidade]').forEach((btn) => btn.addEventListener('click', () => {
         const habilidade = disponiveis[Number(btn.dataset.categoriaHabilidade)].nome;
+        if (!habilidadesCategoriaSelecionadas.includes(habilidade) && habilidadesCategoriaSelecionadas.length >= habilidadesObtidas) {
+          mostrarToast('Sua evolução ainda não liberou outra habilidade de categoria.', 'erro');
+          return;
+        }
         habilidadesCategoriaSelecionadas = habilidadesCategoriaSelecionadas.includes(habilidade) ? habilidadesCategoriaSelecionadas.filter((nome) => nome !== habilidade) : [...habilidadesCategoriaSelecionadas, habilidade];
         renderHabilidadesCategoria();
       }));
-      container.querySelectorAll('[data-categoria-usar]').forEach((btn) => btn.addEventListener('click', (event) => {
-        event.stopPropagation();
-        usarHabilidade(disponiveis[Number(btn.dataset.categoriaUsar)]);
+      container.querySelectorAll('[data-categoria-nivel]').forEach((btn) => btn.addEventListener('click', () => {
+        nivelAtual = Math.min(8, Math.max(1, Number(btn.dataset.categoriaNivel)));
+        renderStatus();
+        renderHabilidadesCategoria();
+        initPericias(document.getElementById('pericias-container'), periciasEscolhidas, (pers) => {
+          periciasEscolhidas = pers;
+          renderSelectPericiaManual();
+          renderPericiasDistancia();
+          renderStatus();
+        }, calcularPontosPericiaMaximos());
+        mostrarToast(`Nível ${nivelAtual} alcançado.`);
       }));
     }
     document.getElementById('select-arquetipo').addEventListener('change', renderHabilidadesCategoria);
@@ -912,6 +942,7 @@
       renderTalentos();
       renderVisoes();
       renderPericiasDistancia();
+      renderHabilidadesCategoria();
       renderCondicoes();
       renderAcoesRodada();
 
