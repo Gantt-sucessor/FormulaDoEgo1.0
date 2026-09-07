@@ -152,6 +152,7 @@
 .categoria-nivel.ativo { opacity: 1; border-color: var(--accent-blue-dim); }
 .categoria-nivel strong { display: block; margin-bottom: 6px; color: var(--accent-blue); }
 .categoria-nivel span { display: block; color: var(--text-secondary); font-size: 0.84rem; line-height: 1.5; overflow-wrap: anywhere; }
+.categoria-nivel em { display: block; margin-top: 10px; color: var(--accent-gold); font-size: 0.78rem; font-style: normal; font-weight: 600; }
 .categoria-nivel small { display: block; margin-top: 12px; color: var(--accent-gold); font-size: 0.7rem; }
 .categoria-nivel:hover { opacity: 1; border-color: var(--accent-blue); }
 .categoria-habilidade-card { min-height: 230px; padding: 18px; }

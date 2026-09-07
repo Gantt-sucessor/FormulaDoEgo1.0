@@ -652,6 +652,12 @@
       selectArquetipo.innerHTML = '<option value="">— nenhum —</option>';
       if (cat) popularSelect(selectArquetipo, cat.arquetipos);
       renderHabilidadesCategoria();
+      initPericias(document.getElementById('pericias-container'), periciasEscolhidas, (pers) => {
+        periciasEscolhidas = pers;
+        renderSelectPericiaManual();
+        renderPericiasDistancia();
+        renderStatus();
+      }, calcularPontosPericiaMaximos());
     });
 
     function renderHabilidadesCategoria() {
@@ -665,11 +671,17 @@
         return;
       }
       const habilidadesObtidas = categoria.evolucao.filter((item) => item.nivel <= nivelAtual && /habilidade de categoria/.test(item.ganhos)).length;
+      const pontosCategoriaAteNivel = categoria.evolucao
+        .filter((item) => item.nivel <= nivelAtual)
+        .reduce((total, item) => total + extrairPontosPericia(item.ganhos), 0);
       container.innerHTML = `
         <div class="categoria-evolucao">
-          <div class="categoria-subtitulo">Evolução: ${categoria.nome}</div>
+          <div class="categoria-subtitulo">Evolução: ${categoria.nome} <span class="campo-opcional-tag">+${pontosCategoriaAteNivel} perícia</span></div>
           <div class="categoria-evolucao-grid">
-            ${categoria.evolucao.map((item) => `<button type="button" class="categoria-nivel ${item.nivel <= nivelAtual ? 'ativo' : ''}" data-categoria-nivel="${item.nivel}"><strong>Nível ${item.nivel}</strong><span>${item.ganhos}</span><small>${item.nivel <= nivelAtual ? 'alcançado' : 'clique para alcançar'}</small></button>`).join('')}
+            ${categoria.evolucao.map((item) => {
+              const pontosNivel = extrairPontosPericia(item.ganhos);
+              return `<button type="button" class="categoria-nivel ${item.nivel <= nivelAtual ? 'ativo' : ''}" data-categoria-nivel="${item.nivel}"><strong>Nível ${item.nivel}</strong><span>${item.ganhos}</span>${pontosNivel ? `<em>+${pontosNivel} ponto${pontosNivel > 1 ? 's' : ''} de perícia</em>` : ''}<small>${item.nivel <= nivelAtual ? 'alcançado' : 'clique para alcançar'}</small></button>`;
+            }).join('')}
           </div>
         </div>
         <div class="categoria-habilidades">
@@ -700,6 +712,11 @@
       }));
     }
     document.getElementById('select-arquetipo').addEventListener('change', renderHabilidadesCategoria);
+
+    function extrairPontosPericia(ganhos) {
+      return [...ganhos.matchAll(/\+(\d+) ponto(?:s)? de perícia/gi)]
+        .reduce((total, ocorrencia) => total + Number(ocorrencia[1]), 0);
+    }
 
     function atualizarBadgesResumo() {
       const arma = ARMAS.find((a) => a.id === document.getElementById('select-arma').value);
@@ -974,7 +991,14 @@
     }
 
     function calcularPontosPericiaMaximos() {
-      return 10 + (nivelAtual >= 3 ? 1 : 0) + (nivelAtual >= 6 ? 1 : 0) + (nivelAtual >= 7 ? 1 : 0);
+      const categoria = CATEGORIAS.find((c) => c.id === document.getElementById('select-categoria').value);
+      const pontosDaCategoria = categoria
+        ? categoria.evolucao
+          .filter((item) => item.nivel <= nivelAtual)
+          .reduce((total, item) => total + extrairPontosPericia(item.ganhos), 0)
+        : 0;
+      const pontosProgressaoGeral = nivelAtual >= 6 ? 1 : 0;
+      return 10 + pontosDaCategoria + pontosProgressaoGeral;
     }
 
     function renderPericiasDistancia() {
