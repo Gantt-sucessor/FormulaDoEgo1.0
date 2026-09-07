@@ -59,7 +59,7 @@ export const ARMAS = [
       { nome: 'Mach 44', tipo: 'sem bola', texto: 'Avança 1m por turno automaticamente (2 pontos de aceleração = 2m).' },
       { nome: 'Tiro em movimento', tipo: 'com bola', simbolo: '❖', texto: 'Avança driblando com Destreza, chuta/passa com Destreza no final (2 pontos = +1 vantagem +2m).' },
       { nome: 'Pantera x trem', tipo: 'variante', texto: 'Você e um aliado avançam juntos, somando a Constância de ambos (3 pontos = duplica sua Constância).' },
-      { nome: 'Ângulo de 44°', tipo: 'fluxo', texto: 'Avança Constância+3m, chute/passe +2 bônus por 3m andados (4 pontos = vantagens em vez de bônus).' },
+      { nome: 'Ângulo de 44°', tipo: 'fluxo', esf: '+4 PdE', dis: 'setor', dur: 'instantâneo', tda: 'Ação egoísta + ação tática', texto: 'Apenas utilizável uma vez em fluxo. Com a bola no mesmo setor da sua zona dourada enquanto ela está ativa, avança até sua zona dourada e faz um passe ou chute que recebe +2 bônus para cada 3m andados neste turno (ex.: 9m = +6). Pode gastar 4 pontos de aceleração para receber +1 vantagem em vez de +2 bônus.' },
     ],
   },
   {

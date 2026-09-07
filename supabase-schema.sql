@@ -35,7 +35,7 @@ create table if not exists fichas (
 alter table fichas add column if not exists jogador_id uuid references auth.users(id) on delete cascade;
 -- Painel de partida: condições ativas ([{id, quantidade, duracao}]) e ações já gastas na rodada atual.
 alter table fichas add column if not exists efeitos_ativos jsonb not null default '[]';
-alter table fichas add column if not exists acoes_gastas jsonb not null default '{"tatica":false,"egoista":false,"regulares":[false,false,false,false]}';
+alter table fichas add column if not exists acoes_gastas jsonb not null default '{"tatica":false,"egoista":false,"egoistaExtra":false,"regulares":[false,false,false,false]}';
 -- Pontos de Sorte [PdS]: "Representam oportunidades do destino. Máximo padrão: 3."
 alter table fichas add column if not exists pontos_sorte int not null default 0;
 alter table fichas add column if not exists habilidades_categoria jsonb not null default '[]';

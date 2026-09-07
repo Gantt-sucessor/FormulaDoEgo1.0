@@ -209,9 +209,7 @@
           <div class="campo"><label for="select-recompensa-nivel-6">Recompensa do nível 6</label><select id="select-recompensa-nivel-6">
             <option value="">— escolher depois —</option><option value="distancia_chute">+1m de distância de chute</option><option value="distancia_passe">+1m de distância de passe</option><option value="folego">+1 fôlego máximo</option>
           </select></div>
-          <div class="campo"><label for="select-recompensa-nivel-8">Recompensa do nível 8</label><select id="select-recompensa-nivel-8">
-            <option value="">— escolher depois —</option><option value="acao_egoista">+1 ação egoísta adicional</option>
-          </select></div>
+          <div class="campo"><label>Recompensa do nível 8</label><div class="campo-recompensa-fixa">+1 ação egoísta adicional, automática</div></div>
         </div>
         <div id="visoes-container" class="jogadas-grid"></div>
       </div>
@@ -931,7 +929,7 @@
       document.getElementById('select-posicao').value = posicaoAtual;
       document.getElementById('select-perna-dominante').value = pernaDominante;
       document.getElementById('select-recompensa-nivel-6').value = recompensaNivel6;
-      document.getElementById('select-recompensa-nivel-8').value = recompensaNivel8;
+      recompensaNivel8 = 'acao_egoista';
       atualizarRecompensasNivel();
       document.getElementById('select-arma').dispatchEvent(new Event('change'));
       document.getElementById('select-otica').dispatchEvent(new Event('change'));
@@ -1053,16 +1051,11 @@
     document.getElementById('select-posicao').addEventListener('change', (e) => { posicaoAtual = e.target.value; });
     document.getElementById('select-perna-dominante').addEventListener('change', (e) => { pernaDominante = e.target.value; });
     document.getElementById('select-recompensa-nivel-6').addEventListener('change', (e) => { recompensaNivel6 = e.target.value; renderStatus(); });
-    document.getElementById('select-recompensa-nivel-8').addEventListener('change', (e) => { recompensaNivel8 = e.target.value; renderAcoesRodada(); });
-
     function atualizarRecompensasNivel() {
       const recompensa6 = document.getElementById('select-recompensa-nivel-6');
-      const recompensa8 = document.getElementById('select-recompensa-nivel-8');
-      if (!recompensa6 || !recompensa8) return;
+      if (!recompensa6) return;
       recompensa6.disabled = nivelAtual < 6;
-      recompensa8.disabled = nivelAtual < 8;
       recompensa6.title = nivelAtual < 6 ? 'Disponível a partir do nível 6.' : 'Bônus natural permanente.';
-      recompensa8.title = nivelAtual < 8 ? 'Disponível a partir do nível 8.' : 'Ação egoísta adicional permanente.';
     }
 
     // --- Status: nível, fôlego, PdE, pontos de chama ---
@@ -1086,6 +1079,7 @@
       document.getElementById('valor-ddc').textContent = calcularDdC(periciasEscolhidas[periciaDistanciaChute] || 0, bonusNivel6Ativo && recompensaNivel6 === 'distancia_chute' ? 1 : 0);
       document.getElementById('valor-ddp').textContent = calcularDdP(periciasEscolhidas[periciaDistanciaPasse] || 0, bonusNivel6Ativo && recompensaNivel6 === 'distancia_passe' ? 1 : 0);
       atualizarRecompensasNivel();
+      renderAcoesRodada();
       salvarPartidaAutomatico();
     }
 
