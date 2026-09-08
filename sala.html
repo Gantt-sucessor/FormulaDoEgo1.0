@@ -170,13 +170,26 @@
       const feed = document.getElementById('feed-rolagens-sala');
       const el = document.createElement('div');
       el.className = 'feed-rolagem';
+      const hora = new Date(rolagem.criada_em).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+
+      // Ação (usar habilidade, ativar catalisador...) em vez de uma rolagem de dado de verdade
+      if (rolagem.detalhe?.tipo === 'acao') {
+        el.innerHTML = `
+          <div class="resultado-numero" style="font-size: 1rem; color: var(--accent-gold);">Ação</div>
+          <div class="info">
+            <div class="quem">${rolagem.nome_personagem}</div>
+            <div class="jogada">${rolagem.jogada}</div>
+          </div>
+          <div class="hora">${hora}</div>
+        `;
+        feed.prepend(el);
+        return;
+      }
 
       let classeExtra = '';
       const detalhe = rolagem.detalhe || {};
       if (detalhe.execucaoAbsoluta?.tipo === 'positiva') classeExtra = 'absoluta-positiva';
       if (detalhe.execucaoAbsoluta?.tipo === 'negativa') classeExtra = 'absoluta-negativa';
-
-      const hora = new Date(rolagem.criada_em).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
 
       el.innerHTML = `
         <div class="resultado-numero ${classeExtra}">${rolagem.resultado}</div>

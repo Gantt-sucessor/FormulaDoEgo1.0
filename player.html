@@ -429,9 +429,13 @@
       </div>
 
       <div class="form-section">
-        <h3>Marcas de Despertar</h3>
-        <p class="step-desc">Clique numa marca conforme for cumprindo em partida — a % de fluxo soma sozinha.</p>
+        <h3>Marcas de Despertar <span class="campo-opcional-tag" id="contagem-marcas-conhecidas">0/0 conhecidas</span></h3>
+        <p class="step-desc">Primeiro marca quais você <strong>conhece</strong> (limitado pelo seu nível + tipo de Aura). Só as marcadas aqui aparecem embaixo pra usar em partida — e podem ser usadas quantas vezes quiser, a % soma de novo a cada vez.</p>
         <div id="marcas-despertar-container"></div>
+
+        <div class="divider"></div>
+        <h4 style="margin-bottom: 10px;">Usar em partida</h4>
+        <div id="marcas-despertar-usos-container"></div>
       </div>
 
       <div class="form-section">
@@ -450,7 +454,7 @@
 
       <div class="form-section">
         <h3>Catalisador</h3>
-        <p class="step-desc">As opções mudam de acordo com a Ótica escolhida na aba Classe &amp; Habilidades.</p>
+        <p class="step-desc">As opções mudam de acordo com a Ótica escolhida na aba Classe &amp; Habilidades. Potencial vai até 10 — quando encher, dá pra ativar.</p>
         <select id="select-catalisador">
           <option value="">— nenhum —</option>
         </select>
@@ -467,7 +471,7 @@
     import { criarCampanha } from './js/mestre/campanha.js';
     import { initHexagono } from './js/player/hexagono.js';
     import { initPericias } from './js/player/pericias.js';
-    import { rolarEEnviar, buscarUltimasRolagens } from './js/player/rolar.js';
+    import { rolarEEnviar, buscarUltimasRolagens, registrarUsoHabilidade } from './js/player/rolar.js';
     import { getNomeSalvo, setNomeSalvo, getUltimoCodigoSalvo, setUltimoCodigoSalvo } from './js/player/local.js';
     import { mostrarToast } from './js/ui/toast.js';
     import { iconeArmaHTML } from './js/data/icones-armas.js';
@@ -481,7 +485,7 @@
     import { TALENTOS_EVOLUTIVOS, TALENTOS_SIMPLES, TALENTOS_RAZOAVEIS, TALENTOS_COMPLEXOS, MAX_SLOTS_TALENTOS } from './js/data/talentos.js';
     import { calcularFolegos, calcularDdC, calcularDdP, MAX_PDS_PADRAO } from './js/regras/calculos.js';
     import { CATALOGO_EFEITOS, buscarEfeito, aplicarEfeito, removerEfeito } from './js/regras/efeitos.js';
-    import { TIPOS_AURA, EFEITOS_AURA, MARCAS_DESPERTAR, calcularPercentualFluxo, custoAtributoComplexo, custoTotalComplexo, CUSTO_POR_VANTAGEM_COMPLEXO, MAX_VANTAGENS_COMPLEXO, MAX_BONUS_COMPLEXO } from './js/data/fluxo.js';
+    import { TIPOS_AURA, EFEITOS_AURA, MARCAS_DESPERTAR, calcularPercentualFluxoComUsos, limiteMarcasDespertar, custoAtributoComplexo, custoTotalComplexo, CUSTO_POR_VANTAGEM_COMPLEXO, MAX_VANTAGENS_COMPLEXO, MAX_BONUS_COMPLEXO } from './js/data/fluxo.js';
     import { CATALISADORES } from './js/data/catalisadores.js';
 
     const usuarioLogado = await exigirAutenticacao();
@@ -516,7 +520,8 @@
     let apiceComplexo = {};        // fluxo complexo: { atributoId: { vantagens, bonus } }
     let fluxoJogadasBonus = [];    // fluxo básico: até 3 ids de jogadas com +1 vantagem
     let efeitosAuraSelecionados = [];
-    let marcasMarcadas = [];
+    let marcasConhecidas = [];   // marcas de despertar que você já "sabe" (limitado por nível+aura)
+    let marcasUsos = {};         // { marcaId: quantasVezes usou nessa partida } — reutilizável
     let fluxoAtivo = false;
     let catalisadorId = '';
     let potencialCatalisador = 0;
@@ -970,7 +975,8 @@
       apiceComplexo = fluxoSalvo.apiceComplexo ? JSON.parse(JSON.stringify(fluxoSalvo.apiceComplexo)) : {};
       fluxoJogadasBonus = fluxoSalvo.jogadasBonus ? [...fluxoSalvo.jogadasBonus] : [];
       efeitosAuraSelecionados = fluxoSalvo.efeitosAuraSelecionados ? [...fluxoSalvo.efeitosAuraSelecionados] : [];
-      marcasMarcadas = fluxoSalvo.marcasMarcadas ? [...fluxoSalvo.marcasMarcadas] : [];
+      marcasConhecidas = fluxoSalvo.marcasConhecidas ? [...fluxoSalvo.marcasConhecidas] : [];
+      marcasUsos = fluxoSalvo.marcasUsos ? { ...fluxoSalvo.marcasUsos } : {};
       fluxoAtivo = !!fluxoSalvo.ativo;
       const catalisadorSalvo = fichaExistente?.catalisador || {};
       catalisadorId = catalisadorSalvo.id || '';
@@ -1095,6 +1101,26 @@
       renderAcoesRodada();
       salvarPartidaAutomatico();
       mostrarToast(`${habilidade.nome} usada.`);
+      registrarAcaoNoHistorico(`Usou: ${habilidade.nome}`, habilidade.texto);
+    }
+
+    /**
+     * Registra uma ação (usar habilidade, ativar catalisador, etc) na lista de "Últimas rolagens" —
+     * aparece na sua tela e, se tiver campanha, sincroniza pro painel da sala (o que a mesa vê).
+     */
+    function registrarAcaoNoHistorico(nomeAcao, textoDetalhe = '') {
+      const registro = { jogada: nomeAcao, resultado: 0, detalhe: { tipo: 'acao', texto: textoDetalhe }, hora: new Date().toISOString() };
+      historicoSessao.unshift(registro);
+      renderHistorico(historicoSessao);
+      if (campanhaAtual && fichaAtual?.id) {
+        registrarUsoHabilidade({
+          campanhaId: campanhaAtual.id,
+          fichaId: fichaAtual.id,
+          nomePersonagem: fichaAtual.nome_personagem,
+          nomeAcao,
+          detalheExtra: { texto: textoDetalhe },
+        }).catch(() => { /* se falhar, a ação já apareceu localmente — só não sincronizou */ });
+      }
     }
 
     document.getElementById('select-pericia-distancia-chute').addEventListener('change', (e) => { periciaDistanciaChute = e.target.value; renderStatus(); });
@@ -1135,6 +1161,7 @@
       if (tipo === 'nivel') {
         nivelAtual = Math.min(8, Math.max(1, nivelAtual + delta));
         initPericias(document.getElementById('pericias-container'), periciasEscolhidas, (pers) => { periciasEscolhidas = pers; renderSelectPericiaManual(); renderPericiasDistancia(); renderStatus(); }, calcularPontosPericiaMaximos());
+        renderFluxo();
       }
       if (tipo === 'folego') {
         const max = calcularFolegos(periciasEscolhidas['constancia'] || 0) + (recompensaNivel6 === 'folego' ? 1 : 0);
@@ -1209,7 +1236,7 @@
             pontos_sorte: pontosSorte,
             efeitos_ativos: efeitosAtivos,
             acoes_gastas: acoesGastas,
-            fluxo: { tipo: fluxoTipo, auraTipo, pontosApice, apiceComplexo, jogadasBonus: fluxoJogadasBonus, efeitosAuraSelecionados, marcasMarcadas, ativo: fluxoAtivo },
+            fluxo: { tipo: fluxoTipo, auraTipo, pontosApice, apiceComplexo, jogadasBonus: fluxoJogadasBonus, efeitosAuraSelecionados, marcasConhecidas, marcasUsos, ativo: fluxoAtivo },
             catalisador: { id: catalisadorId, potencial: potencialCatalisador },
           });
         } catch (e) {
@@ -1487,6 +1514,9 @@
         renderFluxo();
       }));
 
+      const limiteMarcas = limiteMarcasDespertar(nivelAtual, auraTipo);
+      document.getElementById('contagem-marcas-conhecidas').textContent = `${marcasConhecidas.length}/${limiteMarcas} conhecidas`;
+
       const gruposMarcas = [
         { titulo: 'Fáceis (+5% cada)', lista: MARCAS_DESPERTAR.facil },
         { titulo: 'Médias (+10% cada)', lista: MARCAS_DESPERTAR.media },
@@ -1499,8 +1529,8 @@
           <div class="jogadas-grupo-titulo">${g.titulo}</div>
           <div class="jogadas-grid">
             ${g.lista.map((m) => `
-              <label class="jogada-card ${marcasMarcadas.includes(m.id) ? 'talento-selecionado' : ''}" style="cursor:pointer; display:block;">
-                <input type="checkbox" data-marca-id="${m.id}" ${marcasMarcadas.includes(m.id) ? 'checked' : ''} style="margin-right:6px;">
+              <label class="jogada-card ${marcasConhecidas.includes(m.id) ? 'talento-selecionado' : ''}" style="cursor:pointer; display:block;">
+                <input type="checkbox" data-marca-id="${m.id}" ${marcasConhecidas.includes(m.id) ? 'checked' : ''} style="margin-right:6px;">
                 <strong>${m.nome}</strong>
                 <div class="info">${m.texto}</div>
               </label>
@@ -1510,11 +1540,46 @@
       `).join('');
       containerMarcas.querySelectorAll('[data-marca-id]').forEach((input) => input.addEventListener('change', () => {
         const id = input.dataset.marcaId;
-        marcasMarcadas = input.checked ? [...marcasMarcadas, id] : marcasMarcadas.filter((x) => x !== id);
+        if (input.checked) {
+          if (marcasConhecidas.length >= limiteMarcas) {
+            mostrarToast(`Seu limite é ${limiteMarcas} marcas conhecidas (nível + Aura).`, 'erro');
+            input.checked = false;
+            return;
+          }
+          marcasConhecidas.push(id);
+        } else {
+          marcasConhecidas = marcasConhecidas.filter((x) => x !== id);
+          delete marcasUsos[id];
+        }
         renderFluxo();
       }));
 
-      const percentualAtual = calcularPercentualFluxo(marcasMarcadas);
+      // Marcas já conhecidas, prontas pra usar em partida (clique soma +1 uso, sem limite de vezes)
+      const containerUsos = document.getElementById('marcas-despertar-usos-container');
+      if (marcasConhecidas.length === 0) {
+        containerUsos.innerHTML = '<p style="color: var(--text-muted); font-size: 0.85rem;">Marca alguma acima primeiro.</p>';
+      } else {
+        const todasMarcas = Object.values(MARCAS_DESPERTAR).flat();
+        containerUsos.innerHTML = `<div class="jogadas-grid">${marcasConhecidas.map((id) => {
+          const m = todasMarcas.find((x) => x.id === id);
+          if (!m) return '';
+          const usos = marcasUsos[id] || 0;
+          return `
+            <button type="button" class="jogada-card" data-usar-marca="${id}">
+              <div class="nome">${m.nome}</div>
+              <div class="info">+${m.recompensa}% · usada ${usos}x nessa partida</div>
+            </button>
+          `;
+        }).join('')}</div>`;
+        containerUsos.querySelectorAll('[data-usar-marca]').forEach((btn) => btn.addEventListener('click', () => {
+          const id = btn.dataset.usarMarca;
+          marcasUsos[id] = (marcasUsos[id] || 0) + 1;
+          renderFluxo();
+          salvarPartidaAutomatico();
+        }));
+      }
+
+      const percentualAtual = calcularPercentualFluxoComUsos(marcasConhecidas, marcasUsos);
       const percentualNecessario = aura ? aura.percentual_necessario : 100;
       document.getElementById('valor-percentual-fluxo').textContent = `${percentualAtual}%`;
       document.getElementById('valor-percentual-necessario').textContent = aura ? `${percentualNecessario}%` : '—';
@@ -1561,10 +1626,11 @@
         <div>${cat.tema}</div>
         <div class="arma-bloco"><strong>Passiva — ${cat.passiva.nome}:</strong> ${cat.passiva.texto}</div>
         <div class="arma-bloco">
-          <strong>Potencial atual: <span id="valor-potencial">${potencialCatalisador}</span></strong>
+          <strong>Potencial atual: <span id="valor-potencial">${potencialCatalisador}</span>/10</strong>
           <div class="jogadas-grid" style="margin-top:8px;">
             ${cat.jogadas_potencial.map((j) => `<button type="button" class="jogada-card" data-potencial="${j.potencial}"><div class="nome">${j.acao}</div><div class="info">+${j.potencial} potencial</div></button>`).join('')}
           </div>
+          <button type="button" id="btn-ativar-catalisador" class="btn btn-primary" style="width:100%; margin-top:12px;" ${potencialCatalisador >= 10 ? '' : 'disabled'}>Ativar catalisador</button>
         </div>
         <div class="arma-bloco">
           <strong>Habilidade — ${cat.habilidade.nome}:</strong> ${cat.habilidade.texto}
@@ -1572,10 +1638,17 @@
         </div>
       `;
       info.querySelectorAll('[data-potencial]').forEach((btn) => btn.addEventListener('click', () => {
-        potencialCatalisador += Number(btn.dataset.potencial);
-        document.getElementById('valor-potencial').textContent = potencialCatalisador;
+        potencialCatalisador = Math.min(10, potencialCatalisador + Number(btn.dataset.potencial));
+        renderCatalisador();
         salvarPartidaAutomatico();
       }));
+      document.getElementById('btn-ativar-catalisador').addEventListener('click', () => {
+        potencialCatalisador = 0;
+        mostrarToast('Catalisador ativado!');
+        registrarAcaoNoHistorico(`Ativou o catalisador: ${cat.nome}`, cat.habilidade.texto);
+        renderCatalisador();
+        salvarPartidaAutomatico();
+      });
       document.getElementById('btn-usar-habilidade-catalisador')?.addEventListener('click', () => usarHabilidade(cat.habilidade));
     }
     document.getElementById('select-catalisador').addEventListener('change', (e) => { catalisadorId = e.target.value; renderCatalisador(); });
@@ -1717,7 +1790,7 @@
         recompensaNivel8,
         posicao: posicaoAtual,
         pernaDominante,
-        fluxo: { tipo: fluxoTipo, auraTipo, pontosApice, apiceComplexo, jogadasBonus: fluxoJogadasBonus, efeitosAuraSelecionados, marcasMarcadas, ativo: fluxoAtivo },
+        fluxo: { tipo: fluxoTipo, auraTipo, pontosApice, apiceComplexo, jogadasBonus: fluxoJogadasBonus, efeitosAuraSelecionados, marcasConhecidas, marcasUsos, ativo: fluxoAtivo },
         catalisador: { id: catalisadorId, potencial: potencialCatalisador },
       };
 
@@ -1818,10 +1891,21 @@
         return;
       }
       container.innerHTML = lista.map((r) => {
+        const hora = new Date(r.hora).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+        if (r.detalhe?.tipo === 'acao') {
+          return `
+            <div class="historico-item">
+              <div class="historico-item-topo">
+                <span class="jogada-nome">${r.jogada}<br/><span class="hora">${hora}</span></span>
+                <span class="badge">Ação</span>
+              </div>
+              ${r.detalhe.texto ? `<div class="historico-detalhe">${r.detalhe.texto}</div>` : ''}
+            </div>
+          `;
+        }
         let classeExtra = '';
         if (r.detalhe?.execucaoAbsoluta?.tipo === 'positiva') classeExtra = 'absoluta-positiva';
         if (r.detalhe?.execucaoAbsoluta?.tipo === 'negativa') classeExtra = 'absoluta-negativa';
-        const hora = new Date(r.hora).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
         return `
           <div class="historico-item">
             <div class="historico-item-topo">

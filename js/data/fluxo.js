@@ -104,6 +104,34 @@ export function calcularPercentualFluxo(marcasMarcadas) {
   return total;
 }
 
+/**
+ * Marcas de despertar agora são reutilizáveis: cada marca CONHECIDA pode ser "usada" várias
+ * vezes numa partida, e cada uso soma a % de novo. marcasUsos = { marcaId: quantasVezes }.
+ */
+export function calcularPercentualFluxoComUsos(marcasConhecidas, marcasUsos) {
+  let total = 0;
+  Object.values(MARCAS_DESPERTAR).forEach((lista) => {
+    lista.forEach((marca) => {
+      if (!marcasConhecidas.includes(marca.id)) return;
+      const usos = marcasUsos[marca.id] || 0;
+      total += usos * marca.recompensa;
+    });
+  });
+  return total;
+}
+
+/**
+ * Quantas marcas de despertar você pode conhecer, de acordo com o nível e o tipo de Aura.
+ * ATENÇÃO: o livro não deixa uma tabela fechada de "marcas por nível" fácil de achar —
+ * usei 1 marca conhecida por nível como estimativa, + o bônus de marcas da própria Aura
+ * (Primitiva +3, Demonstrativa +2, Contida +1, somando os bônus específicos de cada uma).
+ * Se o número certo do seu livro for diferente, é só me falar que eu ajusto essa função.
+ */
+export function limiteMarcasDespertar(nivel, auraId) {
+  const bonusPorAura = { primitiva: 3, demonstrativa: 2, contida: 1 };
+  return Math.max(1, nivel || 1) + (bonusPorAura[auraId] || 0);
+}
+
 // --- Fluxo complexo: tabela de custo por vantagem/bônus ---
 // 10 pontos de ápice ao todo. O 1º atributo incluído é grátis pra "desbloquear";
 // cada atributo adicional custa 3 pontos só pra ser incluído.
