@@ -37,3 +37,23 @@ export async function buscarUltimasRolagens(fichaId, limite = 10) {
   if (error) throw error;
   return data;
 }
+
+/**
+ * Registra uma ação que não é uma rolagem de dado (usar habilidade, ativar catalisador, etc)
+ * na mesma tabela de rolagens — assim o mestre/mesa vê aparecer no painel da sala igualzinho
+ * a uma rolagem, só que sem número de resultado.
+ */
+export async function registrarUsoHabilidade({ campanhaId, fichaId, nomePersonagem, nomeAcao, detalheExtra = {} }) {
+  if (!campanhaId) return; // sem campanha não tem painel de sala pra sincronizar
+
+  const { error } = await supabase.from('rolagens').insert({
+    campanha_id: campanhaId,
+    ficha_id: fichaId,
+    nome_personagem: nomePersonagem,
+    jogada: nomeAcao,
+    resultado: 0,
+    detalhe: { tipo: 'acao', ...detalheExtra },
+  });
+
+  if (error) throw error;
+}
