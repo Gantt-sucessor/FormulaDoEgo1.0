@@ -92,6 +92,7 @@
       <button class="aba-btn" data-aba="classe-habilidades">Classe &amp; Habilidades</button>
       <button class="aba-btn" data-aba="status">Status &amp; Talentos</button>
       <button class="aba-btn" data-aba="partida">Partida</button>
+      <button class="aba-btn" data-aba="fluxo">Fluxo &amp; Catalisador</button>
     </div>
 
     <!-- Aba: Visão Geral -->
@@ -104,6 +105,7 @@
             <input id="input-nome-personagem" type="text" />
           </div>
         </div>
+        <div id="habilidades-categoria-container" class="selecao-info"></div>
       </div>
 
       <div class="form-section">
@@ -209,7 +211,9 @@
           <div class="campo"><label for="select-recompensa-nivel-6">Recompensa do nível 6</label><select id="select-recompensa-nivel-6">
             <option value="">— escolher depois —</option><option value="distancia_chute">+1m de distância de chute</option><option value="distancia_passe">+1m de distância de passe</option><option value="folego">+1 fôlego máximo</option>
           </select></div>
-          <div class="campo"><label>Recompensa do nível 8</label><div class="campo-recompensa-fixa">+1 ação egoísta adicional, automática</div></div>
+          <div class="campo"><label for="select-recompensa-nivel-8">Recompensa do nível 8</label><select id="select-recompensa-nivel-8">
+            <option value="">— escolher depois —</option><option value="acao_egoista">+1 reação egoísta</option>
+          </select></div>
         </div>
         <div id="visoes-container" class="jogadas-grid"></div>
       </div>
@@ -251,7 +255,6 @@
             <select id="select-arquetipo"><option value="">— escolha a categoria primeiro —</option></select>
           </div>
         </div>
-        <div id="categoria-detalhes-container" class="categoria-detalhes"></div>
       </div>
 
       <button id="btn-salvar-ficha-2" class="btn btn-gold" style="width: 100%;">Salvar ficha</button>
@@ -380,6 +383,82 @@
         <div id="condicoes-ativas" class="condicoes-ativas"></div>
       </div>
     </div>
+
+    <!-- Aba: Fluxo & Catalisador -->
+    <div class="painel-aba" id="painel-fluxo">
+      <div class="form-section">
+        <h3>Fluxo</h3>
+        <div class="grid-2">
+          <div class="campo">
+            <label for="select-fluxo-tipo">Tipo de fluxo</label>
+            <select id="select-fluxo-tipo">
+              <option value="basico">Básico (6 pontos de ápice)</option>
+              <option value="complexo">Complexo (10 pontos de ápice)</option>
+            </select>
+          </div>
+          <div class="campo">
+            <label for="select-aura-tipo">Tipo de Aura</label>
+            <select id="select-aura-tipo">
+              <option value="">— nenhuma escolhida —</option>
+              <option value="primitiva">Primitiva</option>
+              <option value="demonstrativa">Demonstrativa</option>
+              <option value="contida">Contida</option>
+            </select>
+          </div>
+        </div>
+        <div id="info-aura" class="selecao-info"></div>
+
+        <div id="apice-basico-bloco">
+          <p class="step-desc" style="margin-top:16px;">Pontos de ápice — cada ponto dá +1 de bônus fixo naquele atributo enquanto o fluxo estiver ativo. <span id="pontos-apice-contagem"></span></p>
+          <div id="pontos-apice-grid" class="status-grid"></div>
+
+          <p class="step-desc" style="margin-top:16px;">Escolha até 3 jogadas que ganham +1 vantagem enquanto o fluxo básico estiver ativo. <span id="jogadas-fluxo-contagem"></span></p>
+          <div id="jogadas-fluxo-container"></div>
+        </div>
+
+        <div id="apice-complexo-bloco" style="display:none;">
+          <p class="step-desc" style="margin-top:16px;">O 1º atributo incluído é grátis; cada atributo adicional custa 3 pontos pra "desbloquear". Depois, cada vantagem custa 2 pontos e cada +2 de bônus custa 2 pontos. <span id="pontos-apice-complexo-contagem"></span></p>
+          <div id="apice-complexo-grid" class="status-grid"></div>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <h3>Efeitos de Aura</h3>
+        <p class="step-desc">Escolha o tipo de Aura primeiro — ele define quantos efeitos você pode ter.</p>
+        <div id="efeitos-aura-container" class="jogadas-grid"></div>
+      </div>
+
+      <div class="form-section">
+        <h3>Marcas de Despertar</h3>
+        <p class="step-desc">Clique numa marca conforme for cumprindo em partida — a % de fluxo soma sozinha.</p>
+        <div id="marcas-despertar-container"></div>
+      </div>
+
+      <div class="form-section">
+        <div class="status-grid">
+          <div class="status-item">
+            <label>% de fluxo atual</label>
+            <div class="status-controles"><span id="valor-percentual-fluxo">0%</span></div>
+          </div>
+          <div class="status-item">
+            <label>% necessária (sua Aura)</label>
+            <div class="status-controles"><span id="valor-percentual-necessario">—</span></div>
+          </div>
+        </div>
+        <button type="button" id="btn-ativar-fluxo" class="btn btn-primary" style="width:100%; margin-top:12px;" disabled>Ativar fluxo</button>
+      </div>
+
+      <div class="form-section">
+        <h3>Catalisador</h3>
+        <p class="step-desc">As opções mudam de acordo com a Ótica escolhida na aba Classe &amp; Habilidades.</p>
+        <select id="select-catalisador">
+          <option value="">— nenhum —</option>
+        </select>
+        <div id="info-catalisador" class="selecao-info"></div>
+      </div>
+
+      <button id="btn-salvar-ficha-4" class="btn btn-gold" style="width: 100%;">Salvar ficha</button>
+    </div>
   </div>
 
   <script type="module">
@@ -402,6 +481,8 @@
     import { TALENTOS_EVOLUTIVOS, TALENTOS_SIMPLES, TALENTOS_RAZOAVEIS, TALENTOS_COMPLEXOS, MAX_SLOTS_TALENTOS } from './js/data/talentos.js';
     import { calcularFolegos, calcularDdC, calcularDdP, MAX_PDS_PADRAO } from './js/regras/calculos.js';
     import { CATALOGO_EFEITOS, buscarEfeito, aplicarEfeito, removerEfeito } from './js/regras/efeitos.js';
+    import { TIPOS_AURA, EFEITOS_AURA, MARCAS_DESPERTAR, calcularPercentualFluxo, custoAtributoComplexo, custoTotalComplexo, CUSTO_POR_VANTAGEM_COMPLEXO, MAX_VANTAGENS_COMPLEXO, MAX_BONUS_COMPLEXO } from './js/data/fluxo.js';
+    import { CATALISADORES } from './js/data/catalisadores.js';
 
     const usuarioLogado = await exigirAutenticacao();
 
@@ -418,7 +499,7 @@
     let pontosSorte = 0;
     let talentosSelecionados = [];
     let efeitosAtivos = [];      // [{id, quantidade, duracao}] — painel de partida
-    let acoesGastas = { tatica: false, egoista: false, egoistaExtra: false, regulares: [false, false, false, false] };
+    let acoesGastas = { tatica: false, egoista: false, regulares: [false, false, false, false] };
     let habilidadesCategoriaSelecionadas = [];
     let visoesDesbloqueadas = [];
     let talentosNiveis = {};
@@ -428,6 +509,17 @@
     let pernaDominante = '';
     let periciaDistanciaChute = 'precisao';
     let periciaDistanciaPasse = 'visao_de_jogo';
+    // --- Fluxo & Catalisador ---
+    let fluxoTipo = 'basico';
+    let auraTipo = '';
+    let pontosApice = {};          // fluxo básico: { atributoId: valor }
+    let apiceComplexo = {};        // fluxo complexo: { atributoId: { vantagens, bonus } }
+    let fluxoJogadasBonus = [];    // fluxo básico: até 3 ids de jogadas com +1 vantagem
+    let efeitosAuraSelecionados = [];
+    let marcasMarcadas = [];
+    let fluxoAtivo = false;
+    let catalisadorId = '';
+    let potencialCatalisador = 0;
 
     document.getElementById('input-nome-jogador-inicial').value = getNomeSalvo();
     document.getElementById('input-codigo').value = getUltimoCodigoSalvo();
@@ -650,71 +742,24 @@
       selectArquetipo.innerHTML = '<option value="">— nenhum —</option>';
       if (cat) popularSelect(selectArquetipo, cat.arquetipos);
       renderHabilidadesCategoria();
-      initPericias(document.getElementById('pericias-container'), periciasEscolhidas, (pers) => {
-        periciasEscolhidas = pers;
-        renderSelectPericiaManual();
-        renderPericiasDistancia();
-        renderStatus();
-      }, calcularPontosPericiaMaximos());
     });
 
     function renderHabilidadesCategoria() {
-      const categoria = CATEGORIAS.find((c) => c.id === document.getElementById('select-categoria').value);
       const arquetipo = document.getElementById('select-arquetipo').value;
       const disponiveis = HABILIDADES_DE_CATEGORIA.filter((h) => h.arquetipos.includes(arquetipo));
-      const container = document.getElementById('categoria-detalhes-container');
-      if (!container) return;
-      if (!categoria) {
-        container.innerHTML = '<p class="categoria-vazio">Escolha Gênio ou Aprendiz para ver a evolução e as habilidades da categoria.</p>';
-        return;
-      }
-      const habilidadesObtidas = categoria.evolucao.filter((item) => item.nivel <= nivelAtual && /habilidade de categoria/.test(item.ganhos)).length;
-      const pontosCategoriaAteNivel = categoria.evolucao
-        .filter((item) => item.nivel <= nivelAtual)
-        .reduce((total, item) => total + extrairPontosPericia(item.ganhos), 0);
-      container.innerHTML = `
-        <div class="categoria-evolucao">
-          <div class="categoria-subtitulo">Evolução: ${categoria.nome} <span class="campo-opcional-tag">+${pontosCategoriaAteNivel} perícia</span></div>
-          <div class="categoria-evolucao-grid">
-            ${categoria.evolucao.map((item) => {
-              const pontosNivel = extrairPontosPericia(item.ganhos);
-              return `<button type="button" class="categoria-nivel ${item.nivel <= nivelAtual ? 'ativo' : ''}" data-categoria-nivel="${item.nivel}"><strong>Nível ${item.nivel}</strong><span>${item.ganhos}</span>${pontosNivel ? `<em>+${pontosNivel} ponto${pontosNivel > 1 ? 's' : ''} de perícia</em>` : ''}<small>${item.nivel <= nivelAtual ? 'alcançado' : 'clique para alcançar'}</small></button>`;
-            }).join('')}
-          </div>
-        </div>
-        <div class="categoria-habilidades">
-          <div class="categoria-subtitulo">Habilidades de categoria <span class="campo-opcional-tag">${habilidadesCategoriaSelecionadas.length}/${habilidadesObtidas} escolhidas</span></div>
-          ${disponiveis.length ? `<div class="jogadas-grid">${disponiveis.map((h, i) => `<button type="button" class="jogada-card categoria-habilidade-card ${habilidadesCategoriaSelecionadas.includes(h.nome) ? 'talento-selecionado' : ''}" data-categoria-habilidade="${i}"><div class="nome">${h.nome}</div><div class="info"><strong>Arquétipos:</strong> ${h.arquetipos.join(' / ')}<br><strong>Esf.:</strong> ${h.esf || '—'} · <strong>Dis.:</strong> ${h.dis || '—'}<br><strong>Dur.:</strong> ${h.dur || '—'} · <strong>TdA:</strong> ${h.tda || '—'}${h.gex ? `<br><strong>G.Ex.:</strong> ${h.gex}` : ''}<br><span>${h.texto}</span></div></button>`).join('')}</div>` : '<p class="categoria-vazio">Escolha um arquétipo para ver as habilidades compatíveis.</p>'}
-        </div>
-      `;
+      const container = document.getElementById('habilidades-categoria-container');
+      container.innerHTML = disponiveis.length ? `<strong>Habilidades disponíveis</strong><div class="jogadas-grid">${disponiveis.map((h, i) => `<button type="button" class="jogada-card ${habilidadesCategoriaSelecionadas.includes(h.nome) ? 'talento-selecionado' : ''}" data-categoria-habilidade="${i}"><div class="nome">${h.nome} <span class="arma-hab-tipo" data-categoria-usar="${i}">Usar</span></div><div class="info">${h.tda || ''} — ${h.texto}</div></button>`).join('')}</div>` : '<span>Escolha um arquétipo para ver as habilidades compatíveis.</span>';
       container.querySelectorAll('[data-categoria-habilidade]').forEach((btn) => btn.addEventListener('click', () => {
         const habilidade = disponiveis[Number(btn.dataset.categoriaHabilidade)].nome;
-        if (!habilidadesCategoriaSelecionadas.includes(habilidade) && habilidadesCategoriaSelecionadas.length >= habilidadesObtidas) {
-          mostrarToast('Sua evolução ainda não liberou outra habilidade de categoria.', 'erro');
-          return;
-        }
         habilidadesCategoriaSelecionadas = habilidadesCategoriaSelecionadas.includes(habilidade) ? habilidadesCategoriaSelecionadas.filter((nome) => nome !== habilidade) : [...habilidadesCategoriaSelecionadas, habilidade];
         renderHabilidadesCategoria();
       }));
-      container.querySelectorAll('[data-categoria-nivel]').forEach((btn) => btn.addEventListener('click', () => {
-        nivelAtual = Math.min(8, Math.max(1, Number(btn.dataset.categoriaNivel)));
-        renderStatus();
-        renderHabilidadesCategoria();
-        initPericias(document.getElementById('pericias-container'), periciasEscolhidas, (pers) => {
-          periciasEscolhidas = pers;
-          renderSelectPericiaManual();
-          renderPericiasDistancia();
-          renderStatus();
-        }, calcularPontosPericiaMaximos());
-        mostrarToast(`Nível ${nivelAtual} alcançado.`);
+      container.querySelectorAll('[data-categoria-usar]').forEach((btn) => btn.addEventListener('click', (event) => {
+        event.stopPropagation();
+        usarHabilidade(disponiveis[Number(btn.dataset.categoriaUsar)]);
       }));
     }
     document.getElementById('select-arquetipo').addEventListener('change', renderHabilidadesCategoria);
-
-    function extrairPontosPericia(ganhos) {
-      return [...ganhos.matchAll(/\+(\d+) ponto(?:s)? de perícia/gi)]
-        .reduce((total, ocorrencia) => total + Number(ocorrencia[1]), 0);
-    }
 
     function atualizarBadgesResumo() {
       const arma = ARMAS.find((a) => a.id === document.getElementById('select-arma').value);
@@ -915,8 +960,21 @@
       pernaDominante = fichaExistente?.perna_dominante || '';
       efeitosAtivos = fichaExistente?.efeitos_ativos ? fichaExistente.efeitos_ativos.map((e) => ({ ...e })) : [];
       acoesGastas = fichaExistente?.acoes_gastas
-        ? { tatica: !!fichaExistente.acoes_gastas.tatica, egoista: !!fichaExistente.acoes_gastas.egoista, egoistaExtra: !!fichaExistente.acoes_gastas.egoistaExtra, regulares: [...(fichaExistente.acoes_gastas.regulares || [false, false, false, false])] }
-        : { tatica: false, egoista: false, egoistaExtra: false, regulares: [false, false, false, false] };
+        ? { tatica: !!fichaExistente.acoes_gastas.tatica, egoista: !!fichaExistente.acoes_gastas.egoista, regulares: [...(fichaExistente.acoes_gastas.regulares || [false, false, false, false])] }
+        : { tatica: false, egoista: false, regulares: [false, false, false, false] };
+
+      const fluxoSalvo = fichaExistente?.fluxo || {};
+      fluxoTipo = fluxoSalvo.tipo || 'basico';
+      auraTipo = fluxoSalvo.auraTipo || '';
+      pontosApice = fluxoSalvo.pontosApice ? { ...fluxoSalvo.pontosApice } : {};
+      apiceComplexo = fluxoSalvo.apiceComplexo ? JSON.parse(JSON.stringify(fluxoSalvo.apiceComplexo)) : {};
+      fluxoJogadasBonus = fluxoSalvo.jogadasBonus ? [...fluxoSalvo.jogadasBonus] : [];
+      efeitosAuraSelecionados = fluxoSalvo.efeitosAuraSelecionados ? [...fluxoSalvo.efeitosAuraSelecionados] : [];
+      marcasMarcadas = fluxoSalvo.marcasMarcadas ? [...fluxoSalvo.marcasMarcadas] : [];
+      fluxoAtivo = !!fluxoSalvo.ativo;
+      const catalisadorSalvo = fichaExistente?.catalisador || {};
+      catalisadorId = catalisadorSalvo.id || '';
+      potencialCatalisador = catalisadorSalvo.potencial || 0;
 
       document.getElementById('titulo-personagem').textContent = fichaExistente?.nome_personagem || 'Novo personagem';
       document.getElementById('eyebrow-personagem').textContent = fichaExistente ? 'Ficha' : 'Novo personagem';
@@ -929,8 +987,7 @@
       document.getElementById('select-posicao').value = posicaoAtual;
       document.getElementById('select-perna-dominante').value = pernaDominante;
       document.getElementById('select-recompensa-nivel-6').value = recompensaNivel6;
-      recompensaNivel8 = 'acao_egoista';
-      atualizarRecompensasNivel();
+      document.getElementById('select-recompensa-nivel-8').value = recompensaNivel8;
       document.getElementById('select-arma').dispatchEvent(new Event('change'));
       document.getElementById('select-otica').dispatchEvent(new Event('change'));
       document.getElementById('select-categoria').dispatchEvent(new Event('change'));
@@ -957,9 +1014,10 @@
       renderTalentos();
       renderVisoes();
       renderPericiasDistancia();
-      renderHabilidadesCategoria();
       renderCondicoes();
       renderAcoesRodada();
+      renderFluxo();
+      renderCatalisador();
 
       if (fichaExistente) {
         await ativarBlocoRolagem();
@@ -989,14 +1047,7 @@
     }
 
     function calcularPontosPericiaMaximos() {
-      const categoria = CATEGORIAS.find((c) => c.id === document.getElementById('select-categoria').value);
-      const pontosDaCategoria = categoria
-        ? categoria.evolucao
-          .filter((item) => item.nivel <= nivelAtual)
-          .reduce((total, item) => total + extrairPontosPericia(item.ganhos), 0)
-        : 0;
-      const pontosProgressaoGeral = nivelAtual >= 6 ? 1 : 0;
-      return 10 + pontosDaCategoria + pontosProgressaoGeral;
+      return 10 + (nivelAtual >= 3 ? 1 : 0) + (nivelAtual >= 6 ? 1 : 0) + (nivelAtual >= 7 ? 1 : 0);
     }
 
     function renderPericiasDistancia() {
@@ -1050,19 +1101,13 @@
     document.getElementById('select-pericia-distancia-passe').addEventListener('change', (e) => { periciaDistanciaPasse = e.target.value; renderStatus(); });
     document.getElementById('select-posicao').addEventListener('change', (e) => { posicaoAtual = e.target.value; });
     document.getElementById('select-perna-dominante').addEventListener('change', (e) => { pernaDominante = e.target.value; });
-    document.getElementById('select-recompensa-nivel-6').addEventListener('change', (e) => { recompensaNivel6 = e.target.value; renderStatus(); });
-    function atualizarRecompensasNivel() {
-      const recompensa6 = document.getElementById('select-recompensa-nivel-6');
-      if (!recompensa6) return;
-      recompensa6.disabled = nivelAtual < 6;
-      recompensa6.title = nivelAtual < 6 ? 'Disponível a partir do nível 6.' : 'Bônus natural permanente.';
-    }
+    document.getElementById('select-recompensa-nivel-6').addEventListener('change', (e) => { recompensaNivel6 = e.target.value; });
+    document.getElementById('select-recompensa-nivel-8').addEventListener('change', (e) => { recompensaNivel8 = e.target.value; renderAcoesRodada(); });
 
     // --- Status: nível, fôlego, PdE, pontos de chama ---
     function renderStatus() {
       const constancia = periciasEscolhidas['constancia'] || 0;
-      const bonusNivel6Ativo = nivelAtual >= 6;
-      const folegoMax = calcularFolegos(constancia) + (bonusNivel6Ativo && recompensaNivel6 === 'folego' ? 1 : 0);
+      const folegoMax = calcularFolegos(constancia) + (recompensaNivel6 === 'folego' ? 1 : 0);
       folegoAtual = Math.min(folegoAtual, folegoMax);
       document.getElementById('valor-nivel').textContent = nivelAtual;
       document.getElementById('valor-folego').textContent = folegoAtual;
@@ -1076,10 +1121,8 @@
       document.getElementById('valor-sorte-max').textContent = MAX_PDS_PADRAO;
       document.getElementById('valor-sorte-partida').textContent = pontosSorte;
       document.getElementById('valor-sorte-max-partida').textContent = MAX_PDS_PADRAO;
-      document.getElementById('valor-ddc').textContent = calcularDdC(periciasEscolhidas[periciaDistanciaChute] || 0, bonusNivel6Ativo && recompensaNivel6 === 'distancia_chute' ? 1 : 0);
-      document.getElementById('valor-ddp').textContent = calcularDdP(periciasEscolhidas[periciaDistanciaPasse] || 0, bonusNivel6Ativo && recompensaNivel6 === 'distancia_passe' ? 1 : 0);
-      atualizarRecompensasNivel();
-      renderAcoesRodada();
+      document.getElementById('valor-ddc').textContent = calcularDdC(periciasEscolhidas[periciaDistanciaChute] || 0, recompensaNivel6 === 'distancia_chute' ? 1 : 0);
+      document.getElementById('valor-ddp').textContent = calcularDdP(periciasEscolhidas[periciaDistanciaPasse] || 0, recompensaNivel6 === 'distancia_passe' ? 1 : 0);
       salvarPartidaAutomatico();
     }
 
@@ -1094,7 +1137,7 @@
         initPericias(document.getElementById('pericias-container'), periciasEscolhidas, (pers) => { periciasEscolhidas = pers; renderSelectPericiaManual(); renderPericiasDistancia(); renderStatus(); }, calcularPontosPericiaMaximos());
       }
       if (tipo === 'folego') {
-        const max = calcularFolegos(periciasEscolhidas['constancia'] || 0) + (nivelAtual >= 6 && recompensaNivel6 === 'folego' ? 1 : 0);
+        const max = calcularFolegos(periciasEscolhidas['constancia'] || 0) + (recompensaNivel6 === 'folego' ? 1 : 0);
         folegoAtual = Math.min(max, Math.max(0, folegoAtual + delta));
       }
       if (tipo === 'pde') pdeAtual = Math.max(0, pdeAtual + delta);
@@ -1166,6 +1209,8 @@
             pontos_sorte: pontosSorte,
             efeitos_ativos: efeitosAtivos,
             acoes_gastas: acoesGastas,
+            fluxo: { tipo: fluxoTipo, auraTipo, pontosApice, apiceComplexo, jogadasBonus: fluxoJogadasBonus, efeitosAuraSelecionados, marcasMarcadas, ativo: fluxoAtivo },
+            catalisador: { id: catalisadorId, potencial: potencialCatalisador },
           });
         } catch (e) {
           mostrarToast('Não deu pra sincronizar o painel de partida.', 'erro');
@@ -1177,8 +1222,7 @@
       const container = document.getElementById('acoes-rodada-container');
       const slots = [
         { label: 'Ação tática', gasta: acoesGastas.tatica, onClick: () => { acoesGastas.tatica = !acoesGastas.tatica; } },
-        { label: 'Ação egoísta', gasta: acoesGastas.egoista, onClick: () => { acoesGastas.egoista = !acoesGastas.egoista; } },
-        ...(nivelAtual >= 8 ? [{ label: 'Ação egoísta adicional', gasta: acoesGastas.egoistaExtra, onClick: () => { acoesGastas.egoistaExtra = !acoesGastas.egoistaExtra; } }] : []),
+        { label: 'Reação egoísta', gasta: acoesGastas.egoista, onClick: () => { acoesGastas.egoista = !acoesGastas.egoista; } },
         ...acoesGastas.regulares.map((gasta, i) => ({
           label: `Reação ${i + 1}`,
           gasta,
@@ -1201,7 +1245,7 @@
     }
 
     document.getElementById('btn-resetar-acoes').addEventListener('click', () => {
-      acoesGastas = { tatica: false, egoista: false, egoistaExtra: false, regulares: [false, false, false, false] };
+      acoesGastas = { tatica: false, egoista: false, regulares: [false, false, false, false] };
       renderAcoesRodada();
       salvarPartidaAutomatico();
     });
@@ -1256,6 +1300,286 @@
         });
       });
     }
+
+    // --- Fluxo: pontos de ápice (básico e complexo), Aura, efeitos, marcas de despertar ---
+    function totalPontosApiceBasicoUsados() { return Object.values(pontosApice).reduce((a, b) => a + (b || 0), 0); }
+
+    function renderApiceBasico() {
+      const limite = 6;
+      const usados = totalPontosApiceBasicoUsados();
+      document.getElementById('pontos-apice-contagem').textContent = `(${usados}/${limite} usados)`;
+      const grid = document.getElementById('pontos-apice-grid');
+      grid.innerHTML = ATRIBUTOS.map((a) => `
+        <div class="status-item">
+          <label>${a.nome}</label>
+          <div class="status-controles">
+            <button type="button" data-apice-menos="${a.id}">−</button>
+            <span>${pontosApice[a.id] || 0}</span>
+            <button type="button" data-apice-mais="${a.id}" ${usados >= limite ? 'disabled' : ''}>+</button>
+          </div>
+        </div>
+      `).join('');
+      grid.querySelectorAll('[data-apice-mais]').forEach((btn) => btn.addEventListener('click', () => {
+        if (totalPontosApiceBasicoUsados() >= 6) return;
+        const id = btn.dataset.apiceMais;
+        pontosApice[id] = (pontosApice[id] || 0) + 1;
+        renderApiceBasico();
+      }));
+      grid.querySelectorAll('[data-apice-menos]').forEach((btn) => btn.addEventListener('click', () => {
+        const id = btn.dataset.apiceMenos;
+        pontosApice[id] = Math.max(0, (pontosApice[id] || 0) - 1);
+        renderApiceBasico();
+      }));
+    }
+
+    function todasJogadasFlat() {
+      return Object.entries(JOGADAS).flatMap(([grupo, lista]) => lista.map((j) => ({ ...j, grupo })));
+    }
+    const NOMES_GRUPOS_FLUXO = { chutes: 'Chutes', passes: 'Passes', dribles: 'Dribles', defesa: 'Defesa', goleiro: 'Goleiro' };
+
+    function renderJogadasFluxo() {
+      document.getElementById('jogadas-fluxo-contagem').textContent = `(${fluxoJogadasBonus.length}/3 escolhidas)`;
+      const porGrupo = {};
+      todasJogadasFlat().forEach((j) => { (porGrupo[j.grupo] = porGrupo[j.grupo] || []).push(j); });
+      const container = document.getElementById('jogadas-fluxo-container');
+      container.innerHTML = Object.entries(porGrupo).map(([grupo, lista]) => `
+        <div class="jogadas-grupo">
+          <div class="jogadas-grupo-titulo">${NOMES_GRUPOS_FLUXO[grupo] || grupo}</div>
+          <div class="jogadas-grid">
+            ${lista.map((j) => `
+              <button type="button" class="jogada-card ${fluxoJogadasBonus.includes(j.id) ? 'talento-selecionado' : ''}" data-jogada-fluxo="${j.id}">
+                <div class="nome">${j.nome}</div>
+                <div class="info">${fluxoJogadasBonus.includes(j.id) ? '+1 vantagem com o fluxo ativo' : 'clique pra escolher'}</div>
+              </button>
+            `).join('')}
+          </div>
+        </div>
+      `).join('');
+      container.querySelectorAll('[data-jogada-fluxo]').forEach((btn) => btn.addEventListener('click', () => {
+        const id = btn.dataset.jogadaFluxo;
+        if (fluxoJogadasBonus.includes(id)) {
+          fluxoJogadasBonus = fluxoJogadasBonus.filter((x) => x !== id);
+        } else {
+          if (fluxoJogadasBonus.length >= 3) { mostrarToast('Só dá pra escolher 3 jogadas no fluxo básico.', 'erro'); return; }
+          fluxoJogadasBonus.push(id);
+        }
+        renderJogadasFluxo();
+      }));
+    }
+
+    function renderApiceComplexo() {
+      const custoTotal = custoTotalComplexo(apiceComplexo);
+      document.getElementById('pontos-apice-complexo-contagem').textContent = `(${custoTotal}/10 pontos usados)`;
+      const grid = document.getElementById('apice-complexo-grid');
+      grid.innerHTML = ATRIBUTOS.map((a) => {
+        const incluido = Object.prototype.hasOwnProperty.call(apiceComplexo, a.id);
+        const dados = apiceComplexo[a.id] || { vantagens: 0, bonus: 0 };
+        const custoAtributo = incluido ? custoAtributoComplexo(dados.vantagens, dados.bonus) : 0;
+        return `
+          <div class="status-item" style="text-align:left;">
+            <label style="display:flex; align-items:center; gap:8px; justify-content:space-between; cursor:pointer;">
+              <span><input type="checkbox" data-apice-incluir="${a.id}" ${incluido ? 'checked' : ''}> ${a.nome}</span>
+              ${incluido ? `<span class="status-max">${custoAtributo} pts</span>` : ''}
+            </label>
+            ${incluido ? `
+              <div style="margin-top:10px; display:flex; flex-direction:column; gap:8px;">
+                <div class="status-controles" style="justify-content:space-between;">
+                  <span style="font-size:0.75rem; color:var(--text-muted);">Vantagens</span>
+                  <span>
+                    <button type="button" data-vant-menos="${a.id}">−</button>
+                    <span>${dados.vantagens}</span>
+                    <button type="button" data-vant-mais="${a.id}">+</button>
+                  </span>
+                </div>
+                <div class="status-controles" style="justify-content:space-between;">
+                  <span style="font-size:0.75rem; color:var(--text-muted);">Bônus</span>
+                  <span>
+                    <button type="button" data-bonus-menos="${a.id}">−</button>
+                    <span>+${dados.bonus}</span>
+                    <button type="button" data-bonus-mais="${a.id}">+</button>
+                  </span>
+                </div>
+              </div>
+            ` : ''}
+          </div>
+        `;
+      }).join('');
+
+      grid.querySelectorAll('[data-apice-incluir]').forEach((input) => input.addEventListener('change', () => {
+        const id = input.dataset.apiceIncluir;
+        if (input.checked) {
+          apiceComplexo[id] = { vantagens: 0, bonus: 0 };
+        } else {
+          delete apiceComplexo[id];
+        }
+        renderApiceComplexo();
+      }));
+      grid.querySelectorAll('[data-vant-mais]').forEach((btn) => btn.addEventListener('click', () => {
+        const id = btn.dataset.vantMais;
+        const dados = apiceComplexo[id];
+        if (!dados || dados.vantagens >= MAX_VANTAGENS_COMPLEXO) return;
+        if (custoTotalComplexo(apiceComplexo) + CUSTO_POR_VANTAGEM_COMPLEXO > 10) { mostrarToast('Sem pontos de ápice suficientes.', 'erro'); return; }
+        dados.vantagens += 1;
+        renderApiceComplexo();
+      }));
+      grid.querySelectorAll('[data-vant-menos]').forEach((btn) => btn.addEventListener('click', () => {
+        const id = btn.dataset.vantMenos;
+        const dados = apiceComplexo[id];
+        if (!dados) return;
+        dados.vantagens = Math.max(0, dados.vantagens - 1);
+        renderApiceComplexo();
+      }));
+      grid.querySelectorAll('[data-bonus-mais]').forEach((btn) => btn.addEventListener('click', () => {
+        const id = btn.dataset.bonusMais;
+        const dados = apiceComplexo[id];
+        if (!dados || dados.bonus >= MAX_BONUS_COMPLEXO) return;
+        if (custoTotalComplexo(apiceComplexo) + 2 > 10) { mostrarToast('Sem pontos de ápice suficientes.', 'erro'); return; }
+        dados.bonus += 2;
+        renderApiceComplexo();
+      }));
+      grid.querySelectorAll('[data-bonus-menos]').forEach((btn) => btn.addEventListener('click', () => {
+        const id = btn.dataset.bonusMenos;
+        const dados = apiceComplexo[id];
+        if (!dados) return;
+        dados.bonus = Math.max(0, dados.bonus - 2);
+        renderApiceComplexo();
+      }));
+    }
+
+    function renderPontosApice() {
+      document.getElementById('apice-basico-bloco').style.display = fluxoTipo === 'basico' ? 'block' : 'none';
+      document.getElementById('apice-complexo-bloco').style.display = fluxoTipo === 'complexo' ? 'block' : 'none';
+      if (fluxoTipo === 'basico') { renderApiceBasico(); renderJogadasFluxo(); }
+      else { renderApiceComplexo(); }
+    }
+
+    function renderFluxo() {
+      document.getElementById('select-fluxo-tipo').value = fluxoTipo;
+      document.getElementById('select-aura-tipo').value = auraTipo;
+      renderPontosApice();
+
+      const aura = TIPOS_AURA.find((t) => t.id === auraTipo);
+      const infoAura = document.getElementById('info-aura');
+      if (aura) {
+        infoAura.classList.add('ativo');
+        infoAura.innerHTML = `<div>${aura.tema}</div><div class="arma-bloco"><strong>% necessário:</strong> ${aura.percentual_necessario}% · <strong>Efeitos de Aura:</strong> ${aura.efeitos_permitidos} · <strong>Bônus de marcas:</strong> ${aura.marcas_adicionais}</div>`;
+      } else {
+        infoAura.classList.remove('ativo');
+      }
+
+      const limiteEfeitos = aura ? aura.efeitos_permitidos : 0;
+      const efeitosContainer = document.getElementById('efeitos-aura-container');
+      efeitosContainer.innerHTML = EFEITOS_AURA.map((ef) => `
+        <button type="button" class="jogada-card ${efeitosAuraSelecionados.includes(ef.id) ? 'talento-selecionado' : ''}" data-efeito-aura="${ef.id}">
+          <div class="nome">${ef.nome}</div>
+          <div class="info">${ef.texto}</div>
+        </button>
+      `).join('');
+      efeitosContainer.querySelectorAll('[data-efeito-aura]').forEach((btn) => btn.addEventListener('click', () => {
+        const id = btn.dataset.efeitoAura;
+        if (efeitosAuraSelecionados.includes(id)) {
+          efeitosAuraSelecionados = efeitosAuraSelecionados.filter((x) => x !== id);
+        } else {
+          if (!auraTipo) { mostrarToast('Escolha um tipo de Aura primeiro.', 'erro'); return; }
+          if (efeitosAuraSelecionados.length >= limiteEfeitos) { mostrarToast(`Sua Aura só permite ${limiteEfeitos} efeito(s).`, 'erro'); return; }
+          efeitosAuraSelecionados.push(id);
+        }
+        renderFluxo();
+      }));
+
+      const gruposMarcas = [
+        { titulo: 'Fáceis (+5% cada)', lista: MARCAS_DESPERTAR.facil },
+        { titulo: 'Médias (+10% cada)', lista: MARCAS_DESPERTAR.media },
+        { titulo: 'Difíceis (+15% cada)', lista: MARCAS_DESPERTAR.dificil },
+        { titulo: 'Impossíveis (+25% cada)', lista: MARCAS_DESPERTAR.impossivel },
+      ];
+      const containerMarcas = document.getElementById('marcas-despertar-container');
+      containerMarcas.innerHTML = gruposMarcas.map((g) => `
+        <div class="jogadas-grupo">
+          <div class="jogadas-grupo-titulo">${g.titulo}</div>
+          <div class="jogadas-grid">
+            ${g.lista.map((m) => `
+              <label class="jogada-card ${marcasMarcadas.includes(m.id) ? 'talento-selecionado' : ''}" style="cursor:pointer; display:block;">
+                <input type="checkbox" data-marca-id="${m.id}" ${marcasMarcadas.includes(m.id) ? 'checked' : ''} style="margin-right:6px;">
+                <strong>${m.nome}</strong>
+                <div class="info">${m.texto}</div>
+              </label>
+            `).join('')}
+          </div>
+        </div>
+      `).join('');
+      containerMarcas.querySelectorAll('[data-marca-id]').forEach((input) => input.addEventListener('change', () => {
+        const id = input.dataset.marcaId;
+        marcasMarcadas = input.checked ? [...marcasMarcadas, id] : marcasMarcadas.filter((x) => x !== id);
+        renderFluxo();
+      }));
+
+      const percentualAtual = calcularPercentualFluxo(marcasMarcadas);
+      const percentualNecessario = aura ? aura.percentual_necessario : 100;
+      document.getElementById('valor-percentual-fluxo').textContent = `${percentualAtual}%`;
+      document.getElementById('valor-percentual-necessario').textContent = aura ? `${percentualNecessario}%` : '—';
+      const btnAtivar = document.getElementById('btn-ativar-fluxo');
+      btnAtivar.disabled = !aura || percentualAtual < percentualNecessario;
+      btnAtivar.textContent = fluxoAtivo ? 'Desativar fluxo' : 'Ativar fluxo';
+    }
+
+    document.getElementById('select-fluxo-tipo').addEventListener('change', (e) => {
+      fluxoTipo = e.target.value;
+      pontosApice = {};
+      apiceComplexo = {};
+      fluxoJogadasBonus = [];
+      renderFluxo();
+    });
+    document.getElementById('select-aura-tipo').addEventListener('change', (e) => { auraTipo = e.target.value; efeitosAuraSelecionados = []; renderFluxo(); });
+    document.getElementById('btn-ativar-fluxo').addEventListener('click', () => {
+      fluxoAtivo = !fluxoAtivo;
+      renderFluxo();
+      salvarPartidaAutomatico();
+      mostrarToast(fluxoAtivo ? 'Fluxo ativado!' : 'Fluxo desativado.');
+    });
+
+    // --- Catalisador (ligado à Ótica escolhida) ---
+    function catalisadoresDisponiveisParaOtica() {
+      const otica = OTICAS.find((o) => o.id === document.getElementById('select-otica').value);
+      if (!otica) return [];
+      const texto = otica.catalisadores.toLowerCase();
+      return CATALISADORES.filter((c) => texto.includes(c.nome.toLowerCase()));
+    }
+
+    function renderCatalisador() {
+      const disponiveis = catalisadoresDisponiveisParaOtica();
+      const select = document.getElementById('select-catalisador');
+      select.innerHTML = '<option value="">— nenhum —</option>' + disponiveis.map((c) => `<option value="${c.id}">${c.nome}</option>`).join('');
+      if (!disponiveis.some((c) => c.id === catalisadorId)) catalisadorId = '';
+      select.value = catalisadorId;
+
+      const cat = CATALISADORES.find((c) => c.id === catalisadorId);
+      const info = document.getElementById('info-catalisador');
+      if (!cat) { info.classList.remove('ativo'); return; }
+      info.classList.add('ativo');
+      info.innerHTML = `
+        <div>${cat.tema}</div>
+        <div class="arma-bloco"><strong>Passiva — ${cat.passiva.nome}:</strong> ${cat.passiva.texto}</div>
+        <div class="arma-bloco">
+          <strong>Potencial atual: <span id="valor-potencial">${potencialCatalisador}</span></strong>
+          <div class="jogadas-grid" style="margin-top:8px;">
+            ${cat.jogadas_potencial.map((j) => `<button type="button" class="jogada-card" data-potencial="${j.potencial}"><div class="nome">${j.acao}</div><div class="info">+${j.potencial} potencial</div></button>`).join('')}
+          </div>
+        </div>
+        <div class="arma-bloco">
+          <strong>Habilidade — ${cat.habilidade.nome}:</strong> ${cat.habilidade.texto}
+          <div style="margin-top:8px;"><button type="button" class="btn btn-ghost" id="btn-usar-habilidade-catalisador">Usar habilidade</button></div>
+        </div>
+      `;
+      info.querySelectorAll('[data-potencial]').forEach((btn) => btn.addEventListener('click', () => {
+        potencialCatalisador += Number(btn.dataset.potencial);
+        document.getElementById('valor-potencial').textContent = potencialCatalisador;
+        salvarPartidaAutomatico();
+      }));
+      document.getElementById('btn-usar-habilidade-catalisador')?.addEventListener('click', () => usarHabilidade(cat.habilidade));
+    }
+    document.getElementById('select-catalisador').addEventListener('change', (e) => { catalisadorId = e.target.value; renderCatalisador(); });
+    document.getElementById('select-otica').addEventListener('change', renderCatalisador);
 
     // --- Formata o detalhe de uma rolagem (dados usados, atributo/perícia, execução absoluta) ---
     function formatarDetalhe(detalhe) {
@@ -1393,6 +1717,8 @@
         recompensaNivel8,
         posicao: posicaoAtual,
         pernaDominante,
+        fluxo: { tipo: fluxoTipo, auraTipo, pontosApice, apiceComplexo, jogadasBonus: fluxoJogadasBonus, efeitosAuraSelecionados, marcasMarcadas, ativo: fluxoAtivo },
+        catalisador: { id: catalisadorId, potencial: potencialCatalisador },
       };
 
       try {
@@ -1423,6 +1749,8 @@
             perna_dominante: dados.pernaDominante,
             efeitos_ativos: efeitosAtivos,
             acoes_gastas: acoesGastas,
+            fluxo: dados.fluxo,
+            catalisador: dados.catalisador,
           });
         } else {
           ficha = await criarFicha({ campanhaId: campanhaAtual ? campanhaAtual.id : null, jogadorId: usuarioLogado?.id || null, nomeJogador, efeitosAtivos, acoesGastas, ...dados });
@@ -1440,6 +1768,7 @@
     document.getElementById('btn-salvar-ficha').addEventListener('click', salvarFicha);
     document.getElementById('btn-salvar-ficha-2').addEventListener('click', salvarFicha);
     document.getElementById('btn-salvar-ficha-3').addEventListener('click', salvarFicha);
+    document.getElementById('btn-salvar-ficha-4').addEventListener('click', salvarFicha);
 
     // --- Bloco de rolagem só aparece depois que a ficha existe salva (precisa de um id) ---
     async function ativarBlocoRolagem() {
