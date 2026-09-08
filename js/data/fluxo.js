@@ -206,4 +206,4 @@ export function custoTotalComplexo(apiceComplexo) {
     return total + custoAtributoComplexo(dados.vantagens || 0, dados.bonus || 0);
   }, 0);
   return custoDesbloqueio + custoBeneficios;
-}f
+}
