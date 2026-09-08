@@ -485,7 +485,7 @@
     import { TALENTOS_EVOLUTIVOS, TALENTOS_SIMPLES, TALENTOS_RAZOAVEIS, TALENTOS_COMPLEXOS, MAX_SLOTS_TALENTOS } from './js/data/talentos.js';
     import { calcularFolegos, calcularDdC, calcularDdP, MAX_PDS_PADRAO } from './js/regras/calculos.js';
     import { CATALOGO_EFEITOS, buscarEfeito, aplicarEfeito, removerEfeito } from './js/regras/efeitos.js';
-    import { TIPOS_AURA, EFEITOS_AURA, MARCAS_DESPERTAR, calcularPercentualFluxoComUsos, limiteMarcasDespertar, custoAtributoComplexo, custoTotalComplexo, CUSTO_POR_VANTAGEM_COMPLEXO, MAX_VANTAGENS_COMPLEXO, MAX_BONUS_COMPLEXO, NIVEL_MINIMO_FLUXO_COMPLEXO, NIVEL_MINIMO_CATALISADOR, NIVEL_MINIMO_HABILIDADE_CATALISADOR } from './js/data/fluxo.js';
+    import { TIPOS_AURA, EFEITOS_AURA, MARCAS_DESPERTAR, calcularPercentualFluxoComUsos, limiteMarcasDespertar, podeMarcarDificuldade, custoAtributoComplexo, custoTotalComplexo, CUSTO_POR_VANTAGEM_COMPLEXO, MAX_VANTAGENS_COMPLEXO, MAX_BONUS_COMPLEXO, NIVEL_MINIMO_FLUXO_COMPLEXO, NIVEL_MINIMO_CATALISADOR, NIVEL_MINIMO_HABILIDADE_CATALISADOR } from './js/data/fluxo.js';
     import { CATALISADORES } from './js/data/catalisadores.js';
 
     const usuarioLogado = await exigirAutenticacao();
@@ -1533,10 +1533,10 @@
       document.getElementById('contagem-marcas-conhecidas').textContent = `${marcasConhecidas.length}/${limiteMarcas} conhecidas`;
 
       const gruposMarcas = [
-        { titulo: 'Fáceis (+5% cada)', lista: MARCAS_DESPERTAR.facil },
-        { titulo: 'Médias (+10% cada)', lista: MARCAS_DESPERTAR.media },
-        { titulo: 'Difíceis (+15% cada)', lista: MARCAS_DESPERTAR.dificil },
-        { titulo: 'Impossíveis (+25% cada)', lista: MARCAS_DESPERTAR.impossivel },
+        { chave: 'facil', titulo: 'Fáceis (+5% cada)', lista: MARCAS_DESPERTAR.facil },
+        { chave: 'media', titulo: 'Médias (+10% cada)', lista: MARCAS_DESPERTAR.media },
+        { chave: 'dificil', titulo: 'Difíceis (+15% cada)', lista: MARCAS_DESPERTAR.dificil },
+        { chave: 'impossivel', titulo: 'Impossíveis (+25% cada)', lista: MARCAS_DESPERTAR.impossivel },
       ];
       const containerMarcas = document.getElementById('marcas-despertar-container');
       containerMarcas.innerHTML = gruposMarcas.map((g) => `
@@ -1545,7 +1545,7 @@
           <div class="jogadas-grid">
             ${g.lista.map((m) => `
               <label class="jogada-card ${marcasConhecidas.includes(m.id) ? 'talento-selecionado' : ''}" style="cursor:pointer; display:block;">
-                <input type="checkbox" data-marca-id="${m.id}" ${marcasConhecidas.includes(m.id) ? 'checked' : ''} style="margin-right:6px;">
+                <input type="checkbox" data-marca-id="${m.id}" data-marca-dificuldade="${g.chave}" ${marcasConhecidas.includes(m.id) ? 'checked' : ''} style="margin-right:6px;">
                 <strong>${m.nome}</strong>
                 <div class="info">${m.texto}</div>
               </label>
@@ -1555,9 +1555,10 @@
       `).join('');
       containerMarcas.querySelectorAll('[data-marca-id]').forEach((input) => input.addEventListener('change', () => {
         const id = input.dataset.marcaId;
+        const dificuldade = input.dataset.marcaDificuldade;
         if (input.checked) {
-          if (marcasConhecidas.length >= limiteMarcas) {
-            mostrarToast(`Seu limite é ${limiteMarcas} marcas conhecidas (nível + Aura).`, 'erro');
+          if (!podeMarcarDificuldade(dificuldade, marcasConhecidas, nivelAtual, auraTipo)) {
+            mostrarToast('Sem slot disponível pra essa dificuldade — confere a reserva da sua Aura e as marcas "livres" do seu nível.', 'erro');
             input.checked = false;
             return;
           }

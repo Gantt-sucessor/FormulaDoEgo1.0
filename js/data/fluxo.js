@@ -138,6 +138,48 @@ export const NIVEL_MINIMO_FLUXO_COMPLEXO = 4;
 export const NIVEL_MINIMO_CATALISADOR = 5;
 export const NIVEL_MINIMO_HABILIDADE_CATALISADOR = 7;
 
+/** Quantas marcas "livres" (qualquer dificuldade) você ganha só por nível — nível 4, 5 e 8. */
+export function marcasLivresPorNivel(nivel) {
+  let livres = 0;
+  if (nivel >= 4) livres += 1;
+  if (nivel >= 5) livres += 1;
+  if (nivel >= 8) livres += 1;
+  return livres;
+}
+
+/** Slots RESERVADOS por dificuldade que cada tipo de Aura dá (não competem com os "livres"). */
+export function reservasPorAura(auraId) {
+  const tabela = {
+    primitiva: { facil: 2, media: 1, dificil: 0, impossivel: 0 },
+    demonstrativa: { facil: 0, media: 1, dificil: 1, impossivel: 0 },
+    contida: { facil: 0, media: 0, dificil: 0, impossivel: 1 },
+  };
+  return tabela[auraId] || { facil: 0, media: 0, dificil: 0, impossivel: 0 };
+}
+
+/** Quantas marcas conhecidas você já tem, separadas por dificuldade. */
+export function contarMarcasPorDificuldade(marcasConhecidas) {
+  const contagem = { facil: 0, media: 0, dificil: 0, impossivel: 0 };
+  Object.entries(MARCAS_DESPERTAR).forEach(([dificuldade, lista]) => {
+    lista.forEach((m) => { if (marcasConhecidas.includes(m.id)) contagem[dificuldade] += 1; });
+  });
+  return contagem;
+}
+
+/**
+ * Confere se dá pra marcar mais uma marca daquela dificuldade: primeiro usa a reserva
+ * específica da Aura pra essa dificuldade; se já estourou a reserva, usa do pool "livre" do nível.
+ */
+export function podeMarcarDificuldade(dificuldade, marcasConhecidas, nivel, auraId) {
+  const reservas = reservasPorAura(auraId);
+  const contagem = contarMarcasPorDificuldade(marcasConhecidas);
+  if (contagem[dificuldade] < reservas[dificuldade]) return true;
+
+  const livreTotal = marcasLivresPorNivel(nivel);
+  const usadoLivre = Object.keys(reservas).reduce((total, dif) => total + Math.max(0, contagem[dif] - reservas[dif]), 0);
+  return usadoLivre < livreTotal;
+}
+
 // --- Fluxo complexo: tabela de custo por vantagem/bônus ---
 // 10 pontos de ápice ao todo. O 1º atributo incluído é grátis pra "desbloquear";
 // cada atributo adicional custa 3 pontos só pra ser incluído.
@@ -164,4 +206,4 @@ export function custoTotalComplexo(apiceComplexo) {
     return total + custoAtributoComplexo(dados.vantagens || 0, dados.bonus || 0);
   }, 0);
   return custoDesbloqueio + custoBeneficios;
-}
+}f
