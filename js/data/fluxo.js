@@ -122,15 +122,21 @@ export function calcularPercentualFluxoComUsos(marcasConhecidas, marcasUsos) {
 
 /**
  * Quantas marcas de despertar você pode conhecer, de acordo com o nível e o tipo de Aura.
- * ATENÇÃO: o livro não deixa uma tabela fechada de "marcas por nível" fácil de achar —
- * usei 1 marca conhecida por nível como estimativa, + o bônus de marcas da própria Aura
- * (Primitiva +3, Demonstrativa +2, Contida +1, somando os bônus específicos de cada uma).
- * Se o número certo do seu livro for diferente, é só me falar que eu ajusto essa função.
+ * Da tabela de progressão de nível do livro: você ganha +1 marca no nível 4, +1 no nível 5,
+ * e +1 no nível 8 (total de 3 marcas só por nível, até o nível 8). A Aura soma um bônus em cima disso.
  */
 export function limiteMarcasDespertar(nivel, auraId) {
   const bonusPorAura = { primitiva: 3, demonstrativa: 2, contida: 1 };
-  return Math.max(1, nivel || 1) + (bonusPorAura[auraId] || 0);
+  let marcasDoNivel = 0;
+  if (nivel >= 4) marcasDoNivel += 1;
+  if (nivel >= 5) marcasDoNivel += 1;
+  if (nivel >= 8) marcasDoNivel += 1;
+  return marcasDoNivel + (bonusPorAura[auraId] || 0);
 }
+
+export const NIVEL_MINIMO_FLUXO_COMPLEXO = 4;
+export const NIVEL_MINIMO_CATALISADOR = 5;
+export const NIVEL_MINIMO_HABILIDADE_CATALISADOR = 7;
 
 // --- Fluxo complexo: tabela de custo por vantagem/bônus ---
 // 10 pontos de ápice ao todo. O 1º atributo incluído é grátis pra "desbloquear";

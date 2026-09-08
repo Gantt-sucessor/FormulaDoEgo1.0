@@ -454,7 +454,7 @@
 
       <div class="form-section">
         <h3>Catalisador</h3>
-        <p class="step-desc">As opções mudam de acordo com a Ótica escolhida na aba Classe &amp; Habilidades. Potencial vai até 10 — quando encher, dá pra ativar.</p>
+        <p class="step-desc">Libera no nível 5 (só a passiva); a habilidade exclusiva e o potencial liberam no nível 7. As opções mudam de acordo com a Ótica escolhida na aba Classe &amp; Habilidades.</p>
         <select id="select-catalisador">
           <option value="">— nenhum —</option>
         </select>
@@ -485,7 +485,7 @@
     import { TALENTOS_EVOLUTIVOS, TALENTOS_SIMPLES, TALENTOS_RAZOAVEIS, TALENTOS_COMPLEXOS, MAX_SLOTS_TALENTOS } from './js/data/talentos.js';
     import { calcularFolegos, calcularDdC, calcularDdP, MAX_PDS_PADRAO } from './js/regras/calculos.js';
     import { CATALOGO_EFEITOS, buscarEfeito, aplicarEfeito, removerEfeito } from './js/regras/efeitos.js';
-    import { TIPOS_AURA, EFEITOS_AURA, MARCAS_DESPERTAR, calcularPercentualFluxoComUsos, limiteMarcasDespertar, custoAtributoComplexo, custoTotalComplexo, CUSTO_POR_VANTAGEM_COMPLEXO, MAX_VANTAGENS_COMPLEXO, MAX_BONUS_COMPLEXO } from './js/data/fluxo.js';
+    import { TIPOS_AURA, EFEITOS_AURA, MARCAS_DESPERTAR, calcularPercentualFluxoComUsos, limiteMarcasDespertar, custoAtributoComplexo, custoTotalComplexo, CUSTO_POR_VANTAGEM_COMPLEXO, MAX_VANTAGENS_COMPLEXO, MAX_BONUS_COMPLEXO, NIVEL_MINIMO_FLUXO_COMPLEXO, NIVEL_MINIMO_CATALISADOR, NIVEL_MINIMO_HABILIDADE_CATALISADOR } from './js/data/fluxo.js';
     import { CATALISADORES } from './js/data/catalisadores.js';
 
     const usuarioLogado = await exigirAutenticacao();
@@ -1162,6 +1162,7 @@
         nivelAtual = Math.min(8, Math.max(1, nivelAtual + delta));
         initPericias(document.getElementById('pericias-container'), periciasEscolhidas, (pers) => { periciasEscolhidas = pers; renderSelectPericiaManual(); renderPericiasDistancia(); renderStatus(); }, calcularPontosPericiaMaximos());
         renderFluxo();
+        renderCatalisador();
       }
       if (tipo === 'folego') {
         const max = calcularFolegos(periciasEscolhidas['constancia'] || 0) + (recompensaNivel6 === 'folego' ? 1 : 0);
@@ -1435,6 +1436,12 @@
       grid.querySelectorAll('[data-apice-incluir]').forEach((input) => input.addEventListener('change', () => {
         const id = input.dataset.apiceIncluir;
         if (input.checked) {
+          const tentativa = { ...apiceComplexo, [id]: { vantagens: 0, bonus: 0 } };
+          if (custoTotalComplexo(tentativa) > 10) {
+            mostrarToast('Sem pontos de ápice suficientes pra incluir mais esse atributo.', 'erro');
+            input.checked = false;
+            return;
+          }
           apiceComplexo[id] = { vantagens: 0, bonus: 0 };
         } else {
           delete apiceComplexo[id];
@@ -1481,6 +1488,14 @@
     }
 
     function renderFluxo() {
+      const opcaoComplexo = document.querySelector('#select-fluxo-tipo option[value="complexo"]');
+      const complexoLiberado = nivelAtual >= NIVEL_MINIMO_FLUXO_COMPLEXO;
+      opcaoComplexo.disabled = !complexoLiberado;
+      opcaoComplexo.textContent = complexoLiberado ? 'Complexo (10 pontos de ápice)' : `Complexo — libera no nível ${NIVEL_MINIMO_FLUXO_COMPLEXO}`;
+      if (fluxoTipo === 'complexo' && !complexoLiberado) {
+        fluxoTipo = 'basico';
+        mostrarToast(`Fluxo Complexo só libera no nível ${NIVEL_MINIMO_FLUXO_COMPLEXO}. Voltei pro Básico.`, 'erro');
+      }
       document.getElementById('select-fluxo-tipo').value = fluxoTipo;
       document.getElementById('select-aura-tipo').value = auraTipo;
       renderPontosApice();
@@ -1597,7 +1612,11 @@
     });
     document.getElementById('select-aura-tipo').addEventListener('change', (e) => { auraTipo = e.target.value; efeitosAuraSelecionados = []; renderFluxo(); });
     document.getElementById('btn-ativar-fluxo').addEventListener('click', () => {
+      const estavaInativo = !fluxoAtivo;
       fluxoAtivo = !fluxoAtivo;
+      if (fluxoAtivo && estavaInativo) {
+        marcasUsos = {}; // ao ativar, os usos de marca zeram — precisa acumular de novo pra próxima vez
+      }
       renderFluxo();
       salvarPartidaAutomatico();
       mostrarToast(fluxoAtivo ? 'Fluxo ativado!' : 'Fluxo desativado.');
@@ -1612,44 +1631,70 @@
     }
 
     function renderCatalisador() {
+      const selectWrap = document.getElementById('select-catalisador');
+      const info = document.getElementById('info-catalisador');
+
+      if (nivelAtual < NIVEL_MINIMO_CATALISADOR) {
+        selectWrap.disabled = true;
+        selectWrap.innerHTML = `<option value="">— libera no nível ${NIVEL_MINIMO_CATALISADOR} —</option>`;
+        info.classList.remove('ativo');
+        return;
+      }
+      selectWrap.disabled = false;
+
       const disponiveis = catalisadoresDisponiveisParaOtica();
-      const select = document.getElementById('select-catalisador');
-      select.innerHTML = '<option value="">— nenhum —</option>' + disponiveis.map((c) => `<option value="${c.id}">${c.nome}</option>`).join('');
+      selectWrap.innerHTML = '<option value="">— nenhum —</option>' + disponiveis.map((c) => `<option value="${c.id}">${c.nome}</option>`).join('');
       if (!disponiveis.some((c) => c.id === catalisadorId)) catalisadorId = '';
-      select.value = catalisadorId;
+      selectWrap.value = catalisadorId;
 
       const cat = CATALISADORES.find((c) => c.id === catalisadorId);
-      const info = document.getElementById('info-catalisador');
       if (!cat) { info.classList.remove('ativo'); return; }
       info.classList.add('ativo');
-      info.innerHTML = `
-        <div>${cat.tema}</div>
-        <div class="arma-bloco"><strong>Passiva — ${cat.passiva.nome}:</strong> ${cat.passiva.texto}</div>
-        <div class="arma-bloco">
+
+      const habilidadeLiberada = nivelAtual >= NIVEL_MINIMO_HABILIDADE_CATALISADOR;
+      const blocoHabilidade = habilidadeLiberada
+        ? `
           <strong>Potencial atual: <span id="valor-potencial">${potencialCatalisador}</span>/10</strong>
           <div class="jogadas-grid" style="margin-top:8px;">
             ${cat.jogadas_potencial.map((j) => `<button type="button" class="jogada-card" data-potencial="${j.potencial}"><div class="nome">${j.acao}</div><div class="info">+${j.potencial} potencial</div></button>`).join('')}
           </div>
           <button type="button" id="btn-ativar-catalisador" class="btn btn-primary" style="width:100%; margin-top:12px;" ${potencialCatalisador >= 10 ? '' : 'disabled'}>Ativar catalisador</button>
+        `
+        : `<p style="color: var(--text-muted); font-size: 0.85rem;">O potencial e a habilidade exclusiva desse catalisador só liberam no nível ${NIVEL_MINIMO_HABILIDADE_CATALISADOR}. Por enquanto você só tem a passiva acima.</p>`;
+
+      info.innerHTML = `
+        <div>${cat.tema}</div>
+        <div class="arma-bloco"><strong>Passiva — ${cat.passiva.nome}:</strong> ${cat.passiva.texto}</div>
+        <div class="arma-bloco">
+          ${blocoHabilidade}
         </div>
+        ${habilidadeLiberada ? `
         <div class="arma-bloco">
           <strong>Habilidade — ${cat.habilidade.nome}:</strong> ${cat.habilidade.texto}
           <div style="margin-top:8px;"><button type="button" class="btn btn-ghost" id="btn-usar-habilidade-catalisador">Usar habilidade</button></div>
         </div>
+        ` : ''}
       `;
-      info.querySelectorAll('[data-potencial]').forEach((btn) => btn.addEventListener('click', () => {
-        potencialCatalisador = Math.min(10, potencialCatalisador + Number(btn.dataset.potencial));
-        renderCatalisador();
-        salvarPartidaAutomatico();
-      }));
-      document.getElementById('btn-ativar-catalisador').addEventListener('click', () => {
-        potencialCatalisador = 0;
-        mostrarToast('Catalisador ativado!');
-        registrarAcaoNoHistorico(`Ativou o catalisador: ${cat.nome}`, cat.habilidade.texto);
-        renderCatalisador();
-        salvarPartidaAutomatico();
-      });
-      document.getElementById('btn-usar-habilidade-catalisador')?.addEventListener('click', () => usarHabilidade(cat.habilidade));
+
+      if (habilidadeLiberada) {
+        info.querySelectorAll('[data-potencial]').forEach((btn) => btn.addEventListener('click', () => {
+          potencialCatalisador = Math.min(10, potencialCatalisador + Number(btn.dataset.potencial));
+          renderCatalisador();
+          salvarPartidaAutomatico();
+        }));
+        document.getElementById('btn-ativar-catalisador').addEventListener('click', () => {
+          if (potencialCatalisador < 10) {
+            mostrarToast('Precisa de 10 de potencial pra ativar o catalisador.', 'erro');
+            return;
+          }
+          potencialCatalisador = 0;
+          mostrarToast('Catalisador ativado!');
+          registrarAcaoNoHistorico(`Ativou o catalisador: ${cat.nome}`, cat.habilidade.texto);
+          renderCatalisador();
+          salvarPartidaAutomatico();
+        });
+        document.getElementById('btn-usar-habilidade-catalisador')?.addEventListener('click', () => usarHabilidade(cat.habilidade));
+      }
     }
     document.getElementById('select-catalisador').addEventListener('change', (e) => { catalisadorId = e.target.value; renderCatalisador(); });
     document.getElementById('select-otica').addEventListener('change', renderCatalisador);
