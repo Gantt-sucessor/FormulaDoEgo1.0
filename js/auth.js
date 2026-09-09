@@ -87,7 +87,12 @@ export async function exigirAutenticacao() {
       }
 
       if (resposta.error) {
-        mensagem.textContent = resposta.error.message;
+        const mensagemErro = resposta.error.message || '';
+        if (/rate limit|email rate limit exceeded/i.test(mensagemErro)) {
+          mensagem.textContent = 'Muitas tentativas de cadastro com esse e-mail. Espere alguns minutos e tente novamente.';
+        } else {
+          mensagem.textContent = mensagemErro;
+        }
         submit.disabled = false;
         return;
       }
