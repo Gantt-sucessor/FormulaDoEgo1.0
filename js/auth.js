@@ -60,20 +60,38 @@ export async function exigirAutenticacao() {
       mensagem.textContent = '';
       const email = form.querySelector('#auth-email').value.trim();
       const senha = form.querySelector('#auth-senha').value;
-      const resposta = cadastro
-        ? await supabase.auth.signUp({ email, password: senha })
-        : await supabase.auth.signInWithPassword({ email, password: senha });
+
+      let resposta;
+      if (cadastro) {
+        resposta = await supabase.auth.signUp({
+          email,
+          password: senha,
+          options: {
+            emailRedirectTo: `${location.origin}/index.html`
+          }
+        });
+
+        if (!resposta.error && !resposta.data.session && resposta.data.user) {
+          const loginFallback = await supabase.auth.signInWithPassword({ email, password: senha });
+          if (!loginFallback.error && loginFallback.data.session && loginFallback.data.user) {
+            resposta = loginFallback;
+          } else if (loginFallback.error) {
+            mensagem.textContent = 'Conta criada. Confirme seu e-mail e depois entre.';
+            submit.disabled = false;
+            form.reset();
+            return;
+          }
+        }
+      } else {
+        resposta = await supabase.auth.signInWithPassword({ email, password: senha });
+      }
 
       if (resposta.error) {
         mensagem.textContent = resposta.error.message;
         submit.disabled = false;
         return;
       }
-      if (cadastro && !resposta.data.session) {
-        mensagem.textContent = 'Conta criada. Confirme seu e-mail e depois entre.';
-        submit.disabled = false;
-        return;
-      }
+
       usuarioAtual = resposta.data.user;
       overlay.remove();
       configurarSaida();
