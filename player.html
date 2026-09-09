@@ -562,7 +562,7 @@
         return;
       }
 
-      const todasFichas = await listarTodasFichasDoJogador(nome);
+      const todasFichas = await listarTodasFichasDoJogador(nome, usuarioLogado?.id || null);
 
       const campanhasUnicas = [];
       const idsVistos = new Set();
@@ -861,7 +861,7 @@
       } else {
         codigoDisplay.style.display = 'none';
       }
-      const fichas = await listarFichasDoJogador(campanhaAtual ? campanhaAtual.id : null, nomeJogador);
+      const fichas = await listarFichasDoJogador(campanhaAtual ? campanhaAtual.id : null, nomeJogador, usuarioLogado?.id || null);
       const container = document.getElementById('fichas-lista');
       if (fichas.length === 0) {
         container.innerHTML = '<p style="color: var(--text-muted); font-size: 0.85rem;">Você ainda não tem nenhuma ficha aqui.</p>';
@@ -908,7 +908,7 @@
       // do jogador (sem campanha) com a opção de adicionar aqui.
       const blocoSoltas = document.getElementById('bloco-fichas-soltas-adicionar');
       if (campanhaAtual) {
-        const fichasSoltas = await listarFichasDoJogador(null, nomeJogador);
+        const fichasSoltas = await listarFichasDoJogador(null, nomeJogador, usuarioLogado?.id || null);
         if (fichasSoltas.length > 0) {
           blocoSoltas.style.display = 'block';
           const listaSoltas = document.getElementById('lista-fichas-soltas-adicionar');

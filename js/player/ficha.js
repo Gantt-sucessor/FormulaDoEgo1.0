@@ -15,9 +15,17 @@ export async function entrarNaCampanha(codigo) {
 /**
  * Lista as fichas de um jogador específico (pra ele poder ter várias e escolher).
  * Passe campanhaId = null pra listar as fichas "soltas" (sem campanha nenhuma).
+ * O filtro principal é o jogador_id autenticado do Supabase, não o nome exibido.
  */
-export async function listarFichasDoJogador(campanhaId, nomeJogador) {
-  let query = supabase.from('fichas').select('*').eq('nome_jogador', nomeJogador);
+export async function listarFichasDoJogador(campanhaId, nomeJogador, jogadorId = null) {
+  let query = supabase.from('fichas').select('*');
+
+  if (jogadorId) {
+    query = query.eq('jogador_id', jogadorId);
+  } else {
+    query = query.eq('nome_jogador', nomeJogador);
+  }
+
   query = campanhaId ? query.eq('campanha_id', campanhaId) : query.is('campanha_id', null);
 
   const { data, error } = await query.order('criada_em', { ascending: false });
@@ -29,13 +37,20 @@ export async function listarFichasDoJogador(campanhaId, nomeJogador) {
  * Lista TODAS as fichas de um jogador, em qualquer campanha (ou sem campanha),
  * já trazendo o nome/código da campanha de cada uma. Usada pra montar os atalhos
  * de "minhas fichas" e "minhas campanhas" (index e tela inicial do player).
+ * O filtro principal é o jogador_id autenticado do Supabase, não o nome exibido.
  */
-export async function listarTodasFichasDoJogador(nomeJogador) {
-  const { data, error } = await supabase
+export async function listarTodasFichasDoJogador(nomeJogador, jogadorId = null) {
+  let query = supabase
     .from('fichas')
-    .select('*, campanhas(id, nome, codigo)')
-    .eq('nome_jogador', nomeJogador)
-    .order('criada_em', { ascending: false });
+    .select('*, campanhas(id, nome, codigo)');
+
+  if (jogadorId) {
+    query = query.eq('jogador_id', jogadorId);
+  } else {
+    query = query.eq('nome_jogador', nomeJogador);
+  }
+
+  const { data, error } = await query.order('criada_em', { ascending: false });
 
   if (error) throw error;
   return data;
