@@ -738,7 +738,7 @@
       info.innerHTML = html;
       info.classList.toggle('ativo', !!html);
     }
-    document.getElementById('select-tendencia-principal').addEventListener('change', atualizarInfoTendencia);
+    document.getElementById('select-tendencia-principal').addEventListener('change', () => { atualizarInfoTendencia(); atualizarLimitePericias(); });
     document.getElementById('select-tendencia-secundaria').addEventListener('change', atualizarInfoTendencia);
 
     document.getElementById('select-categoria').addEventListener('change', (e) => {
@@ -747,6 +747,7 @@
       selectArquetipo.innerHTML = '<option value="">— nenhum —</option>';
       if (cat) popularSelect(selectArquetipo, cat.arquetipos);
       renderHabilidadesCategoria();
+      atualizarLimitePericias();
     });
 
     function renderHabilidadesCategoria() {
@@ -1053,7 +1054,37 @@
     }
 
     function calcularPontosPericiaMaximos() {
-      return 10 + (nivelAtual >= 3 ? 1 : 0) + (nivelAtual >= 6 ? 1 : 0) + (nivelAtual >= 7 ? 1 : 0);
+      let total = 10;
+
+      // Pontos vindos da tabela universal de nível (nível 2, 3, 6 e 7 dão +1 cada).
+      [2, 3, 6, 7].forEach((n) => { if (nivelAtual >= n) total += 1; });
+
+      // Pontos vindos da evolução da Categoria (Gênio/Aprendiz) — soma tudo até o nível atual.
+      const categoria = CATEGORIAS.find((c) => c.id === document.getElementById('select-categoria').value);
+      if (categoria) {
+        categoria.evolucao.forEach((e) => {
+          if (nivelAtual >= e.nivel) {
+            const match = e.ganhos.match(/\+(\d+)\s*pontos?\s+de\s+perícia/i);
+            if (match) total += Number(match[1]);
+          }
+        });
+      }
+
+      // +1 ponto extra da Tendência principal, gasto numa das perícias elegíveis dela.
+      const tendenciaPrincipal = TENDENCIAS.find((t) => t.id === document.getElementById('select-tendencia-principal').value);
+      if (tendenciaPrincipal && tendenciaPrincipal.pericia_adicional?.length) total += 1;
+
+      return total;
+    }
+
+    /** Reaplica o limite de pontos de perícia (chamado quando nível/categoria/tendência mudam). */
+    function atualizarLimitePericias() {
+      initPericias(document.getElementById('pericias-container'), periciasEscolhidas, (pers) => {
+        periciasEscolhidas = pers;
+        renderSelectPericiaManual();
+        renderPericiasDistancia();
+        renderStatus();
+      }, calcularPontosPericiaMaximos());
     }
 
     function renderPericiasDistancia() {

@@ -175,11 +175,8 @@ export const TENDENCIAS = [
     id: 'rebelde',
     nome: 'Rebelde',
     tema: 'Limites não existem — evolui derrubando os mais fortes com sorte.',
-    dom: {
-      nome: 'Duelo de sorte',
-      texto: 'Ao declarar ou um alvo declarar um teste de J vs J para ou contra você, pode ativar esta habilidade recebendo +2 PdE e gastando 1 PdS. Com a ativação, role d2: resultado 1 = vitória garantida; resultado 2 = derrota garantida.',
-    },
-    pericia_adicional: ['determinacao', 'posicionamento', 'instintos'],
+    dom: null,
+    pericia_adicional: [],
     passiva_secundaria: {
       nome: 'Contra destino',
       texto: 'Gasta 1 PdS pra remover efeito negativo de inimigo por 2 rodadas; começa toda partida com 1 PdS.',
