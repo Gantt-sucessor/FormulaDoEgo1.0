@@ -72,15 +72,10 @@ export async function exigirAutenticacao() {
         });
 
         if (!resposta.error && !resposta.data.session && resposta.data.user) {
-          const loginFallback = await supabase.auth.signInWithPassword({ email, password: senha });
-          if (!loginFallback.error && loginFallback.data.session && loginFallback.data.user) {
-            resposta = loginFallback;
-          } else if (loginFallback.error) {
-            mensagem.textContent = 'Conta criada. Confirme seu e-mail e depois entre.';
-            submit.disabled = false;
-            form.reset();
-            return;
-          }
+          mensagem.textContent = 'Conta criada. Confirme seu e-mail e depois entre.';
+          submit.disabled = false;
+          form.reset();
+          return;
         }
       } else {
         resposta = await supabase.auth.signInWithPassword({ email, password: senha });
