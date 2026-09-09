@@ -96,7 +96,7 @@
     import { getNomeSalvo, setNomeSalvo } from './js/player/local.js';
     import { mostrarToast } from './js/ui/toast.js';
 
-    await exigirAutenticacao();
+    const usuarioLogado = await exigirAutenticacao();
 
     const inputNome = document.getElementById('input-nome-index');
     inputNome.value = getNomeSalvo();
@@ -111,7 +111,7 @@
       const bloco = document.getElementById('bloco-minhas-fichas');
       if (!nome) { bloco.style.display = 'none'; return; }
 
-      const fichas = await listarTodasFichasDoJogador(nome);
+      const fichas = await listarTodasFichasDoJogador(nome, usuarioLogado?.id || null);
       if (fichas.length === 0) { bloco.style.display = 'none'; return; }
 
       bloco.style.display = 'block';
