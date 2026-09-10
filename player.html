@@ -1064,8 +1064,8 @@
       tendenciaPericiaEscolhida = fichaExistente?.tendencia_pericia_escolhida || '';
       efeitosAtivos = fichaExistente?.efeitos_ativos ? fichaExistente.efeitos_ativos.map((e) => ({ ...e })) : [];
       acoesGastas = fichaExistente?.acoes_gastas
-        ? { tatica: !!fichaExistente.acoes_gastas.tatica, egoista: !!fichaExistente.acoes_gastas.egoista, regulares: [...(fichaExistente.acoes_gastas.regulares || [false, false, false, false])] }
-        : { tatica: false, egoista: false, regulares: [false, false, false, false] };
+        ? { tatica: !!fichaExistente.acoes_gastas.tatica, egoista: !!fichaExistente.acoes_gastas.egoista, egoistaExtra: !!fichaExistente.acoes_gastas.egoistaExtra, regulares: [...(fichaExistente.acoes_gastas.regulares || [false, false, false, false])] }
+        : { tatica: false, egoista: false, egoistaExtra: false, regulares: [false, false, false, false] };
 
       const fluxoSalvo = fichaExistente?.fluxo || {};
       fluxoTipo = fluxoSalvo.tipo || 'basico';
@@ -1404,7 +1404,7 @@
           onClick: () => { acoesGastas.regulares[i] = !acoesGastas.regulares[i]; },
         })),
       ];
-      if (recompensaNivel8 === 'acao_egoista') {
+      if (nivelAtual >= 8) {
         slots.push({
           label: 'Ação egoísta adicional',
           gasta: acoesGastas.egoistaExtra,
