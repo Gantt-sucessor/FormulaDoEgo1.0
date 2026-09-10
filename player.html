@@ -515,6 +515,7 @@
     let pernaDominante = '';
     let periciaDistanciaChute = 'precisao';
     let periciaDistanciaPasse = 'visao_de_jogo';
+    let tendenciaPericiaEscolhida = ''; // qual das 3 perícias da tendência principal foi escolhida pro +2
     // --- Fluxo & Catalisador ---
     let fluxoTipo = 'basico';
     let auraTipo = '';
@@ -734,17 +735,38 @@
       const p = TENDENCIAS.find((t) => t.id === document.getElementById('select-tendencia-principal').value);
       const s = TENDENCIAS.find((t) => t.id === document.getElementById('select-tendencia-secundaria').value);
 
-      const infoPrincipal = document.getElementById('info-tendencia-principal');
-      if (p && p.dom) {
-        infoPrincipal.innerHTML = `<strong>Dom (${p.nome}):</strong> ${p.dom.nome} — ${p.dom.texto}`;
-        infoPrincipal.classList.add('ativo');
-      } else if (p && !p.dom) {
-        infoPrincipal.innerHTML = `<strong>${p.nome}:</strong> essa tendência não tem Dom próprio — ela só dá a Passiva dela quando usada como <strong>secundária</strong>.`;
-        infoPrincipal.classList.add('ativo');
-      } else {
-        infoPrincipal.innerHTML = '';
-        infoPrincipal.classList.remove('ativo');
+      // Se trocou de tendência principal, a perícia escolhida antes pode não ser mais válida.
+      if (!p || !p.pericia_adicional?.includes(tendenciaPericiaEscolhida)) {
+        tendenciaPericiaEscolhida = '';
       }
+
+      const infoPrincipal = document.getElementById('info-tendencia-principal');
+      let htmlPrincipal = '';
+      if (p && p.dom) {
+        htmlPrincipal = `<strong>Dom (${p.nome}):</strong> ${p.dom.nome} — ${p.dom.texto}`;
+      } else if (p && !p.dom) {
+        htmlPrincipal = `<strong>${p.nome}:</strong> essa tendência não tem Dom próprio — ela só dá a Passiva dela quando usada como <strong>secundária</strong>.`;
+      }
+      if (p && p.pericia_adicional?.length) {
+        htmlPrincipal += `
+          <div class="arma-bloco">
+            <strong>Escolha sua perícia adicional (+2):</strong>
+            <div class="jogadas-grid" style="margin-top:8px;">
+              ${p.pericia_adicional.map((periciaId) => {
+                const periciaDef = PERICIAS.find((pe) => pe.id === periciaId);
+                return `<button type="button" class="jogada-card ${tendenciaPericiaEscolhida === periciaId ? 'talento-selecionado' : ''}" data-escolher-pericia-tendencia="${periciaId}"><div class="nome">+2 em ${periciaDef ? periciaDef.nome : periciaId}</div></button>`;
+              }).join('')}
+            </div>
+          </div>
+        `;
+      }
+      infoPrincipal.innerHTML = htmlPrincipal;
+      infoPrincipal.classList.toggle('ativo', !!htmlPrincipal);
+      infoPrincipal.querySelectorAll('[data-escolher-pericia-tendencia]').forEach((btn) => btn.addEventListener('click', () => {
+        tendenciaPericiaEscolhida = btn.dataset.escolherPericiaTendencia;
+        atualizarInfoTendencia();
+        atualizarLimitePericias();
+      }));
 
       const infoSecundaria = document.getElementById('info-tendencia-secundaria');
       if (s && s.passiva_secundaria) {
@@ -795,15 +817,43 @@
       }));
     }
 
+    /** Quantas Habilidades de Categoria você já desbloqueou, somando a evolução até o nível atual. */
+    function limiteHabilidadesCategoria() {
+      const cat = CATEGORIAS.find((c) => c.id === document.getElementById('select-categoria').value);
+      if (!cat) return 0;
+      let total = 0;
+      cat.evolucao.forEach((e) => {
+        if (nivelAtual < e.nivel) return;
+        const matches = e.ganhos.match(/\+(\d+)\s*habilidades?\s+de\s+categoria/gi) || [];
+        matches.forEach((m) => {
+          const num = m.match(/\+(\d+)/);
+          if (num) total += Number(num[1]);
+        });
+      });
+      return total;
+    }
+
     function renderHabilidadesCategoria() {
       const arquetipo = document.getElementById('select-arquetipo').value;
       const disponiveis = HABILIDADES_DE_CATEGORIA.filter((h) => h.arquetipos.includes(arquetipo));
+      const limite = limiteHabilidadesCategoria();
       const container = document.getElementById('habilidades-categoria-container');
       container.classList.add('ativo');
-      container.innerHTML = disponiveis.length ? `<strong>Habilidades disponíveis</strong><div class="jogadas-grid">${disponiveis.map((h, i) => `<button type="button" class="jogada-card ${habilidadesCategoriaSelecionadas.includes(h.nome) ? 'talento-selecionado' : ''}" data-categoria-habilidade="${i}"><div class="nome">${h.nome} <span class="arma-hab-tipo" data-categoria-usar="${i}">Usar</span></div><div class="info">${h.tda || ''} — ${h.texto}</div></button>`).join('')}</div>` : '<span>Escolha um arquétipo para ver as habilidades compatíveis.</span>';
+      const contagemTexto = `<p class="step-desc" style="margin: 4px 0 10px;">${habilidadesCategoriaSelecionadas.length}/${limite} habilidades desbloqueadas (soma da evolução da sua categoria até o nível atual).</p>`;
+      container.innerHTML = disponiveis.length
+        ? `<strong>Habilidades disponíveis</strong>${contagemTexto}<div class="jogadas-grid">${disponiveis.map((h, i) => `<button type="button" class="jogada-card ${habilidadesCategoriaSelecionadas.includes(h.nome) ? 'talento-selecionado' : ''}" data-categoria-habilidade="${i}"><div class="nome">${h.nome} <span class="arma-hab-tipo" data-categoria-usar="${i}">Usar</span></div><div class="info">${h.tda || ''} — ${h.texto}</div></button>`).join('')}</div>`
+        : '<span>Escolha um arquétipo para ver as habilidades compatíveis.</span>';
       container.querySelectorAll('[data-categoria-habilidade]').forEach((btn) => btn.addEventListener('click', () => {
         const habilidade = disponiveis[Number(btn.dataset.categoriaHabilidade)].nome;
-        habilidadesCategoriaSelecionadas = habilidadesCategoriaSelecionadas.includes(habilidade) ? habilidadesCategoriaSelecionadas.filter((nome) => nome !== habilidade) : [...habilidadesCategoriaSelecionadas, habilidade];
+        if (habilidadesCategoriaSelecionadas.includes(habilidade)) {
+          habilidadesCategoriaSelecionadas = habilidadesCategoriaSelecionadas.filter((nome) => nome !== habilidade);
+        } else {
+          if (habilidadesCategoriaSelecionadas.length >= limite) {
+            mostrarToast(`Você só desbloqueou ${limite} habilidade(s) de categoria até o nível ${nivelAtual}.`, 'erro');
+            return;
+          }
+          habilidadesCategoriaSelecionadas = [...habilidadesCategoriaSelecionadas, habilidade];
+        }
         renderHabilidadesCategoria();
       }));
       container.querySelectorAll('[data-categoria-usar]').forEach((btn) => btn.addEventListener('click', (event) => {
@@ -1010,6 +1060,7 @@
       recompensaNivel8 = fichaExistente?.recompensa_nivel_8 || '';
       posicaoAtual = fichaExistente?.posicao || '';
       pernaDominante = fichaExistente?.perna_dominante || '';
+      tendenciaPericiaEscolhida = fichaExistente?.tendencia_pericia_escolhida || '';
       efeitosAtivos = fichaExistente?.efeitos_ativos ? fichaExistente.efeitos_ativos.map((e) => ({ ...e })) : [];
       acoesGastas = fichaExistente?.acoes_gastas
         ? { tatica: !!fichaExistente.acoes_gastas.tatica, egoista: !!fichaExistente.acoes_gastas.egoista, regulares: [...(fichaExistente.acoes_gastas.regulares || [false, false, false, false])] }
@@ -1122,7 +1173,7 @@
 
       // +1 ponto extra da Tendência principal, gasto numa das perícias elegíveis dela.
       const tendenciaPrincipal = TENDENCIAS.find((t) => t.id === document.getElementById('select-tendencia-principal').value);
-      if (tendenciaPrincipal && tendenciaPrincipal.pericia_adicional?.length) total += 1;
+      if (tendenciaPrincipal && tendenciaPericiaEscolhida) total += 2;
 
       return total;
     }
@@ -1259,6 +1310,7 @@
       renderFluxo();
       renderCatalisador();
       renderNiveisCategoria();
+      renderHabilidadesCategoria();
       renderStatus();
     }
 
@@ -1924,6 +1976,7 @@
         recompensaNivel8,
         posicao: posicaoAtual,
         pernaDominante,
+        tendenciaPericiaEscolhida,
         fluxo: { tipo: fluxoTipo, auraTipo, pontosApice, apiceComplexo, jogadasBonus: fluxoJogadasBonus, efeitosAuraSelecionados, marcasConhecidas, marcasUsos, ativo: fluxoAtivo },
         catalisador: { id: catalisadorId, potencial: potencialCatalisador },
       };
@@ -1954,6 +2007,7 @@
             recompensa_nivel_8: dados.recompensaNivel8,
             posicao: dados.posicao,
             perna_dominante: dados.pernaDominante,
+            tendencia_pericia_escolhida: dados.tendenciaPericiaEscolhida,
             efeitos_ativos: efeitosAtivos,
             acoes_gastas: acoesGastas,
             fluxo: dados.fluxo,
