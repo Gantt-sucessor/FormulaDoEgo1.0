@@ -738,6 +738,9 @@
       if (p && p.dom) {
         infoPrincipal.innerHTML = `<strong>Dom (${p.nome}):</strong> ${p.dom.nome} — ${p.dom.texto}`;
         infoPrincipal.classList.add('ativo');
+      } else if (p && !p.dom) {
+        infoPrincipal.innerHTML = `<strong>${p.nome}:</strong> essa tendência não tem Dom próprio — ela só dá a Passiva dela quando usada como <strong>secundária</strong>.`;
+        infoPrincipal.classList.add('ativo');
       } else {
         infoPrincipal.innerHTML = '';
         infoPrincipal.classList.remove('ativo');
@@ -772,15 +775,24 @@
       container.classList.add('ativo');
       container.innerHTML = `
         <strong>Evolução — ${cat.nome}</strong>
+        <p class="step-desc" style="margin: 4px 0 0;">Clique num nível pra ir direto pra ele — dourado é o atual, esverdeado é o que você já passou.</p>
         <div class="jogadas-grid" style="margin-top:10px;">
-          ${cat.evolucao.map((e) => `
-            <div class="jogada-card ${nivelAtual === e.nivel ? 'talento-selecionado' : ''}" style="cursor:default;">
-              <div class="nome">Nível ${e.nivel}</div>
-              <div class="info">${e.ganhos}</div>
-            </div>
-          `).join('')}
+          ${cat.evolucao.map((e) => {
+            let classeExtra = '';
+            if (nivelAtual === e.nivel) classeExtra = 'talento-selecionado';
+            else if (nivelAtual > e.nivel) classeExtra = 'nivel-passado';
+            return `
+              <button type="button" class="jogada-card ${classeExtra}" data-ir-para-nivel="${e.nivel}">
+                <div class="nome">Nível ${e.nivel}${nivelAtual === e.nivel ? ' · atual' : ''}${nivelAtual > e.nivel ? ' · concluído' : ''}</div>
+                <div class="info">${e.ganhos}</div>
+              </button>
+            `;
+          }).join('')}
         </div>
       `;
+      container.querySelectorAll('[data-ir-para-nivel]').forEach((btn) => btn.addEventListener('click', () => {
+        definirNivel(Number(btn.dataset.irParaNivel));
+      }));
     }
 
     function renderHabilidadesCategoria() {
@@ -1224,11 +1236,7 @@
       const tipo = btn.dataset.status;
       const delta = btn.dataset.acao === 'mais' ? 1 : -1;
       if (tipo === 'nivel') {
-        nivelAtual = Math.min(8, Math.max(1, nivelAtual + delta));
-        initPericias(document.getElementById('pericias-container'), periciasEscolhidas, (pers) => { periciasEscolhidas = pers; renderSelectPericiaManual(); renderPericiasDistancia(); renderStatus(); }, calcularPontosPericiaMaximos());
-        renderFluxo();
-        renderCatalisador();
-        renderNiveisCategoria();
+        definirNivel(nivelAtual + delta);
       }
       if (tipo === 'folego') {
         const max = calcularFolegos(periciasEscolhidas['constancia'] || 0) + (recompensaNivel6 === 'folego' ? 1 : 0);
@@ -1239,6 +1247,16 @@
       if (tipo === 'sorte') pontosSorte = Math.min(MAX_PDS_PADRAO, Math.max(0, pontosSorte + delta));
       renderStatus();
     });
+
+    /** Muda o nível atual (1-8) e reatualiza tudo que depende dele. Usado pelo +/- e pelos cards clicáveis. */
+    function definirNivel(novoNivel) {
+      nivelAtual = Math.min(8, Math.max(1, novoNivel));
+      initPericias(document.getElementById('pericias-container'), periciasEscolhidas, (pers) => { periciasEscolhidas = pers; renderSelectPericiaManual(); renderPericiasDistancia(); renderStatus(); }, calcularPontosPericiaMaximos());
+      renderFluxo();
+      renderCatalisador();
+      renderNiveisCategoria();
+      renderStatus();
+    }
 
     // --- Talentos impetuosos (até 5 slots) ---
     function renderTalentos() {
@@ -1316,7 +1334,7 @@
       const container = document.getElementById('acoes-rodada-container');
       const slots = [
         { label: 'Ação tática', gasta: acoesGastas.tatica, onClick: () => { acoesGastas.tatica = !acoesGastas.tatica; } },
-        { label: 'Reação egoísta', gasta: acoesGastas.egoista, onClick: () => { acoesGastas.egoista = !acoesGastas.egoista; } },
+        { label: 'Ação egoísta', gasta: acoesGastas.egoista, onClick: () => { acoesGastas.egoista = !acoesGastas.egoista; } },
         ...acoesGastas.regulares.map((gasta, i) => ({
           label: `Reação ${i + 1}`,
           gasta,

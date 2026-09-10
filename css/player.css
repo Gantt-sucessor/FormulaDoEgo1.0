@@ -632,6 +632,11 @@
   background: rgba(242, 183, 5, 0.08);
 }
 
+.jogada-card.nivel-passado {
+  border-color: var(--success);
+  opacity: 0.75;
+}
+
 /* Painel de partida: ações da rodada e condições (reaproveita o visual de jogada-card) */
 .jogada-card.acao-slot.acao-gasta {
   border-color: var(--border-strong);
