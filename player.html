@@ -105,7 +105,6 @@
             <input id="input-nome-personagem" type="text" />
           </div>
         </div>
-        <div id="habilidades-categoria-container" class="selecao-info"></div>
       </div>
 
       <div class="form-section">
@@ -255,6 +254,8 @@
             <select id="select-arquetipo"><option value="">— escolha a categoria primeiro —</option></select>
           </div>
         </div>
+        <div id="niveis-categoria-container" class="selecao-info"></div>
+        <div id="habilidades-categoria-container" class="selecao-info" style="margin-top: 10px;"></div>
       </div>
 
       <button id="btn-salvar-ficha-2" class="btn btn-gold" style="width: 100%;">Salvar ficha</button>
@@ -423,22 +424,6 @@
       </div>
 
       <div class="form-section">
-        <h3>Efeitos de Aura</h3>
-        <p class="step-desc">Escolha o tipo de Aura primeiro — ele define quantos efeitos você pode ter.</p>
-        <div id="efeitos-aura-container" class="jogadas-grid"></div>
-      </div>
-
-      <div class="form-section">
-        <h3>Marcas de Despertar <span class="campo-opcional-tag" id="contagem-marcas-conhecidas">0/0 conhecidas</span></h3>
-        <p class="step-desc">Primeiro marca quais você <strong>conhece</strong> (limitado pelo seu nível + tipo de Aura). Só as marcadas aqui aparecem embaixo pra usar em partida — e podem ser usadas quantas vezes quiser, a % soma de novo a cada vez.</p>
-        <div id="marcas-despertar-container"></div>
-
-        <div class="divider"></div>
-        <h4 style="margin-bottom: 10px;">Usar em partida</h4>
-        <div id="marcas-despertar-usos-container"></div>
-      </div>
-
-      <div class="form-section">
         <div class="status-grid">
           <div class="status-item">
             <label>% de fluxo atual</label>
@@ -459,6 +444,22 @@
           <option value="">— nenhum —</option>
         </select>
         <div id="info-catalisador" class="selecao-info"></div>
+      </div>
+
+      <div class="form-section">
+        <h3>Efeitos de Aura</h3>
+        <p class="step-desc">Escolha o tipo de Aura primeiro — ele define quantos efeitos você pode ter.</p>
+        <div id="efeitos-aura-container" class="jogadas-grid"></div>
+      </div>
+
+      <div class="form-section">
+        <h3>Marcas de Despertar <span class="campo-opcional-tag" id="contagem-marcas-conhecidas">0/0 conhecidas</span></h3>
+        <p class="step-desc">Primeiro marca quais você <strong>conhece</strong> (limitado pelo seu nível + tipo de Aura). Só as marcadas aqui aparecem embaixo pra usar em partida — e podem ser usadas quantas vezes quiser, a % soma de novo a cada vez.</p>
+        <div id="marcas-despertar-container"></div>
+
+        <div class="divider"></div>
+        <h4 style="margin-bottom: 10px;">Usar em partida</h4>
+        <div id="marcas-despertar-usos-container"></div>
       </div>
 
       <button id="btn-salvar-ficha-4" class="btn btn-gold" style="width: 100%;">Salvar ficha</button>
@@ -562,7 +563,7 @@
         return;
       }
 
-      const todasFichas = await listarTodasFichasDoJogador(nome, usuarioLogado?.id || null);
+      const todasFichas = await listarTodasFichasDoJogador(nome);
 
       const campanhasUnicas = [];
       const idsVistos = new Set();
@@ -747,8 +748,27 @@
       selectArquetipo.innerHTML = '<option value="">— nenhum —</option>';
       if (cat) popularSelect(selectArquetipo, cat.arquetipos);
       renderHabilidadesCategoria();
+      renderNiveisCategoria();
       atualizarLimitePericias();
     });
+
+    function renderNiveisCategoria() {
+      const cat = CATEGORIAS.find((c) => c.id === document.getElementById('select-categoria').value);
+      const container = document.getElementById('niveis-categoria-container');
+      if (!cat) { container.classList.remove('ativo'); return; }
+      container.classList.add('ativo');
+      container.innerHTML = `
+        <strong>Evolução — ${cat.nome}</strong>
+        <div class="jogadas-grid" style="margin-top:10px;">
+          ${cat.evolucao.map((e) => `
+            <div class="jogada-card ${nivelAtual === e.nivel ? 'talento-selecionado' : ''}" style="cursor:default;">
+              <div class="nome">Nível ${e.nivel}</div>
+              <div class="info">${e.ganhos}</div>
+            </div>
+          `).join('')}
+        </div>
+      `;
+    }
 
     function renderHabilidadesCategoria() {
       const arquetipo = document.getElementById('select-arquetipo').value;
@@ -861,7 +881,7 @@
       } else {
         codigoDisplay.style.display = 'none';
       }
-      const fichas = await listarFichasDoJogador(campanhaAtual ? campanhaAtual.id : null, nomeJogador, usuarioLogado?.id || null);
+      const fichas = await listarFichasDoJogador(campanhaAtual ? campanhaAtual.id : null, nomeJogador);
       const container = document.getElementById('fichas-lista');
       if (fichas.length === 0) {
         container.innerHTML = '<p style="color: var(--text-muted); font-size: 0.85rem;">Você ainda não tem nenhuma ficha aqui.</p>';
@@ -908,7 +928,7 @@
       // do jogador (sem campanha) com a opção de adicionar aqui.
       const blocoSoltas = document.getElementById('bloco-fichas-soltas-adicionar');
       if (campanhaAtual) {
-        const fichasSoltas = await listarFichasDoJogador(null, nomeJogador, usuarioLogado?.id || null);
+        const fichasSoltas = await listarFichasDoJogador(null, nomeJogador);
         if (fichasSoltas.length > 0) {
           blocoSoltas.style.display = 'block';
           const listaSoltas = document.getElementById('lista-fichas-soltas-adicionar');
@@ -1021,6 +1041,7 @@
       renderTalentos();
       renderVisoes();
       renderPericiasDistancia();
+      renderNiveisCategoria();
       renderCondicoes();
       renderAcoesRodada();
       renderFluxo();
@@ -1194,6 +1215,7 @@
         initPericias(document.getElementById('pericias-container'), periciasEscolhidas, (pers) => { periciasEscolhidas = pers; renderSelectPericiaManual(); renderPericiasDistancia(); renderStatus(); }, calcularPontosPericiaMaximos());
         renderFluxo();
         renderCatalisador();
+        renderNiveisCategoria();
       }
       if (tipo === 'folego') {
         const max = calcularFolegos(periciasEscolhidas['constancia'] || 0) + (recompensaNivel6 === 'folego' ? 1 : 0);
