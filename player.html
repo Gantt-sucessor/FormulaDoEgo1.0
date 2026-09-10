@@ -237,7 +237,8 @@
             <select id="select-tendencia-secundaria"><option value="">— nenhuma —</option></select>
           </div>
         </div>
-        <div id="info-tendencia" class="selecao-info"></div>
+        <div id="info-tendencia-principal" class="selecao-info"></div>
+        <div id="info-tendencia-secundaria" class="selecao-info" style="margin-top: 10px;"></div>
       </div>
 
       <div class="form-section">
@@ -732,12 +733,24 @@
     function atualizarInfoTendencia() {
       const p = TENDENCIAS.find((t) => t.id === document.getElementById('select-tendencia-principal').value);
       const s = TENDENCIAS.find((t) => t.id === document.getElementById('select-tendencia-secundaria').value);
-      const info = document.getElementById('info-tendencia');
-      let html = '';
-      if (p && p.dom) html += `<strong>Dom (${p.nome}):</strong> ${p.dom.nome} — ${p.dom.texto}<br/>`;
-      if (s && s.passiva_secundaria) html += `<strong>Passiva (${s.nome}):</strong> ${s.passiva_secundaria.nome} — ${s.passiva_secundaria.texto}`;
-      info.innerHTML = html;
-      info.classList.toggle('ativo', !!html);
+
+      const infoPrincipal = document.getElementById('info-tendencia-principal');
+      if (p && p.dom) {
+        infoPrincipal.innerHTML = `<strong>Dom (${p.nome}):</strong> ${p.dom.nome} — ${p.dom.texto}`;
+        infoPrincipal.classList.add('ativo');
+      } else {
+        infoPrincipal.innerHTML = '';
+        infoPrincipal.classList.remove('ativo');
+      }
+
+      const infoSecundaria = document.getElementById('info-tendencia-secundaria');
+      if (s && s.passiva_secundaria) {
+        infoSecundaria.innerHTML = `<strong>Passiva (${s.nome}):</strong> ${s.passiva_secundaria.nome} — ${s.passiva_secundaria.texto}`;
+        infoSecundaria.classList.add('ativo');
+      } else {
+        infoSecundaria.innerHTML = '';
+        infoSecundaria.classList.remove('ativo');
+      }
     }
     document.getElementById('select-tendencia-principal').addEventListener('change', () => { atualizarInfoTendencia(); atualizarLimitePericias(); });
     document.getElementById('select-tendencia-secundaria').addEventListener('change', atualizarInfoTendencia);
