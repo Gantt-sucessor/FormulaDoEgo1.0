@@ -799,6 +799,7 @@
       const arquetipo = document.getElementById('select-arquetipo').value;
       const disponiveis = HABILIDADES_DE_CATEGORIA.filter((h) => h.arquetipos.includes(arquetipo));
       const container = document.getElementById('habilidades-categoria-container');
+      container.classList.add('ativo');
       container.innerHTML = disponiveis.length ? `<strong>Habilidades disponíveis</strong><div class="jogadas-grid">${disponiveis.map((h, i) => `<button type="button" class="jogada-card ${habilidadesCategoriaSelecionadas.includes(h.nome) ? 'talento-selecionado' : ''}" data-categoria-habilidade="${i}"><div class="nome">${h.nome} <span class="arma-hab-tipo" data-categoria-usar="${i}">Usar</span></div><div class="info">${h.tda || ''} — ${h.texto}</div></button>`).join('')}</div>` : '<span>Escolha um arquétipo para ver as habilidades compatíveis.</span>';
       container.querySelectorAll('[data-categoria-habilidade]').forEach((btn) => btn.addEventListener('click', () => {
         const habilidade = disponiveis[Number(btn.dataset.categoriaHabilidade)].nome;
@@ -1044,7 +1045,10 @@
       document.getElementById('select-otica').dispatchEvent(new Event('change'));
       document.getElementById('select-categoria').dispatchEvent(new Event('change'));
       if (fichaExistente?.arquetipo_id) {
-        setTimeout(() => { document.getElementById('select-arquetipo').value = fichaExistente.arquetipo_id; }, 0);
+        setTimeout(() => {
+          document.getElementById('select-arquetipo').value = fichaExistente.arquetipo_id;
+          renderHabilidadesCategoria();
+        }, 0);
       }
       atualizarInfoTendencia();
       atualizarBadgesResumo();
