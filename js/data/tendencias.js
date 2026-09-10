@@ -179,7 +179,7 @@ export const TENDENCIAS = [
       nome: 'Duelo de sorte',
       texto: 'Ao declarar ou um alvo declarar um teste de J vs J contra você, pode ativar essa habilidade recebendo +2 PdE e gastando 1 PdS. Com a ativação, role d2: Resultado 1 = vitória garantida; Resultado 2 = derrota garantida.',
     },
-    pericia_adicional: [],
+    pericia_adicional: ['determinacao', 'posicionamento', 'instintos'],
     passiva_secundaria: {
       nome: 'Contra destino',
       texto: 'Gasta 1 PdS pra remover efeito negativo de inimigo por 2 rodadas; começa toda partida com 1 PdS.',
