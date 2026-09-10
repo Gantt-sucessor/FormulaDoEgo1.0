@@ -133,6 +133,7 @@
           <div class="form-section">
             <h3>Perícias <span class="campo-opcional-tag">opcional</span></h3>
             <p class="step-desc">Distribua livremente. O livro recomenda 10 pontos, máx. 5 por perícia — mas fica a critério do mestre.</p>
+            <div id="aviso-pericia-tendencia" class="selecao-info"></div>
             <div id="pericias-container"></div>
           </div>
 
@@ -824,9 +825,9 @@
       let total = 0;
       cat.evolucao.forEach((e) => {
         if (nivelAtual < e.nivel) return;
-        const matches = e.ganhos.match(/\+(\d+)\s*habilidades?\s+de\s+categoria/gi) || [];
+        const matches = e.ganhos.match(/\+\s*(\d+)\s*habilidades?\s+de\s+categoria/gi) || [];
         matches.forEach((m) => {
-          const num = m.match(/\+(\d+)/);
+          const num = m.match(/\+\s*(\d+)/);
           if (num) total += Number(num[1]);
         });
       });
@@ -1108,11 +1109,7 @@
         atributosEscolhidos = atrs;
         renderSelectAtributoManual();
       }, atributosEscolhidos);
-      initPericias(document.getElementById('pericias-container'), periciasEscolhidas, (pers) => {
-        periciasEscolhidas = pers;
-        renderSelectPericiaManual();
-        renderStatus();
-      }, calcularPontosPericiaMaximos());
+      atualizarLimitePericias();
 
       renderSelectAtributoManual();
       renderSelectPericiaManual();
@@ -1165,7 +1162,7 @@
       if (categoria) {
         categoria.evolucao.forEach((e) => {
           if (nivelAtual >= e.nivel) {
-            const match = e.ganhos.match(/\+(\d+)\s*pontos?\s+de\s+perícia/i);
+            const match = e.ganhos.match(/\+\s*(\d+)\s*pontos?\s+de\s+perícia/i);
             if (match) total += Number(match[1]);
           }
         });
@@ -1186,6 +1183,16 @@
         renderPericiasDistancia();
         renderStatus();
       }, calcularPontosPericiaMaximos());
+
+      const aviso = document.getElementById('aviso-pericia-tendencia');
+      if (tendenciaPericiaEscolhida) {
+        const periciaDef = PERICIAS.find((pe) => pe.id === tendenciaPericiaEscolhida);
+        aviso.innerHTML = `<strong>+2 de bônus</strong> em ${periciaDef ? periciaDef.nome : tendenciaPericiaEscolhida} pela sua Tendência — já incluído no total de pontos acima.`;
+        aviso.classList.add('ativo');
+      } else {
+        aviso.innerHTML = '';
+        aviso.classList.remove('ativo');
+      }
     }
 
     function renderPericiasDistancia() {
