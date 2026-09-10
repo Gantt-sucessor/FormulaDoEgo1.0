@@ -1404,6 +1404,13 @@
           onClick: () => { acoesGastas.regulares[i] = !acoesGastas.regulares[i]; },
         })),
       ];
+      if (recompensaNivel8 === 'acao_egoista') {
+        slots.push({
+          label: 'Ação egoísta adicional',
+          gasta: acoesGastas.egoistaExtra,
+          onClick: () => { acoesGastas.egoistaExtra = !acoesGastas.egoistaExtra; },
+        });
+      }
       container.innerHTML = slots.map((s, i) => `
         <button type="button" class="jogada-card acao-slot ${s.gasta ? 'acao-gasta' : ''}" data-acao-idx="${i}">
           <div class="nome">${s.label}</div>
@@ -1420,7 +1427,7 @@
     }
 
     document.getElementById('btn-resetar-acoes').addEventListener('click', () => {
-      acoesGastas = { tatica: false, egoista: false, regulares: [false, false, false, false] };
+      acoesGastas = { tatica: false, egoista: false, egoistaExtra: false, regulares: [false, false, false, false] };
       renderAcoesRodada();
       salvarPartidaAutomatico();
     });
