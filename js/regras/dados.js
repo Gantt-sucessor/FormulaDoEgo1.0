@@ -68,6 +68,7 @@ export function rolarJogada({ valorAtributo, valorPericia = 0, vantagens = 0, de
     rolagensAtributo,
     rolagensVantagem,
     dadosRemovidosPorDesvantagem,
+    desvantagensInformadas: desvantagens,
     valorPericia,
     bonus,
     execucaoAbsoluta,
