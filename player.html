@@ -1877,11 +1877,8 @@
       if (detalhe.rolagensVantagem?.length) {
         dados += ` + ${detalhe.rolagensVantagem.length}d6 vantagem [${detalhe.rolagensVantagem.join(', ')}]`;
       }
-      if (detalhe.dadosRemovidosPorDesvantagem) {
-        dados += ` − ${detalhe.dadosRemovidosPorDesvantagem}d6 desvantagem [tirado do pool do atributo, dado não rolado]`;
-        if (detalhe.desvantagensInformadas > detalhe.dadosRemovidosPorDesvantagem) {
-          dados += ` (você tinha ${detalhe.desvantagensInformadas} desvantagem(ns), mas seu atributo só tinha ${detalhe.dadosRemovidosPorDesvantagem}d6 pra remover)`;
-        }
+      if (detalhe.rolagensDesvantagem?.length) {
+        dados += ` − ${detalhe.rolagensDesvantagem.length}d6 desvantagem [${detalhe.rolagensDesvantagem.join(', ')}]`;
       }
       if (detalhe.valorPericia) {
         dados += ` + perícia ${detalhe.valorPericia}`;

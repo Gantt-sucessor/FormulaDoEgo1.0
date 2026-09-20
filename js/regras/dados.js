@@ -24,34 +24,22 @@ function rolarD12ComAtributo(valorAtributo) {
  * @param {Object} params
  * @param {number} params.valorAtributo - valor do atributo (-1 a +4)
  * @param {number} params.valorPericia - pontos na perícia (0 a 5)
- * @param {number} [params.vantagens=0] - vantagens acumuladas (cada = +1d6)
- * @param {number} [params.desvantagens=0] - desvantagens acumuladas (cada = -1d6)
+ * @param {number} [params.vantagens=0] - vantagens acumuladas (cada = +1d6 somado)
+ * @param {number} [params.desvantagens=0] - desvantagens acumuladas (cada = +1d6 rolado à parte e subtraído)
  * @param {number} [params.bonus=0] - bônus fixo somado/subtraído do resultado final
  */
 export function rolarJogada({ valorAtributo, valorPericia = 0, vantagens = 0, desvantagens = 0, bonus = 0 }) {
   const base = rolarD12ComAtributo(valorAtributo);
 
-  const dadosAtributoBase = Math.max(valorAtributo, 0);
-  const liquido = vantagens - desvantagens; // positivo = sobra vantagem, negativo = sobra desvantagem
-
-  let dadosAtributo = dadosAtributoBase;
-  let dadosVantagemExtra = 0;
-  let dadosRemovidosPorDesvantagem = 0;
-
-  if (liquido > 0) {
-    dadosVantagemExtra = liquido;
-  } else if (liquido < 0) {
-    // Cada desvantagem líquida tira 1d6 do próprio pool do atributo (não pode ficar negativo).
-    dadosRemovidosPorDesvantagem = Math.min(dadosAtributoBase, -liquido);
-    dadosAtributo = dadosAtributoBase - dadosRemovidosPorDesvantagem;
-  }
-
+  const dadosAtributo = Math.max(valorAtributo, 0);
   const rolagensAtributo = Array.from({ length: dadosAtributo }, () => rolarDado(6));
-  const rolagensVantagem = Array.from({ length: dadosVantagemExtra }, () => rolarDado(6));
+  const rolagensVantagem = Array.from({ length: Math.max(vantagens, 0) }, () => rolarDado(6));
+  const rolagensDesvantagem = Array.from({ length: Math.max(desvantagens, 0) }, () => rolarDado(6));
 
-  const somaD6 = [...rolagensAtributo, ...rolagensVantagem].reduce((a, b) => a + b, 0);
+  const somaPositiva = [...rolagensAtributo, ...rolagensVantagem].reduce((a, b) => a + b, 0);
+  const somaDesvantagem = rolagensDesvantagem.reduce((a, b) => a + b, 0);
 
-  let resultado = base.valor + somaD6 + valorPericia + bonus;
+  let resultado = base.valor + somaPositiva - somaDesvantagem + valorPericia + bonus;
 
   let execucaoAbsoluta = null;
   if (base.valor === 12) {
@@ -67,8 +55,7 @@ export function rolarJogada({ valorAtributo, valorPericia = 0, vantagens = 0, de
     detalheBase: base.detalhe,
     rolagensAtributo,
     rolagensVantagem,
-    dadosRemovidosPorDesvantagem,
-    desvantagensInformadas: desvantagens,
+    rolagensDesvantagem,
     valorPericia,
     bonus,
     execucaoAbsoluta,
