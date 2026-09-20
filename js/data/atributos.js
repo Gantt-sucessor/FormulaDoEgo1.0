@@ -14,7 +14,7 @@ export const ATRIBUTOS = [
   },
   {
     id: 'drible',
-    nome: 'Drible',
+    nome: 'Controle',
     grupo: 'ofensivo',
     descricao: 'Reflete sua criatividade e velocidade em driblar e esquivar de seus oponentes.',
     pericias: ['criatividade', 'pressao', 'posse'],
