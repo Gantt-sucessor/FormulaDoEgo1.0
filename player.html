@@ -1877,6 +1877,9 @@
       if (detalhe.rolagensVantagem?.length) {
         dados += ` + ${detalhe.rolagensVantagem.length}d6 vantagem [${detalhe.rolagensVantagem.join(', ')}]`;
       }
+      if (detalhe.dadosRemovidosPorDesvantagem) {
+        dados += ` − ${detalhe.dadosRemovidosPorDesvantagem}d6 por desvantagem`;
+      }
       if (detalhe.valorPericia) {
         dados += ` + perícia ${detalhe.valorPericia}`;
       }

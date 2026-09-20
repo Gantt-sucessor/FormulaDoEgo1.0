@@ -5,17 +5,17 @@
 // Execução absoluta positiva: tirou 12 no d12 = +5 na jogada + 1 PdS.
 // Execução absoluta negativa: tirou 1 no d12 = -5 na jogada, +1 PdE, -1 PdS.
 
-function rolarDado(faces, aleatorio = Math.random) {
-  return Math.floor(aleatorio() * faces) + 1;
+function rolarDado(faces) {
+  return Math.floor(Math.random() * faces) + 1;
 }
 
-function rolarD12ComAtributo(valorAtributo, aleatorio) {
+function rolarD12ComAtributo(valorAtributo) {
   if (valorAtributo === -1) {
-    const a = rolarDado(12, aleatorio);
-    const b = rolarDado(12, aleatorio);
+    const a = rolarDado(12);
+    const b = rolarDado(12);
     return { valor: Math.min(a, b), detalhe: `2d12 (pega o menor): [${a}, ${b}]` };
   }
-  const d = rolarDado(12, aleatorio);
+  const d = rolarDado(12);
   return { valor: d, detalhe: `d12: ${d}` };
 }
 
@@ -28,21 +28,30 @@ function rolarD12ComAtributo(valorAtributo, aleatorio) {
  * @param {number} [params.desvantagens=0] - desvantagens acumuladas (cada = -1d6)
  * @param {number} [params.bonus=0] - bônus fixo somado/subtraído do resultado final
  */
-export function rolarJogada({ valorAtributo, valorPericia = 0, vantagens = 0, desvantagens = 0, bonus = 0, aleatorio = Math.random }) {
-  const base = rolarD12ComAtributo(valorAtributo, aleatorio);
+export function rolarJogada({ valorAtributo, valorPericia = 0, vantagens = 0, desvantagens = 0, bonus = 0 }) {
+  const base = rolarD12ComAtributo(valorAtributo);
 
-  const dadosAtributo = Math.max(valorAtributo, 0);
-  const rolagensAtributo = Array.from({ length: dadosAtributo }, () => rolarDado(6, aleatorio));
+  const dadosAtributoBase = Math.max(valorAtributo, 0);
+  const liquido = vantagens - desvantagens; // positivo = sobra vantagem, negativo = sobra desvantagem
 
-  const dadosVantagem = Math.max(vantagens - desvantagens, 0);
-  const dadosDesvantagem = Math.max(desvantagens - vantagens, 0);
-  const rolagensExtra = Array.from({ length: dadosVantagem }, () => rolarDado(6, aleatorio));
-  const rolagensDesvantagem = Array.from({ length: dadosDesvantagem }, () => rolarDado(6, aleatorio));
+  let dadosAtributo = dadosAtributoBase;
+  let dadosVantagemExtra = 0;
+  let dadosRemovidosPorDesvantagem = 0;
 
-  const somaD6 = [...rolagensAtributo, ...rolagensExtra].reduce((a, b) => a + b, 0);
-  const somaDesvantagem = rolagensDesvantagem.reduce((a, b) => a + b, 0);
+  if (liquido > 0) {
+    dadosVantagemExtra = liquido;
+  } else if (liquido < 0) {
+    // Cada desvantagem líquida tira 1d6 do próprio pool do atributo (não pode ficar negativo).
+    dadosRemovidosPorDesvantagem = Math.min(dadosAtributoBase, -liquido);
+    dadosAtributo = dadosAtributoBase - dadosRemovidosPorDesvantagem;
+  }
 
-  let resultado = base.valor + somaD6 - somaDesvantagem + valorPericia + bonus;
+  const rolagensAtributo = Array.from({ length: dadosAtributo }, () => rolarDado(6));
+  const rolagensVantagem = Array.from({ length: dadosVantagemExtra }, () => rolarDado(6));
+
+  const somaD6 = [...rolagensAtributo, ...rolagensVantagem].reduce((a, b) => a + b, 0);
+
+  let resultado = base.valor + somaD6 + valorPericia + bonus;
 
   let execucaoAbsoluta = null;
   if (base.valor === 12) {
@@ -57,9 +66,8 @@ export function rolarJogada({ valorAtributo, valorPericia = 0, vantagens = 0, de
     resultado,
     detalheBase: base.detalhe,
     rolagensAtributo,
-    rolagensVantagem: rolagensExtra,
-    rolagensDesvantagem,
-    desvantagensLiquidas: dadosDesvantagem,
+    rolagensVantagem,
+    dadosRemovidosPorDesvantagem,
     valorPericia,
     bonus,
     execucaoAbsoluta,
@@ -71,16 +79,4 @@ export function rolarJogada({ valorAtributo, valorPericia = 0, vantagens = 0, de
  */
 export function contraDj(resultado, dj) {
   return resultado >= dj;
-}
-
-/**
- * Resolve uma jogada contra uma DJ numérica. DJs textuais ficam pendentes
- * porque precisam do resultado ou estado de outro personagem.
- */
-export function resolverJogada(resultado, dj) {
-  if (!Number.isFinite(dj)) {
-    return { resolvida: false, sucesso: null, margem: null, dj };
-  }
-  const sucesso = contraDj(resultado, dj);
-  return { resolvida: true, sucesso, margem: resultado - dj, dj };
 }
