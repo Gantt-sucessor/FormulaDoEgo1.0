@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Fórmula do Ego — Ficha</title>
+<link rel="stylesheet" href="css/base.css" />
+<link rel="stylesheet" href="css/player.css" />
+<style>
+  .ficha-publica-aviso {
+    max-width: 720px;
+    margin: 12px auto 0;
+    padding: 10px 16px;
+    background: var(--bg-surface-2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    text-align: center;
+  }
+</style>
+</head>
+<body>
+  <div class="topbar">
+    <div class="logo">Fórmula do <span class="ego">Ego</span></div>
+    <div style="font-size: 0.8rem; color: var(--text-secondary);">Visualização compartilhada — somente leitura</div>
+  </div>
+
+  <div id="carregando" class="setup-screen">
+    <p>Carregando ficha...</p>
+  </div>
+
+  <div id="erro-tela" class="setup-screen" style="display: none;">
+    <div class="eyebrow">Ops</div>
+    <h2>Não achei essa ficha</h2>
+    <p>O link pode estar errado, ou a ficha foi apagada.</p>
+  </div>
+
+  <div id="tela-ficha-publica" class="ficha-screen ficha-screen-larga" style="display: none;">
+    <div class="ficha-header">
+      <div>
+        <div class="eyebrow">Ficha (compartilhada)</div>
+        <div class="titulo-personagem-linha">
+          <span id="icone-personagem" class="arma-icone-pequeno"></span>
+          <h2 id="titulo-personagem" style="margin-bottom: 0;"></h2>
+        </div>
+      </div>
+    </div>
+    <div class="resumo-ficha" id="resumo-ficha"></div>
+    <p class="ficha-publica-aviso">Essa é uma visualização compartilhada — só quem tem esse link consegue ver. Pra editar, entre com a conta que criou a ficha.</p>
+
+    <div class="visao-geral-grid" style="margin-top: 24px;">
+      <div class="coluna-atributos">
+        <div class="atributos-card">
+          <div class="atributos-card-titulo">Atributos</div>
+          <div id="atributos-lista" class="hex-attr-grid"></div>
+        </div>
+      </div>
+
+      <div class="coluna-jogo">
+        <div class="form-section">
+          <h3>Perícias</h3>
+          <div id="pericias-lista" class="pericias-grid"></div>
+        </div>
+
+        <div class="form-section">
+          <h3>Status</h3>
+          <div class="status-grid" id="status-lista"></div>
+        </div>
+
+        <div class="form-section">
+          <h3>Arma</h3>
+          <div id="info-arma" class="selecao-info ativo"></div>
+        </div>
+
+        <div class="form-section">
+          <h3>Ótica</h3>
+          <div id="info-otica" class="selecao-info ativo"></div>
+        </div>
+
+        <div class="form-section">
+          <h3>Tendências</h3>
+          <div id="info-tendencia-principal" class="selecao-info ativo"></div>
+          <div id="info-tendencia-secundaria" class="selecao-info ativo" style="margin-top: 10px;"></div>
+        </div>
+
+        <div class="form-section">
+          <h3>Categoria</h3>
+          <div id="info-categoria" class="selecao-info ativo"></div>
+        </div>
+
+        <div class="form-section">
+          <h3>Talentos Impetuosos</h3>
+          <div id="talentos-lista" class="jogadas-grid"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { supabase } from './js/supabase-client.js';
+    import { iconeArmaHTML } from './js/data/icones-armas.js';
+    import { ATRIBUTOS } from './js/data/atributos.js';
+    import { PERICIAS } from './js/data/pericias.js';
+    import { ARMAS } from './js/data/armas.js';
+    import { OTICAS } from './js/data/oticas.js';
+    import { TENDENCIAS } from './js/data/tendencias.js';
+    import { CATEGORIAS, HABILIDADES_DE_CATEGORIA } from './js/data/categorias.js';
+    import { TALENTOS_EVOLUTIVOS, TALENTOS_SIMPLES, TALENTOS_RAZOAVEIS, TALENTOS_COMPLEXOS } from './js/data/talentos.js';
+    import { calcularFolegos, calcularDdC, calcularDdP, MAX_PDS_PADRAO } from './js/regras/calculos.js';
+
+    const TODOS_TALENTOS = [...TALENTOS_EVOLUTIVOS, ...TALENTOS_SIMPLES, ...TALENTOS_RAZOAVEIS, ...TALENTOS_COMPLEXOS];
+
+    const id = new URLSearchParams(location.search).get('id');
+
+    function mostrar(tela) {
+      document.getElementById('carregando').style.display = tela === 'carregando' ? 'block' : 'none';
+      document.getElementById('erro-tela').style.display = tela === 'erro' ? 'block' : 'none';
+      document.getElementById('tela-ficha-publica').style.display = tela === 'ficha' ? 'block' : 'none';
+    }
+
+    if (!id) {
+      mostrar('erro');
+    } else {
+      carregar();
+    }
+
+    async function carregar() {
+      const { data: ficha, error } = await supabase.from('fichas').select('*').eq('id', id).single();
+      if (error || !ficha) {
+        mostrar('erro');
+        return;
+      }
+      renderizar(ficha);
+      mostrar('ficha');
+    }
+
+    function renderizar(ficha) {
+      document.title = `${ficha.nome_personagem} — Fórmula do Ego`;
+      document.getElementById('titulo-personagem').textContent = ficha.nome_personagem;
+
+      const arma = ARMAS.find((a) => a.id === ficha.arma_id);
+      document.getElementById('icone-personagem').innerHTML = arma ? iconeArmaHTML(arma.id, arma.nome) : '';
+
+      const otica = OTICAS.find((o) => o.id === ficha.otica_id);
+      document.getElementById('resumo-ficha').innerHTML = [
+        arma ? `<span class="badge badge-com-icone"><span class="arma-icone-mini">${iconeArmaHTML(arma.id, arma.nome)}</span>${arma.nome}</span>` : '',
+        otica ? `<span class="badge">${otica.nome}</span>` : '',
+        `<span class="badge">Nível ${ficha.nivel || 1}</span>`,
+      ].join('');
+
+      const atributos = ficha.atributos || {};
+      document.getElementById('atributos-lista').innerHTML = ATRIBUTOS.map((a) => `
+        <div class="hex-attr-cell">
+          <div class="hex-attr-nome">${a.nome}</div>
+          <div class="hex-attr-valor" style="text-align:center;">${atributos[a.id] !== undefined ? (atributos[a.id] > 0 ? '+' + atributos[a.id] : atributos[a.id]) : '0'}</div>
+        </div>
+      `).join('');
+
+      const pericias = ficha.pericias || {};
+      document.getElementById('pericias-lista').innerHTML = PERICIAS.map((p) => `
+        <div class="pericia-item">
+          <span class="nome">${p.nome}</span>
+          <span class="valor">${pericias[p.id] || 0}</span>
+        </div>
+      `).join('');
+
+      const constancia = pericias['constancia'] || 0;
+      const folegoMax = calcularFolegos(constancia) + (ficha.recompensa_nivel_6 === 'folego' ? 1 : 0);
+      document.getElementById('status-lista').innerHTML = `
+        <div class="status-item"><label>Fôlego</label><div class="status-controles">${ficha.folego_atual ?? 0}<span class="status-max">/${folegoMax}</span></div></div>
+        <div class="status-item"><label>PdE</label><div class="status-controles">${ficha.pde_atual ?? 0}</div></div>
+        <div class="status-item"><label>Pontos de Chama</label><div class="status-controles">${ficha.pontos_chama ?? 0}</div></div>
+        <div class="status-item"><label>PdS</label><div class="status-controles">${ficha.pontos_sorte ?? 0}<span class="status-max">/${MAX_PDS_PADRAO}</span></div></div>
+      `;
+
+      const infoArma = document.getElementById('info-arma');
+      if (arma) {
+        infoArma.innerHTML = `
+          <strong>${arma.nome}</strong> ${'★'.repeat(arma.dificuldade)}${'☆'.repeat(5 - arma.dificuldade)}
+          <p>${arma.tema}</p>
+          <div class="arma-bloco"><strong>${arma.mecanica_especial.nome}:</strong> ${arma.mecanica_especial.texto}</div>
+          <div class="arma-bloco">
+            <strong>Skills</strong>
+            <ul class="arma-habilidades-lista">
+              ${arma.habilidades.map((h) => `<li><strong>${h.nome}</strong> [${h.tipo}]<p>${h.texto}</p></li>`).join('')}
+            </ul>
+          </div>
+          <div class="arma-bloco"><strong>${arma.passiva.nome}:</strong> ${arma.passiva.texto}</div>
+        `;
+      } else {
+        infoArma.innerHTML = '<span>Nenhuma arma escolhida.</span>';
+      }
+
+      const infoOtica = document.getElementById('info-otica');
+      infoOtica.innerHTML = otica
+        ? `<strong>${otica.nome}</strong><p>${otica.tema}</p>${otica.niveis.map((t, i) => `<div><strong>Nível ${i + 1}:</strong> ${t}</div>`).join('')}`
+        : '<span>Nenhuma ótica escolhida.</span>';
+
+      const tPrincipal = TENDENCIAS.find((t) => t.id === ficha.tendencia_principal_id);
+      const tSecundaria = TENDENCIAS.find((t) => t.id === ficha.tendencia_secundaria_id);
+      document.getElementById('info-tendencia-principal').innerHTML = tPrincipal
+        ? (tPrincipal.dom ? `<strong>Dom (${tPrincipal.nome}):</strong> ${tPrincipal.dom.nome} — ${tPrincipal.dom.texto}` : `<strong>${tPrincipal.nome}:</strong> sem Dom próprio.`)
+        : '<span>Nenhuma tendência principal.</span>';
+      document.getElementById('info-tendencia-secundaria').innerHTML = tSecundaria?.passiva_secundaria
+        ? `<strong>Passiva (${tSecundaria.nome}):</strong> ${tSecundaria.passiva_secundaria.nome} — ${tSecundaria.passiva_secundaria.texto}`
+        : '<span>Nenhuma tendência secundária.</span>';
+
+      const categoria = CATEGORIAS.find((c) => c.id === ficha.categoria_id);
+      const arquetipo = categoria?.arquetipos.find((a) => a.id === ficha.arquetipo_id);
+      const habilidadesCategoria = ficha.habilidades_categoria || [];
+      document.getElementById('info-categoria').innerHTML = categoria
+        ? `<strong>${categoria.nome}${arquetipo ? ' — ' + arquetipo.nome : ''}</strong>${habilidadesCategoria.length ? `<div class="arma-bloco"><strong>Habilidades escolhidas:</strong> ${habilidadesCategoria.join(', ')}</div>` : ''}`
+        : '<span>Nenhuma categoria escolhida.</span>';
+
+      const talentosSelecionados = ficha.talentos || [];
+      document.getElementById('talentos-lista').innerHTML = talentosSelecionados.length
+        ? talentosSelecionados.map((tid) => {
+            const t = TODOS_TALENTOS.find((x) => x.id === tid);
+            if (!t) return '';
+            return `<div class="jogada-card"><div class="nome">${t.nome}</div><div class="info">${t.texto || (t.niveis ? t.niveis[0] : '')}</div></div>`;
+          }).join('')
+        : '<p style="color: var(--text-muted); font-size: 0.85rem;">Nenhum talento escolhido.</p>';
+    }
+  </script>
+</body>
+</html>

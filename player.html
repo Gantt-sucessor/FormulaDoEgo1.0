@@ -12,7 +12,6 @@
     <div class="logo">Fórmula do <span class="ego">Ego</span></div>
     <div style="display: flex; gap: 8px;">
       <a href="sala.html" id="link-sala-topbar" class="btn btn-ghost" style="padding: 8px 16px;">Sala</a>
-      <a href="mapa.html" class="btn btn-ghost" style="padding: 8px 16px;">Mapa</a>
       <a href="index.html" class="btn btn-ghost" style="padding: 8px 16px;">Sair</a>
     </div>
   </div>
@@ -83,7 +82,10 @@
           <h2 id="titulo-personagem" style="margin-bottom: 0;">Novo personagem</h2>
         </div>
       </div>
-      <span class="link-trocar" id="link-voltar-lista">← minhas fichas</span>
+      <div style="display: flex; align-items: center; gap: 14px;">
+        <button type="button" id="btn-compartilhar-ficha" class="btn btn-ghost" style="padding: 8px 16px; display: none;">🔗 Compartilhar</button>
+        <span class="link-trocar" id="link-voltar-lista">← minhas fichas</span>
+      </div>
     </div>
     <div class="resumo-ficha" id="resumo-ficha"></div>
 
@@ -835,31 +837,42 @@
       atualizarLimitePericias();
     });
 
+    /**
+     * Nível de categoria (1-5) — SEPARADO do nível de personagem (1-8).
+     * Sobe automaticamente conforme a tabela universal: +1 nos níveis de personagem 4, 5, 6 e 8.
+     */
+    function calcularNivelCategoria() {
+      let n = 1;
+      if (nivelAtual >= 4) n += 1;
+      if (nivelAtual >= 5) n += 1;
+      if (nivelAtual >= 6) n += 1;
+      if (nivelAtual >= 8) n += 1;
+      return Math.min(5, n);
+    }
+
     function renderNiveisCategoria() {
       const cat = CATEGORIAS.find((c) => c.id === document.getElementById('select-categoria').value);
       const container = document.getElementById('niveis-categoria-container');
       if (!cat) { container.classList.remove('ativo'); return; }
       container.classList.add('ativo');
+      const nivelCategoriaAtual = calcularNivelCategoria();
       container.innerHTML = `
         <strong>Evolução — ${cat.nome}</strong>
-        <p class="step-desc" style="margin: 4px 0 0;">Clique num nível pra ir direto pra ele — dourado é o atual, esverdeado é o que você já passou.</p>
+        <p class="step-desc" style="margin: 4px 0 0;">O nível de categoria sobe sozinho junto com o nível de personagem (nos níveis 4, 5, 6 e 8) — dourado é o atual, esverdeado é o que você já passou.</p>
         <div class="jogadas-grid" style="margin-top:10px;">
           ${cat.evolucao.map((e) => {
             let classeExtra = '';
-            if (nivelAtual === e.nivel) classeExtra = 'talento-selecionado';
-            else if (nivelAtual > e.nivel) classeExtra = 'nivel-passado';
+            if (nivelCategoriaAtual === e.nivel) classeExtra = 'talento-selecionado';
+            else if (nivelCategoriaAtual > e.nivel) classeExtra = 'nivel-passado';
             return `
-              <button type="button" class="jogada-card ${classeExtra}" data-ir-para-nivel="${e.nivel}">
-                <div class="nome">Nível ${e.nivel}${nivelAtual === e.nivel ? ' · atual' : ''}${nivelAtual > e.nivel ? ' · concluído' : ''}</div>
+              <div class="jogada-card ${classeExtra}" style="cursor: default;">
+                <div class="nome">Nível de categoria ${e.nivel}${nivelCategoriaAtual === e.nivel ? ' · atual' : ''}${nivelCategoriaAtual > e.nivel ? ' · concluído' : ''}</div>
                 <div class="info">${e.ganhos}</div>
-              </button>
+              </div>
             `;
           }).join('')}
         </div>
       `;
-      container.querySelectorAll('[data-ir-para-nivel]').forEach((btn) => btn.addEventListener('click', () => {
-        definirNivel(Number(btn.dataset.irParaNivel));
-      }));
     }
 
     /** Quantas Habilidades de Categoria você já desbloqueou, somando a evolução até o nível atual. */
@@ -868,7 +881,7 @@
       if (!cat) return 0;
       let total = 0;
       cat.evolucao.forEach((e) => {
-        if (nivelAtual < e.nivel) return;
+        if (calcularNivelCategoria() < e.nivel) return;
         const matches = e.ganhos.match(/\+\s*(\d+)\s*habilidades?\s+de\s+categoria/gi) || [];
         matches.forEach((m) => {
           const num = m.match(/\+\s*(\d+)/);
@@ -1079,6 +1092,17 @@
     document.getElementById('btn-nova-ficha').addEventListener('click', () => abrirTelaPersonagem(null));
     document.getElementById('link-voltar-lista').addEventListener('click', abrirListaFichas);
 
+    document.getElementById('btn-compartilhar-ficha').addEventListener('click', async () => {
+      if (!fichaAtual?.id) return;
+      const link = `${location.origin}${location.pathname.replace('player.html', 'ficha-publica.html')}?id=${fichaAtual.id}`;
+      try {
+        await navigator.clipboard.writeText(link);
+        mostrarToast('Link copiado! Qualquer um com esse link consegue ver a ficha (sem precisar de login).');
+      } catch (e) {
+        prompt('Copia esse link pra compartilhar a ficha:', link);
+      }
+    });
+
     // --- Tela unificada: ficha + jogo ---
     async function abrirTelaPersonagem(fichaExistente) {
       fichaAtual = fichaExistente;
@@ -1127,6 +1151,7 @@
 
       document.getElementById('titulo-personagem').textContent = fichaExistente?.nome_personagem || 'Novo personagem';
       document.getElementById('eyebrow-personagem').textContent = fichaExistente ? 'Ficha' : 'Novo personagem';
+      document.getElementById('btn-compartilhar-ficha').style.display = fichaExistente ? 'inline-block' : 'none';
       document.getElementById('input-nome-personagem').value = fichaExistente?.nome_personagem || '';
       document.getElementById('select-arma').value = fichaExistente?.arma_id || '';
       document.getElementById('select-otica').value = fichaExistente?.otica_id || '';
@@ -1200,11 +1225,12 @@
       // Pontos vindos da tabela universal de nível (nível 2, 3, 6 e 7 dão +1 cada).
       [2, 3, 6, 7].forEach((n) => { if (nivelAtual >= n) total += 1; });
 
-      // Pontos vindos da evolução da Categoria (Gênio/Aprendiz) — soma tudo até o nível atual.
+      // Pontos vindos da evolução da Categoria (Gênio/Aprendiz) — soma tudo até o nível de categoria atual.
       const categoria = CATEGORIAS.find((c) => c.id === document.getElementById('select-categoria').value);
       if (categoria) {
+        const nivelCategoriaAtual = calcularNivelCategoria();
         categoria.evolucao.forEach((e) => {
-          if (nivelAtual >= e.nivel) {
+          if (nivelCategoriaAtual >= e.nivel) {
             const match = e.ganhos.match(/\+\s*(\d+)\s*pontos?\s+de\s+perícia/i);
             if (match) total += Number(match[1]);
           }
@@ -1595,7 +1621,7 @@
     function todasJogadasFlat() {
       return Object.entries(JOGADAS).flatMap(([grupo, lista]) => lista.map((j) => ({ ...j, grupo })));
     }
-    const NOMES_GRUPOS_FLUXO = { chutes: 'Chutes', passes: 'Passes', dribles: 'Dribles', defesa: 'Defesa', goleiro: 'Goleiro' };
+    const NOMES_GRUPOS_FLUXO = { chutes: 'Chutes', passes: 'Passes', dribles: 'Dribles', defesa: 'Defesa', goleiro: 'Goleiro', outras: 'Outras' };
 
     function renderJogadasFluxo() {
       document.getElementById('jogadas-fluxo-contagem').textContent = `(${fluxoJogadasBonus.length}/3 escolhidas)`;
@@ -1765,10 +1791,10 @@
       document.getElementById('contagem-marcas-conhecidas').textContent = `${marcasConhecidas.length}/${limiteMarcas} conhecidas`;
 
       const gruposMarcas = [
-        { chave: 'facil', titulo: 'Fáceis (+5% cada)', lista: MARCAS_DESPERTAR.facil },
-        { chave: 'media', titulo: 'Médias (+10% cada)', lista: MARCAS_DESPERTAR.media },
-        { chave: 'dificil', titulo: 'Difíceis (+15% cada)', lista: MARCAS_DESPERTAR.dificil },
-        { chave: 'impossivel', titulo: 'Impossíveis (+25% cada)', lista: MARCAS_DESPERTAR.impossivel },
+        { chave: 'facil', titulo: 'Fáceis (+10% cada)', lista: MARCAS_DESPERTAR.facil },
+        { chave: 'media', titulo: 'Médias (+20% cada)', lista: MARCAS_DESPERTAR.media },
+        { chave: 'dificil', titulo: 'Difíceis (+30% cada)', lista: MARCAS_DESPERTAR.dificil },
+        { chave: 'impossivel', titulo: 'Impossíveis (+40% cada)', lista: MARCAS_DESPERTAR.impossivel },
       ];
       const containerMarcas = document.getElementById('marcas-despertar-container');
       containerMarcas.innerHTML = gruposMarcas.map((g) => `
@@ -1860,6 +1886,7 @@
       const otica = OTICAS.find((o) => o.id === document.getElementById('select-otica').value);
       if (!otica) return [];
       const texto = otica.catalisadores.toLowerCase();
+      if (texto.includes('qualquer um')) return CATALISADORES; // ex: Visão Neutra — libera todos, sem restrição
       return CATALISADORES.filter((c) => texto.includes(c.nome.toLowerCase()));
     }
 
@@ -1965,7 +1992,7 @@
     }
 
     // --- Jogadas base do livro, clicáveis pra rolar direto ---
-    const NOMES_GRUPOS = { chutes: 'Chutes', passes: 'Passes', dribles: 'Dribles', defesa: 'Defesa', goleiro: 'Goleiro' };
+    const NOMES_GRUPOS = { chutes: 'Chutes', passes: 'Passes', dribles: 'Dribles', defesa: 'Defesa', goleiro: 'Goleiro', outras: 'Outras' };
     const NOMES_ATRIBUTOS_CURTO = Object.fromEntries(ATRIBUTOS.map((a) => [a.id, a.nome]));
 
     function calcularPericiaJogada(jogada) {
@@ -2117,6 +2144,7 @@
         fichaAtual = ficha;
         document.getElementById('titulo-personagem').textContent = ficha.nome_personagem;
         document.getElementById('eyebrow-personagem').textContent = 'Ficha';
+        document.getElementById('btn-compartilhar-ficha').style.display = 'inline-block';
         mostrarToast('Ficha salva com sucesso!');
         await ativarBlocoRolagem();
       } catch (e) {
@@ -2228,4 +2256,4 @@
     });
   </script>
 </body>
-</html>feat: 
+</html>

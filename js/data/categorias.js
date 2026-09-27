@@ -80,7 +80,7 @@ export const HABILIDADES_DE_CATEGORIA = [
     frase: 'Penso, logo te esmago!',
     arquetipos: ['arquiteto', 'determinado'],
     esf: '+4 PdE', dis: 'pessoal', dur: 'visão de jogo + 1 turnos', tda: 'Ação egoísta', prep: 'M/3 turnos',
-    texto: 'Ao estar sem a bola, pode ativar essa habilidade em seu turno. Você entra em um estado de percepção total por visão de jogo + 1 turnos. Durante esse modo: sua DdP possui +2m; interceptar não dá rebote em maior distância; pode trocar o atributo de qualquer teste por Cognição [ex: Cognição-músculos]; pode avançar 1m ao fim de todo turno.',
+    texto: 'Ao estar sem a bola, pode ativar essa habilidade em seu turno. Você entra em um estado de percepção total por visão de jogo + 1 turnos. Durante esse modo: sua DdP possui +2m; interceptar não dá rebote em maior distância; usa Visão de jogo em qualquer teste (sem trocar atributos); pode avançar 1m ao fim de todo turno.',
   },
   {
     nome: 'Máquina inumana',

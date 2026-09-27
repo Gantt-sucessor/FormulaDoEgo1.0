@@ -14,10 +14,10 @@ export const ARMAS = [
     mecanica_especial: { nome: 'Divino general imoral', texto: 'Desbloqueia o efeito Adaptado através de habilidades específicas ou gastando 1 PdS em seu turno.' },
     passiva: { nome: 'Adaptado', texto: 'Sempre que acumular x1 desse efeito, pode escolher uma jogada de J vs J para oponentes receberem -1 em executá-la contra você (ex: -1 de bônus em lhe roubar), com o bônus negativo sendo acumulável (máx. -5 por jogada). O efeito dura até o fim da partida, assim como seu benefício.' },
     habilidades: [
-      { nome: 'Chute direto', tipo: 'sem bola', texto: 'Ao receber passe/rebote: chute regular fora do turno +5 bônus.' },
+      { nome: 'Chute direto', tipo: 'sem bola', texto: 'Ao receber a bola, faz um chute regular mesmo fora do turno com 1 vantagem. Usando a perna ruim, pode gastar 1 PdS pra usar a perna boa (ignora flanque/ângulo cortado) com +5 de bônus adicional.' },
       { nome: 'Peças fora do lugar', tipo: 'com bola', simbolo: '✪', texto: 'Cria área ao redor; quem entrar recebe Adaptado x1 (1x por pessoa/partida).' },
       { nome: 'Monto e desmonto', tipo: 'variante', texto: 'Na zona dourada: inimigos do setor têm desvantagem em J vs J contra você.' },
-      { nome: 'Rei demônio', tipo: 'fluxo', texto: 'Aliado com bola é forçado a te passar; ao receber, chute regular 2 vantagens+4 bônus.' },
+      { nome: 'Rei demônio', tipo: 'fluxo', texto: 'Avança 6m e testa Posicionamento vs Consumir do aliado com a bola; se ganhar, ele é obrigado a passar (+6m DdP+4 bônus) pra você. Ao receber, chute com 2 vantagens+4 bônus.' },
     ],
   },
   {
@@ -59,7 +59,7 @@ export const ARMAS = [
       { nome: 'Mach 44', tipo: 'sem bola', texto: 'Avança 1m por turno automaticamente (2 pontos de aceleração = 2m).' },
       { nome: 'Tiro em movimento', tipo: 'com bola', simbolo: '❖', texto: 'Avança driblando com Destreza, chuta/passa com Destreza no final (2 pontos = +1 vantagem +2m).' },
       { nome: 'Pantera x trem', tipo: 'variante', texto: 'Você e um aliado avançam juntos, somando a Constância de ambos (3 pontos = duplica sua Constância).' },
-      { nome: 'Ângulo de 44°', tipo: 'fluxo', esf: '+4 PdE', dis: 'setor', dur: 'instantâneo', tda: 'Ação egoísta + ação tática', texto: 'Apenas utilizável uma vez em fluxo. Com a bola no mesmo setor da sua zona dourada enquanto ela está ativa, avança até sua zona dourada e faz um passe ou chute que recebe +2 bônus para cada 3m andados neste turno (ex.: 9m = +6). Pode gastar 4 pontos de aceleração para receber +1 vantagem em vez de +2 bônus.' },
+      { nome: 'Ângulo de 44°', tipo: 'fluxo', texto: 'Avança Constância+3m, chute/passe +2 bônus por 3m andados (4 pontos = vantagens em vez de bônus).' },
     ],
   },
   {
@@ -85,8 +85,8 @@ export const ARMAS = [
     passiva: { nome: 'Forma ofensiva / Forma defensiva', texto: 'Enquanto na forma escolhida, +3 bônus nos atributos correspondentes (ofensivos ou defensivos) durante as próximas 3 jogadas.' },
     habilidades: [
       { nome: 'Cópia 99%', tipo: 'sem bola', simbolo: '✪', texto: 'Copia e guarda 1 habilidade de um alvo (usa com metade do PdE).' },
-      { nome: 'Simulacro de movimento', tipo: 'com bola', simbolo: '❖', texto: 'Copia os 2 maiores atributos do alvo.' },
-      { nome: 'Formação double player', tipo: 'variante', texto: 'Copia TODOS atributos/perícias de um aliado; ambos ficam inspirados.' },
+      { nome: 'Simulacro de movimento', tipo: 'com bola', simbolo: '❖', texto: 'Copia os 2 maiores atributos do alvo por Visão de jogo+3 turnos.' },
+      { nome: 'Formação double player', tipo: 'variante', texto: 'Copia TODOS atributos/perícias de um aliado por Visão de jogo+3 turnos; ambos ficam inspirados.' },
       { nome: 'Mimetismo perfeito', tipo: 'fluxo', texto: 'Copia e guarda 1 habilidade de fluxo de um alvo.' },
     ],
   },
@@ -96,7 +96,7 @@ export const ARMAS = [
     dificuldade: 2,
     tema: 'Retaliação — o corpo é uma máquina que destrói e é destruída.',
     mecanica_especial: { nome: 'Retaliação', texto: 'Ativa automaticamente sempre que você recebe um efeito negativo.' },
-    passiva: { nome: 'Ponto de fibra', texto: 'Todo efeito negativo recebido dá +1 ponto de fibra; cada ponto de fibra concede +2 bônus em jogadas de Potência/Robustez.' },
+    passiva: { nome: 'Ponto de fibra', texto: 'Todo efeito negativo recebido dá +1 ponto de fibra; cada ponto de fibra concede +2 bônus em jogadas de Potência/Robustez, sem gastar os pontos ao usar. Os pontos de fibra resetam a 0 se você falhar um teste de Robustez ou Potência, ou depois de um gol (seu ou do adversário).' },
     habilidades: [
       { nome: 'Deus ex machina', tipo: 'sem bola', texto: 'Antes de rolar Robustez J vs J: testa Músculos vs Pressão; se vencer, escolhe efeito no alvo.' },
       { nome: 'Justiça na marra', tipo: 'com bola', simbolo: '✪', texto: 'Escolhe a perna: boa = chute de poder +4m; ruim = chute que derruba alvos.' },
@@ -152,10 +152,10 @@ export const ARMAS = [
     dificuldade: 4,
     tema: 'Futebol de rua — ninguém acompanha seu ritmo.',
     mecanica_especial: { nome: 'Futebol de rua', texto: 'Desbloqueia uma jogada especial nova, disponível a qualquer momento (não depende de gatilho).' },
-    passiva: { nome: 'Corte', texto: 'Perícia: Criatividade | J vs J | Distância: Adjacente | Ação: Reação+1 fôlego — se ganhar, avança 2m, o driblado fica caído por 1 turno.' },
+    passiva: { nome: 'Corte', texto: 'Perícia: Pressão | J vs J | Distância: Adjacente | Ação: Reação+1 fôlego — se ganhar, avança 2m, o driblado fica caído por 1 turno. Ignora malefícios de perna ruim quando não flanqueado.' },
     habilidades: [
-      { nome: 'Corte de asfalto', tipo: 'sem bola', texto: 'Ao receber passe: avança fazendo Corte contra 2 "obstáculos" sequenciais.' },
-      { nome: 'Gyro shot', tipo: 'com bola', simbolo: '✪', texto: 'Chute curvo +4 bônus; interceptar exige teste de Momento difícil.' },
+      { nome: 'Corte de asfalto', tipo: 'sem bola', texto: 'Ao receber passe: avança fazendo Corte contra 2 "obstáculos" sequenciais, cada um com 2 vantagens.' },
+      { nome: 'Gyro shot', tipo: 'com bola', simbolo: '✪', texto: 'Chute curvo +4 bônus; interceptar exige teste de Momento com dj = Trajetória x4.' },
       { nome: 'Sword screw', tipo: 'variante', texto: 'A bola quica na trajetória, confundindo alvos ao redor.' },
       { nome: 'Minha melhor performance', tipo: 'fluxo', texto: 'Cria uma "rota", avança driblando tudo, chute final +3 bônus por driblado.' },
     ],
@@ -196,7 +196,7 @@ export const ARMAS = [
     mecanica_especial: { nome: 'Kage mane no jutsu', texto: 'Ativa ao gastar 1 fôlego estando adjacente a um inimigo.' },
     passiva: { nome: 'Furtivo prolongado', texto: 'Fica furtivo pelos próximos 3 fôlegos gastos; enquanto furtivo por esse efeito, pode driblar usando Destreza no lugar do atributo padrão.' },
     habilidades: [
-      { nome: 'Passos sorrateiros', tipo: 'sem bola', texto: 'Ação reativa: fica furtivo, avança 4m, alvos no caminho ficam confusos.' },
+      { nome: 'Passos sorrateiros', tipo: 'sem bola', texto: 'Ao um alvo declarar recepção no seu setor, precisa estar furtivo pra ativar: avança e testa domínio antes dele; se recepcionar, escolhe avançar 4m furtivo ou passar pro aliado mais próximo (só parável por habilidade).' },
       { nome: 'Bukijutsu de Shurikens', tipo: 'com bola', simbolo: '❖', texto: 'Passe adiantado +3 bônus, avança e fica furtivo.' },
       { nome: 'Voleio de Kusarigama', tipo: 'variante', texto: 'Aliado levanta bola não interceptável; você avança e faz voleio +7 bônus.' },
       { nome: 'Centro do Mundo', tipo: 'fluxo', texto: 'Furtivo, ações reativas custam 1 reação, sem malefícios de flanqueamento.' },
@@ -212,7 +212,7 @@ export const ARMAS = [
     habilidades: [
       { nome: 'Corro, não paro, me movo', tipo: 'sem bola', simbolo: '✪', texto: '3 investidas seguidas, cada uma em direção diferente da anterior.' },
       { nome: 'Jet counter', tipo: 'com bola', texto: 'Preparação de investida; se tentarem roubar, drible Destreza+Constância.' },
-      { nome: 'Área de aceleração', tipo: 'variante', texto: 'Área onde investidas preparatórias contam o dobro de metros.' },
+      { nome: 'Área de aceleração', tipo: 'variante', texto: 'Área de raio igual a Agilidade metros que dura 2 rodadas; investidas preparatórias dentro dela contam o dobro de metros.' },
       { nome: 'NÃO POSSO PARAR!', tipo: 'fluxo', texto: 'Investida x3m; alvos no caminho testam Constância ou caem.' },
     ],
   },
@@ -250,12 +250,12 @@ export const ARMAS = [
     dificuldade: 4,
     tema: 'Breakdance caótico — nem os deuses sabem seu próximo passe.',
     mecanica_especial: { nome: 'Balança desequilibrada', texto: 'Ativa automaticamente sempre que um aliado falha um teste de J vs J.' },
-    passiva: { nome: 'Ponto de azarão', texto: 'O aliado que falhou ganha +1 ponto de azarão (+1 bônus em passes pra ele, sem limite de pontos, máx. +5 de bônus); ganhar um PdS remove -1 ponto de azarão.' },
+    passiva: { nome: 'Balança equilibrada', texto: 'O aliado que falhou ganha +1 ponto de azarão. Você tem bônus em passes por ranking de azarão: +5 pro aliado com mais pontos, +4 pro segundo, e assim por diante; ganhar um PdS remove 1 ponto de azarão do aliado.' },
     habilidades: [
       { nome: 'Twist', tipo: 'sem bola', texto: 'Inverte pontos de azarão entre 2 alvos.' },
       { nome: 'Windmill pass', tipo: 'com bola', simbolo: '❖', texto: 'Passe +8 bônus pro aliado com mais pontos de azarão do setor.' },
       { nome: 'Indecisão', tipo: 'variante', texto: '2 aliados disputam Consumir; passe recompensa vencedor ou perdedor.' },
-      { nome: 'Airflare', tipo: 'fluxo', texto: 'Ao sofrer desarme: passe pro aliado com mais azarão, com bônus escalonado.' },
+      { nome: 'Airflare', tipo: 'fluxo', texto: 'Ao sofrer desarme: faz um passe (ignora DdP e o roubador) pra um aliado. Se ele for o mais azarão: +25% de fluxo. Se for o menos azarão: +3 em testes por 3 turnos. Se for nenhum dos dois: remove todos os efeitos negativos.' },
     ],
   },
   {
@@ -297,7 +297,7 @@ export const ARMAS = [
       { nome: 'Perdão senhor', tipo: 'sem bola', texto: 'Ao alvo com bola entrar em 4x4m: avança e faz jogo de corpo com 1 vantagem; sucesso dá fôlegos extras iguais ao resultado do teste ÷4 (máx +6 na rodada).' },
       { nome: 'Bala humana', tipo: 'com bola', simbolo: '❖', texto: 'Ao tomar a posse: avança metros = fôlegos restantes ÷2, empurrando alvos no caminho; pode gastar 1 reação a mais pra chutar/passar com +4 bônus no final.' },
       { nome: 'Boas maneiras', tipo: 'variante', texto: 'Remove todos os efeitos negativos de um aliado adjacente e assume eles pela mesma duração; ambos ganham fôlegos extras.' },
-      { nome: 'Blindão!', tipo: 'fluxo', texto: 'Por Músculos×2 turnos: +4 fôlegos; ao passar adjacente a um alvo, testa Músculos vs Constância — vitória derruba ele por 2 turnos; ganha bônus acumulável a cada 2 fôlegos andados.' },
+      { nome: 'Blindão!', tipo: 'fluxo', texto: 'Por Músculos×2 turnos: +4 fôlegos; testes de resistir a roubo contra você usam Escudo; ao passar adjacente a um alvo, testa Músculos vs Constância — vitória derruba ele por 2 turnos; ganha bônus acumulável a cada 2 fôlegos andados.' },
     ],
   },
   {
@@ -379,7 +379,7 @@ export const ARMAS = [
     passiva: { nome: 'Ocus pocus', texto: 'Desbloqueia uma capacidade usável no seu turno ou em ação reativa.' },
     habilidades: [
       { nome: 'Acredite na magia!', tipo: 'sem bola', texto: 'Ao um aliado perder um J vs J na sua DdP ou menos: dá ego alto por Criatividade+1 turnos; mana aumenta a duração, e com 3 de mana vira ego alto x2.' },
-      { nome: 'Truque de mestre', tipo: 'com bola', simbolo: '✪', texto: 'Faz um passe; gastando mana ao declarar: receptor avança 2m se dominar, alvos ao redor caem, ou receptor ganha vantagem no próximo chute.' },
+      { nome: 'Truque de mestre', tipo: 'com bola', simbolo: '✪', texto: 'Alcance dobrado (2x sua DdP). Faz um passe; gastando mana ao declarar: receptor avança 2m se dominar, alvos ao redor caem, ou receptor ganha vantagem no próximo chute.' },
       { nome: 'Círculo de transmutação', tipo: 'variante', texto: 'Passa a bola e transfere sua zona dourada pro local do receptor; mana aumenta a zona ou remove efeito negativo dele.' },
       { nome: 'Pedra filosofal', tipo: 'fluxo', texto: 'Passe com 2 vantagens; se dominado, o receptor pode usar a habilidade de fluxo da arma dele gastando 2 reações; mana investida dá % de fluxo extra.' },
     ],

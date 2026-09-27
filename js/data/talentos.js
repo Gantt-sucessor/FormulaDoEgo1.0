@@ -32,8 +32,8 @@ export const TALENTOS_EVOLUTIVOS = [
     frase: 'Encomendei lápides para o meu cemitério!',
     esf: '+2 PdE', dis: 'adjacente', dur: 'instantâneo', tda: 'Ação egoísta', gex: '2 fôlegos',
     niveis: [
-      'Roubo com 1 vantagem; se ganhar, avança 2m.',
-      '1 vantagem+3 bônus; avança 3m; retira 2 fôlegos do roubado.',
+      'Desarme com 1 vantagem; se ganhar, avança 2m.',
+      '1 vantagem+3 bônus; avança 3m; retira 2 fôlegos do desarmado.',
       '2 vantagens+3 bônus; avança 4m; passe curto garantido ao final.',
     ],
   },
@@ -65,7 +65,7 @@ export const TALENTOS_SIMPLES = [
   { id: 'cabeca_dura', nome: 'Cabeça-dura', esf: '+3 PdE', dis: '½DdC+3m', dur: 'instantâneo', tda: 'Ação egoísta + Reação', texto: 'Cabeceio ofensivo +3 bônus, ignora malefícios de não estar no ar/flanqueamento, +3m distância.' },
   { id: 'judas', nome: 'Judas', frase: 'Torne-se um traidor por trinta moedas!', esf: '+3 PdE', dis: 'DdP/pessoal', dur: 'd4+2/d6+1 turnos', tda: 'Ação egoísta + tática', texto: 'Passe longo pra um INIMIGO; se dominar sem interceptação: você ganha ego alto x2, time recebe ego ferido.' },
   { id: 'ponto_cego', nome: 'Ponto cego + sem bola', esf: '+2 PdE', dis: 'pessoal', dur: 'Posicionamento+1 turnos', tda: 'Ação egoísta', prep: 'P/2 turnos', texto: 'Sem a bola: +2 fôlegos, +3 bônus escapar marcação/roubo, fica furtivo. Acaba ao ganhar posse.' },
-  { id: 'a_gasolina', nome: 'À gasolina', frase: 'Perde a linha, puxa o brabo!', esf: '+3 PdE', dis: 'Investida+1m', dur: 'instantâneo', tda: 'Reação', gex: '3 fôlegos', texto: 'Investida +1m; se achar alvo, drible usa Destreza em vez do atributo padrão.' },
+  { id: 'a_gasolina', nome: 'À gasolina', frase: 'Perde a linha, puxa o brabo!', esf: '+3 PdE', dis: 'Investida+0m', dur: 'instantâneo', tda: 'Reação', gex: '3 fôlegos', texto: 'Investida sem bônus de distância; se achar alvo, drible usa Destreza em vez do atributo padrão.' },
   { id: 'zero_reset_turn', nome: 'Zero Reset Turn', esf: '+2 PdE', dis: '3m/2m', dur: 'instantâneo', tda: '2 reações', gex: '3 fôlegos', texto: 'Ao ser flanqueado, avança 3m saindo do flanqueamento; pode passar pra aliado, que avança 2m se dominar.' },
 ];
 
