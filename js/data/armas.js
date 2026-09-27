@@ -408,7 +408,7 @@ export const ARMAS = [
     habilidades: [
       { nome: 'Yo bro', tipo: 'sem bola', simbolo: '✪', esf: '+3 PdE', dis: 'setor', dur: 'instantâneo', tda: '2 reações', gex: '4 fôlegos', texto: 'Ao alvo com bola entrar no seu setor: avança e faz um roubo; ele testa Emocional dj16 (dj20 se for o maior valor do time) antes de te driblar; se falhar, seu roubo fica garantido; se te driblar, ele ganha +1 valor.' },
       { nome: 'Zombie dribble', tipo: 'com bola', esf: '+3 PdE', dis: '6m', dur: 'instantâneo', tda: '2 reações + ação tática', texto: 'Ao roubar ou sofrer desarme: avança 6m, alvos no caminho testam Momento dj18 ou ficam confusos ao tentar te roubar; termina com passe +1m DdP por alvo driblado.' },
-      { nome: 'Chegou na zaga, para!', tipo: 'variante', esf: '+5 PdE', dis: 'setor', dur: 'instantâneo', tda: 'Ação egoísta + 2 reações', texto: 'Ao alvo driblar/chutar no seu setor: avança, ele testa Emocional dj20 (dj25 se maior valor); falha = rebote de interceptação tirando a bola dele; sucesso = ele ganha +3 valor.' },
+      { nome: 'Impact cancelado', tipo: 'variante', esf: '+5 PdE', dis: 'setor', dur: 'instantâneo', tda: 'Ação egoísta + 2 reações', texto: 'Ao alvo driblar/chutar no seu setor: avança, ele testa Emocional dj20 (dj25 se maior valor); falha = rebote de interceptação tirando a bola dele; sucesso = ele ganha +3 valor.' },
       { nome: 'Divoratore de Às', tipo: 'fluxo', esf: '+5 PdE', dis: 'pessoal', dur: '2d2 rodadas', tda: 'Ação egoísta + 2 reações', texto: 'Ao roubar um alvo: ele perde 5% de fluxo por valor que tiver, você ganha +1 turno de fluxo por valor dele; ele fica com ego ferido x2 por 2d2 rodadas.' },
     ],
   },
