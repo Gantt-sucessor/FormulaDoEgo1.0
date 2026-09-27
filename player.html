@@ -1290,13 +1290,18 @@
       const esf = Number((habilidade.esf || '').match(/\d+/)?.[0] || 0);
       const gastoFolego = Number((habilidade.gex || '').match(/(\d+)\s*fôlego/i)?.[1] || 0);
       const gastoPds = Number((habilidade.gex || '').match(/(\d+)\s*PdS/i)?.[1] || 0);
-      if (gastoFolego > folegoAtual || gastoPds > pontosSorte) {
-        mostrarToast('Fôlego ou PdS insuficiente para essa habilidade.', 'erro');
-        return;
-      }
+      // O "G.Ex." do livro é opcional (efeito melhorado se você tiver o recurso) — não trava o uso da habilidade.
+      // Só desconta o que você realmente tiver disponível, sem deixar negativo.
       pdeAtual += esf;
-      folegoAtual -= gastoFolego;
-      pontosSorte -= gastoPds;
+      let avisoRecursoFaltando = '';
+      if (gastoFolego) {
+        if (gastoFolego > folegoAtual) avisoRecursoFaltando = ' (sem fôlego suficiente pro G.Ex. completo)';
+        folegoAtual = Math.max(0, folegoAtual - gastoFolego);
+      }
+      if (gastoPds) {
+        if (gastoPds > pontosSorte) avisoRecursoFaltando += ' (sem PdS suficiente pro G.Ex. completo)';
+        pontosSorte = Math.max(0, pontosSorte - gastoPds);
+      }
       const tipoAcao = (habilidade.tda || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '');
       if (/egoista/i.test(tipoAcao)) acoesGastas.egoista = true;
       if (/tatica/i.test(tipoAcao)) acoesGastas.tatica = true;
@@ -1308,7 +1313,7 @@
       renderStatus();
       renderAcoesRodada();
       salvarPartidaAutomatico();
-      mostrarToast(`${habilidade.nome} usada.`);
+      mostrarToast(`${habilidade.nome} usada.${avisoRecursoFaltando}`);
       registrarAcaoNoHistorico(`Usou: ${habilidade.nome}`, habilidade.texto);
     }
 
