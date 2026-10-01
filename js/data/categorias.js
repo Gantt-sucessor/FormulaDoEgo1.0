@@ -14,7 +14,7 @@ export const CATEGORIAS = [
     evolucao: [
       { nivel: 1, ganhos: 'Criação de personagem + 1 nível de ótica' },
       { nivel: 2, ganhos: '+2 Pontos de Chama' },
-      { nivel: 3, ganhos: '+1 nível de ótica + 1 habilidade de categoria' },
+      { nivel: 3, ganhos: '+1 habilidade de categoria' },
       { nivel: 4, ganhos: '+2 Pontos de Chama + 2 pontos de perícia distribuíveis' },
       { nivel: 5, ganhos: '+2 Pontos de Chama + 1 nível de ótica' },
     ],
