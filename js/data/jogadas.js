@@ -6,7 +6,7 @@ export const JOGADAS = {
     { id: 'chute_curvo', nome: 'Chute curvo', pericia: 'trajetoria', dj: 'J vs G', distancia: 'DdC', acao: 'Ação tática', anormalidade: 'Com a bola no ar, pode curvá-la, desviando metros p/ esquerda/direita/diagonal.' },
     { id: 'chute_regular', nome: 'Chute regular', pericia: 'precisao', dj: 'J vs G', distancia: 'DdC', acao: 'Ação tática', anormalidade: 'Nenhuma.' },
     { id: 'chute_de_poder', nome: 'Chute de poder', pericia: 'especializacao', dj: 'J vs G', distancia: 'DdC+2m', acao: 'Ação tática', anormalidade: 'Ignora o primeiro interceptador (exceto contra habilidades).' },
-    { id: 'voleio', nome: 'Voleio', pericia: 'instintos + precisao ÷ 2', dj: 'J vs G', distancia: 'DdC', acao: '2 reações', anormalidade: 'Só como reação a um passe aliado. 2 desvantagens se não estiver no ar. Atributo usado: sempre Potência.' },
+    { id: 'voleio', nome: 'Voleio', pericia: 'instintos + precisao ÷ 2', pericias_compostas: ['instintos', 'precisao'], divisor: 2, atributo: 'potencia', dj: 'J vs G', distancia: 'DdC', acao: '2 reações', anormalidade: 'Só como reação a um passe aliado. 2 desvantagens se não estiver no ar. Atributo usado: sempre Potência.' },
   ],
   passes: [
     { id: 'passe_longo', nome: 'Passe longo', pericia: 'visao_de_jogo', dj: 14, distancia: 'DdP', acao: 'Ação tática', anormalidade: 'Nenhuma.' },
@@ -34,7 +34,7 @@ export const JOGADAS = {
   goleiro: [
     { id: 'defesa_de_goleiro', nome: 'Defesa de goleiro', pericia: 'agilidade', dj: 'chute inimigo', distancia: 'Adjacente', acao: '2 reações', anormalidade: 'Para a trajetória e toma posse. Obriga um passe logo em seguida.' },
     { id: 'espalmar', nome: 'Espalmar', pericia: 'instintos', dj: 'chute inimigo', distancia: 'Adjacente', acao: 'Reação', anormalidade: 'A bola volta metade da trajetória e fica livre.' },
-    { id: 'erguer_base', nome: 'Erguer base', pericia: 'constancia + posicionamento ÷ 2', dj: 10, distancia: 'pessoal', acao: 'Ação de movimento', anormalidade: 'Facilita defesas seguintes; dj sobe +2 por turno seguido, tendo que rerolar no início de todo turno. Atributo usado: sempre Cognição.' },
+    { id: 'erguer_base', nome: 'Erguer base', pericia: 'constancia + posicionamento ÷ 2', pericias_compostas: ['constancia', 'posicionamento'], divisor: 2, atributo: 'cognicao', dj: 10, distancia: 'pessoal', acao: 'Ação de movimento', anormalidade: 'Facilita defesas seguintes; dj sobe +2 por turno seguido, tendo que rerolar no início de todo turno. Atributo usado: sempre Cognição.' },
   ],
   outras: [
     { id: 'investida', nome: 'Investida', pericia: null, dj: null, distancia: 'Agilidade + 1m', acao: 'Ação tática', anormalidade: 'Avança uma quantidade de metros igual sua perícia de Agilidade + 1, em qualquer direção.' },
