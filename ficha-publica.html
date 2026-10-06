@@ -171,6 +171,7 @@
         <div class="status-item"><label>Fôlego</label><div class="status-controles">${ficha.folego_atual ?? 0}<span class="status-max">/${folegoMax}</span></div></div>
         <div class="status-item"><label>PdE</label><div class="status-controles">${ficha.pde_atual ?? 0}</div></div>
         <div class="status-item"><label>Pontos de Chama</label><div class="status-controles">${ficha.pontos_chama ?? 0}</div></div>
+        <div class="status-item"><label>Iniciativa</label><div class="status-controles">${(pericias['momento'] || 0) + (atributos['destreza'] || 0)}</div></div>
         <div class="status-item"><label>PdS</label><div class="status-controles">${ficha.pontos_sorte ?? 0}<span class="status-max">/${MAX_PDS_PADRAO}</span></div></div>
       `;
 

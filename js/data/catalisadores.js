@@ -19,7 +19,7 @@ export const CATALISADORES = [
     id: 'olhos_de_predador',
     nome: 'Olhos de Predador',
     tema: 'A sua percepção permite identificar brechas na defesa e antecipar o instante perfeito pra atacar, como um predador que fixa sua presa antes do bote.',
-    passiva: { nome: 'Foco na presa', texto: '(texto exato dessa passiva não ficou legível na leitura do livro — o nome e a lógica geral de "focar num alvo" estão confirmados, falta o número exato do bônus.)' },
+    passiva: { nome: 'Foco na presa', texto: 'Ao ativar esse catalisador, escolha 2 alvos para colocá-los como "presas" (exceto goleiro). Até desativar o catalisador, ambas as presas se tornam incapacitadas de parar seus chutes e você pode usar Potência em qualquer teste J vs J contra elas.' },
     jogadas_potencial: [
       { acao: 'Devorar', potencial: 1 },
       { acao: 'Chute + gol', potencial: 2 },
@@ -34,7 +34,7 @@ export const CATALISADORES = [
     passiva: { nome: 'Arte da dança', texto: 'Pode fazer dribles utilizando qualquer uma das 3 perícias do atributo Drible (Pressão, Criatividade ou Posse).' },
     jogadas_potencial: [
       { acao: '2x drible', potencial: 1 },
-      { acao: 'Drible + gol', potencial: 2 },
+      { acao: 'Controle + gol', potencial: 2 },
       { acao: '2x trash talk', potencial: 1 },
     ],
     habilidade: { nome: 'Vem x1!', esf: '+2 PdE', dis: 'setor', dur: 'd4 turnos', tda: '—', texto: 'Com a bola, obriga um alvo (exceto goleiro) do setor a avançar até você e fazer um desarme. Se você driblar, ele fica caído por d4 turnos, você avança 2m e pode repetir a habilidade sem receber PdE de novo. Repetindo 3x seguidas sem falhar, todos os driblados ficam com ego quebrado.' },

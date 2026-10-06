@@ -367,6 +367,10 @@
             <label>Distância de passe (DdP)</label>
             <div class="status-controles"><span id="valor-ddp">6</span><span class="status-max">m</span></div>
           </div>
+          <div class="status-item">
+            <label>Iniciativa (Momento + Destreza)</label>
+            <div class="status-controles"><span id="valor-iniciativa">0</span></div>
+          </div>
         </div>
       </div>
 
@@ -487,7 +491,7 @@
 
       <div class="form-section">
         <h3>Catalisador</h3>
-        <p class="step-desc">Libera no nível 5 (só a passiva); a habilidade exclusiva e o potencial liberam no nível 7. As opções mudam de acordo com a Ótica escolhida na aba Classe &amp; Habilidades.</p>
+        <p class="step-desc">Libera no nível 5 (passiva + potencial); a habilidade exclusiva libera no nível 7. As opções mudam de acordo com a Ótica escolhida na aba Classe &amp; Habilidades.</p>
         <select id="select-catalisador">
           <option value="">— nenhum —</option>
         </select>
@@ -1176,6 +1180,7 @@
       initHexagono(document.getElementById('hexagono-container'), (atrs) => {
         atributosEscolhidos = atrs;
         renderSelectAtributoManual();
+        renderStatus();
       }, atributosEscolhidos);
       atualizarLimitePericias();
 
@@ -1361,6 +1366,7 @@
       document.getElementById('valor-sorte-max-partida').textContent = MAX_PDS_PADRAO;
       document.getElementById('valor-ddc').textContent = calcularDdC(periciasEscolhidas[periciaDistanciaChute] || 0, recompensaNivel6 === 'distancia_chute' ? 1 : 0);
       document.getElementById('valor-ddp').textContent = calcularDdP(periciasEscolhidas[periciaDistanciaPasse] || 0, recompensaNivel6 === 'distancia_passe' ? 1 : 0);
+      document.getElementById('valor-iniciativa').textContent = (periciasEscolhidas['momento'] || 0) + (atributosEscolhidos['destreza'] || 0);
       salvarPartidaAutomatico();
     }
 
@@ -1917,49 +1923,57 @@
       info.classList.add('ativo');
 
       const habilidadeLiberada = nivelAtual >= NIVEL_MINIMO_HABILIDADE_CATALISADOR;
-      const blocoHabilidade = habilidadeLiberada
-        ? `
+      const blocoPotencial = `
+          <p class="step-desc" style="margin: 0 0 8px;">Como funciona: ao <strong>ganhar</strong> uma das jogadas abaixo (com ou sem habilidade), você recebe potencial (+1 a +3). O limite acumulado é 10. Ativar o catalisador é uma <strong>ação egoísta</strong> no seu turno: gasta <strong>todo</strong> o potencial de uma vez, e a duração em turnos é igual ao potencial gasto (ex: 5 de potencial = 5 turnos). Dá pra ativar com menos de 10.</p>
           <strong>Potencial atual: <span id="valor-potencial">${potencialCatalisador}</span>/10</strong>
           <div class="jogadas-grid" style="margin-top:8px;">
             ${cat.jogadas_potencial.map((j) => `<button type="button" class="jogada-card" data-potencial="${j.potencial}"><div class="nome">${j.acao}</div><div class="info">+${j.potencial} potencial</div></button>`).join('')}
           </div>
-          <button type="button" id="btn-ativar-catalisador" class="btn btn-primary" style="width:100%; margin-top:12px;" ${potencialCatalisador >= 10 ? '' : 'disabled'}>Ativar catalisador</button>
-        `
-        : `<p style="color: var(--text-muted); font-size: 0.85rem;">O potencial e a habilidade exclusiva desse catalisador só liberam no nível ${NIVEL_MINIMO_HABILIDADE_CATALISADOR}. Por enquanto você só tem a passiva acima.</p>`;
+          <div style="display:flex; gap:8px; margin-top:12px;">
+            <button type="button" id="btn-ativar-catalisador" class="btn btn-primary" style="flex:1;" ${potencialCatalisador >= 1 ? '' : 'disabled'}>Ativar catalisador${potencialCatalisador >= 1 ? ` (${potencialCatalisador} turno${potencialCatalisador > 1 ? 's' : ''})` : ''}</button>
+            <button type="button" id="btn-zerar-potencial" class="btn btn-ghost" ${potencialCatalisador >= 1 ? '' : 'disabled'}>Zerar</button>
+          </div>
+        `;
 
       info.innerHTML = `
         <div>${cat.tema}</div>
         <div class="arma-bloco"><strong>Passiva — ${cat.passiva.nome}:</strong> ${cat.passiva.texto}</div>
         <div class="arma-bloco">
-          ${blocoHabilidade}
+          ${blocoPotencial}
         </div>
         ${habilidadeLiberada ? `
         <div class="arma-bloco">
           <strong>Habilidade — ${cat.habilidade.nome}:</strong> ${cat.habilidade.texto}
           <div style="margin-top:8px;"><button type="button" class="btn btn-ghost" id="btn-usar-habilidade-catalisador">Usar habilidade</button></div>
         </div>
-        ` : ''}
+        ` : `<div class="arma-bloco"><p style="color: var(--text-muted); font-size: 0.85rem; margin:0;">A habilidade exclusiva desse catalisador (${cat.habilidade.nome}) só libera no nível ${NIVEL_MINIMO_HABILIDADE_CATALISADOR}.</p></div>`}
       `;
 
-      if (habilidadeLiberada) {
-        info.querySelectorAll('[data-potencial]').forEach((btn) => btn.addEventListener('click', () => {
-          potencialCatalisador = Math.min(10, potencialCatalisador + Number(btn.dataset.potencial));
-          renderCatalisador();
-          salvarPartidaAutomatico();
-        }));
-        document.getElementById('btn-ativar-catalisador').addEventListener('click', () => {
-          if (potencialCatalisador < 10) {
-            mostrarToast('Precisa de 10 de potencial pra ativar o catalisador.', 'erro');
-            return;
-          }
-          potencialCatalisador = 0;
-          mostrarToast('Catalisador ativado!');
-          registrarAcaoNoHistorico(`Ativou o catalisador: ${cat.nome}`, cat.habilidade.texto);
-          renderCatalisador();
-          salvarPartidaAutomatico();
-        });
-        document.getElementById('btn-usar-habilidade-catalisador')?.addEventListener('click', () => usarHabilidade(cat.habilidade));
-      }
+      info.querySelectorAll('[data-potencial]').forEach((btn) => btn.addEventListener('click', () => {
+        potencialCatalisador = Math.min(10, potencialCatalisador + Number(btn.dataset.potencial));
+        renderCatalisador();
+        salvarPartidaAutomatico();
+      }));
+      document.getElementById('btn-zerar-potencial').addEventListener('click', () => {
+        potencialCatalisador = 0;
+        renderCatalisador();
+        salvarPartidaAutomatico();
+      });
+      document.getElementById('btn-ativar-catalisador').addEventListener('click', () => {
+        if (potencialCatalisador < 1) {
+          mostrarToast('Sem potencial acumulado pra ativar o catalisador.', 'erro');
+          return;
+        }
+        const turnos = potencialCatalisador;
+        potencialCatalisador = 0;
+        acoesGastas.egoista = true;
+        mostrarToast(`Catalisador ativado por ${turnos} turno(s)!`);
+        registrarAcaoNoHistorico(`Ativou o catalisador: ${cat.nome} (${turnos} turno${turnos > 1 ? 's' : ''})`, cat.passiva.texto);
+        renderAcoesRodada();
+        renderCatalisador();
+        salvarPartidaAutomatico();
+      });
+      document.getElementById('btn-usar-habilidade-catalisador')?.addEventListener('click', () => usarHabilidade(cat.habilidade));
     }
     document.getElementById('select-catalisador').addEventListener('change', (e) => { catalisadorId = e.target.value; renderCatalisador(); });
     document.getElementById('select-otica').addEventListener('change', renderCatalisador);
