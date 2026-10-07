@@ -31,15 +31,11 @@
   gap: 28px;
   align-items: start;
 }
-.coluna-atributos { position: sticky; top: 20px; min-width: 0; }
+.coluna-atributos { min-width: 0; }
 .coluna-jogo {
   min-width: 0;
   display: block;
 }
-.coluna-jogo > #bloco-rolagem { min-width: 0; display: grid; gap: 18px; }
-.jogadas-area { order: 1; min-width: 0; }
-.rolagem-manual-card { order: 2; margin: 0; }
-.jogadas-area > .divider { margin: 18px 0; }
 @media (max-width: 900px) {
   .visao-geral-grid { grid-template-columns: 1fr; }
   .coluna-atributos { position: static; }
@@ -410,21 +406,6 @@
 
 /* Rolagem */
 .jogada-select { margin-bottom: 12px; }
-.resultado-box {
-  text-align: center;
-  padding: 24px;
-  background: var(--bg-surface-2);
-  border-radius: var(--radius);
-  margin-top: 16px;
-}
-.resultado-box .numero-final {
-  font-family: var(--font-display);
-  font-size: 3rem;
-  color: var(--accent-blue);
-}
-.resultado-box .numero-final.absoluta-positiva { color: var(--accent-gold); }
-.resultado-box .numero-final.absoluta-negativa { color: var(--danger); }
-.resultado-box .detalhe { font-size: 0.8rem; color: var(--text-secondary); margin-top: 8px; }
 
 .ficha-header {
   display: flex;
@@ -451,7 +432,6 @@
   display: flex;
   gap: 4px;
   border-bottom: 1px solid var(--border);
-  margin-bottom: 24px;
   overflow-x: auto;
 }
 .aba-btn {
@@ -504,28 +484,6 @@
 .jogada-card .info { font-size: 0.84rem; color: var(--text-muted); line-height: 1.4; }
 .talento-nivel { width: 100%; margin-top: 12px; min-height: 42px; font-size: 0.95rem; }
 
-/* Histórico de rolagens */
-.historico-lista { display: flex; flex-direction: column; gap: 8px; margin-top: 12px; }
-.historico-item {
-  padding: 10px 14px;
-  background: var(--bg-surface-2);
-  border-radius: var(--radius);
-}
-.historico-item-topo {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-.historico-item .jogada-nome { font-size: 0.85rem; }
-.historico-item .hora { font-size: 0.7rem; color: var(--text-muted); }
-.historico-item .resultado {
-  font-family: var(--font-display);
-  font-size: 1.2rem;
-  color: var(--accent-blue);
-}
-.historico-item .resultado.absoluta-positiva { color: var(--accent-gold); }
-.historico-item .resultado.absoluta-negativa { color: var(--danger); }
-
 /* Ícones das armas */
 .icone-arma-svg { width: 100%; height: 100%; display: block; color: var(--accent-gold); }
 .icone-arma-fundo { fill: var(--bg-surface-2); stroke: var(--border-strong); stroke-width: 1; }
@@ -538,13 +496,6 @@
 
 .titulo-personagem-linha { display: flex; align-items: center; gap: 10px; }
 .badge-com-icone { display: inline-flex; align-items: center; gap: 6px; }
-.historico-detalhe {
-  margin-top: 6px;
-  padding-top: 6px;
-  border-top: 1px solid var(--border);
-  font-size: 0.75rem;
-  color: var(--text-secondary);
-}
 
 /* Linha de ficha com botão de excluir ao lado */
 .linha-com-exclusao {
@@ -672,3 +623,247 @@
   padding: 6px 8px;
   font-size: 0.85rem;
 }
+[hidden] { display: none !important; }
+
+/* Cabeçalho da ficha: status do salvamento automático */
+.ficha-header { gap: 12px; flex-wrap: wrap; }
+.ficha-header-acoes { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+.status-salvamento { font-size: 0.75rem; color: var(--text-muted); }
+.status-salvamento[data-estado="salvo"] { color: var(--success); }
+.status-salvamento[data-estado="pendente"],
+.status-salvamento[data-estado="salvando"] { color: var(--accent-gold); }
+.status-salvamento[data-estado="erro"],
+.status-salvamento[data-estado="sem-nome"] { color: var(--danger); }
+
+/* Abas + recursos grudados no topo enquanto a página rola */
+.ficha-fixa {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  margin: 0 -24px 24px;
+  padding: 0 24px 10px;
+  background: rgba(10, 13, 20, 0.92);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+}
+.barra-recursos {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+  margin-top: 10px;
+}
+.recurso {
+  padding: 8px 10px 6px;
+  background: var(--bg-surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  text-align: center;
+}
+.recurso-nome {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 0.68rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.recurso .status-controles { font-size: 1.15rem; }
+.recurso-barra {
+  height: 3px;
+  margin-top: 6px;
+  background: var(--bg-surface);
+  border-radius: 999px;
+  overflow: hidden;
+}
+.recurso-barra i { display: block; height: 100%; background: var(--accent-blue); transition: width 0.2s ease; }
+@media (max-width: 560px) {
+  .barra-recursos { gap: 6px; }
+  .recurso { padding: 6px 4px 4px; }
+  .recurso-nome { font-size: 0.6rem; }
+  .recurso .status-controles { gap: 4px; font-size: 1rem; }
+  .recurso .status-controles button { width: 22px; height: 22px; }
+}
+
+/* Âncoras do checklist não ficam escondidas atrás da barra fixa */
+.painel-aba .form-section,
+.coluna-atributos { scroll-margin-top: 150px; }
+
+.secao-titulo-linha { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 4px; }
+.secao-titulo-linha h3 { margin-bottom: 0; }
+.status-controles-campo { justify-content: flex-start; min-height: 48px; }
+.select-mini { margin-top: 8px; padding: 6px 8px; font-size: 0.8rem; }
+
+.aviso-sem-ficha {
+  padding: 14px 16px;
+  margin-bottom: 24px;
+  border: 1px dashed var(--accent-gold-dim);
+  border-radius: var(--radius);
+  background: rgba(242, 183, 5, 0.05);
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+}
+
+/* Checklist de criação no topo da aba Personagem */
+.checklist-criacao {
+  margin-bottom: 24px;
+  padding: 14px 16px;
+  border: 1px solid var(--accent-blue-dim);
+  border-radius: var(--radius);
+  background: rgba(var(--accent-rgb), 0.05);
+}
+.checklist-criacao.completo { border-color: var(--success); background: rgba(51, 196, 129, 0.05); }
+.checklist-topo { display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 0.9rem; }
+.checklist-topo span { color: var(--text-muted); }
+.checklist-itens { display: flex; flex-wrap: wrap; gap: 6px; }
+.checklist-item {
+  padding: 5px 10px;
+  border: 1px solid var(--border-strong);
+  border-radius: 999px;
+  background: var(--bg-surface);
+  color: var(--text-secondary);
+  font: 0.8rem var(--font-body);
+  cursor: pointer;
+}
+.checklist-item:hover { border-color: var(--accent-blue); color: var(--text-primary); }
+.checklist-item.ok { border-color: var(--success); color: var(--success); }
+
+/* Modificadores da próxima rolagem */
+.modificadores {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 10px 16px;
+  margin-bottom: 16px;
+  padding: 10px 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--bg-surface-2);
+}
+.modificadores.ativo { border-color: var(--accent-gold); }
+.modificadores-titulo { width: 100%; font-size: 0.75rem; color: var(--text-muted); }
+.modificador label { margin-bottom: 4px; font-size: 0.72rem; }
+.modificador .status-controles { gap: 6px; }
+.modificador input {
+  width: 46px;
+  padding: 4px;
+  text-align: center;
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  color: var(--accent-gold);
+  -moz-appearance: textfield;
+}
+.modificador input::-webkit-inner-spin-button,
+.modificador input::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+
+/* Jogadas e botões de partida mais compactos — muita coisa pra clicar rápido */
+.jogadas-compactas .jogadas-grid,
+.jogadas-compactas-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 8px; }
+.jogadas-compactas .jogada-card,
+.jogadas-compactas-grid .jogada-card { min-height: 0; padding: 10px 12px; }
+.jogadas-compactas .jogada-card .nome,
+.jogadas-compactas-grid .jogada-card .nome { font-size: 0.9rem; margin-bottom: 2px; }
+.jogadas-compactas .jogada-card .info,
+.jogadas-compactas-grid .jogada-card .info { font-size: 0.75rem; }
+
+/* Blocos dobráveis (marcar condição, rolagem livre, dados avulsos) */
+.dobravel { margin-top: 12px; }
+.dobravel > summary {
+  cursor: pointer;
+  padding: 8px 0;
+  color: var(--accent-blue);
+  font-size: 0.88rem;
+  font-weight: 600;
+  list-style: none;
+}
+.dobravel > summary::-webkit-details-marker { display: none; }
+.dobravel > summary::before { content: '▸ '; }
+.dobravel[open] > summary::before { content: '▾ '; }
+.dobravel[open] > summary { margin-bottom: 8px; }
+
+/* Fita de rolagens: botão flutuante + painel */
+.dados-botao {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  z-index: 40;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 18px;
+  border: 1px solid var(--accent-blue);
+  border-radius: 999px;
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  font: 600 0.95rem var(--font-body);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.45);
+  cursor: pointer;
+}
+.dados-botao:hover { box-shadow: 0 0 22px rgba(var(--accent-rgb), 0.3); }
+.painel-dados {
+  position: fixed;
+  right: 20px;
+  bottom: 80px;
+  z-index: 41;
+  display: flex;
+  flex-direction: column;
+  width: min(380px, calc(100vw - 32px));
+  max-height: min(640px, calc(100vh - 110px));
+  border: 1px solid var(--border-strong);
+  border-top: 3px solid var(--accent-blue);
+  border-radius: var(--radius-lg);
+  background: var(--bg-surface);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.55);
+}
+.painel-dados-topo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 6px 10px 16px;
+  border-bottom: 1px solid var(--border);
+  font-family: var(--font-display);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.painel-dados-topo .btn-excluir { width: 28px; height: 28px; }
+.painel-dados-ferramentas {
+  flex: none;
+  max-height: 45vh;
+  overflow-y: auto;
+  padding: 0 16px 12px;
+  border-top: 1px solid var(--border);
+}
+.fita {
+  flex: 1;
+  min-height: 80px;
+  margin: 0;
+  padding: 4px 16px;
+  list-style: none;
+  overflow-y: auto;
+}
+.fita-item { padding: 10px 0; border-bottom: 1px dashed var(--border-strong); }
+.fita-item:last-child { border-bottom: none; }
+.fita-vazia { padding: 28px 8px; text-align: center; color: var(--text-muted); font-size: 0.85rem; }
+.fita-cabeca { display: flex; align-items: baseline; gap: 8px; font-size: 0.85rem; }
+.fita-hora { flex: none; font-size: 0.7rem; color: var(--text-muted); }
+.fita-nome { flex: 1; min-width: 0; font-weight: 600; }
+.fita-conta { display: flex; align-items: flex-end; justify-content: space-between; gap: 12px; margin-top: 4px; }
+.fita-detalhe { min-width: 0; font-size: 0.75rem; color: var(--text-secondary); line-height: 1.4; }
+.fita-acao .fita-detalhe { display: block; margin-top: 4px; }
+.fita-total { flex: none; font-family: var(--font-display); font-size: 1.5rem; line-height: 1; color: var(--accent-blue); }
+.fita-total.absoluta-positiva, .fita-marca.absoluta-positiva { color: var(--accent-gold); }
+.fita-total.absoluta-negativa, .fita-marca.absoluta-negativa { color: var(--danger); }
+.fita-marca { margin-top: 4px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; }
+/* A rolagem que acabou de sair fica grande, pra ler de relance */
+.fita-ultima { animation: fita-entra 0.25s ease-out; }
+.fita-ultima .fita-total { font-size: 2.6rem; }
+.fita-ultima .fita-nome { font-size: 0.95rem; }
+@keyframes fita-entra {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: none; }
+}
+@media (max-width: 560px) {
+  .dados-botao { right: 12px; bottom: 12px; padding: 10px 14px; }
+  .painel-dados { right: 8px; left: 8px; bottom: 64px; width: auto; max-height: calc(100vh - 140px); }
+}
+/* Espaço pro botão flutuante não cobrir o fim da ficha */
+#tela-personagem { padding-bottom: 96px; }
