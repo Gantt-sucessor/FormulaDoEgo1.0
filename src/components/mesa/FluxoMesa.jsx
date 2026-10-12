@@ -1,5 +1,6 @@
 import { MARCAS_DESPERTAR, TIPOS_AURA, calcularPercentualFluxoComUsos } from '../../data/fluxo.js';
 import { Secao } from '../ui.jsx';
+import { Termo } from '../Termo.jsx';
 
 export function FluxoMesa({ f, atualizar, registrar, toast }) {
   const fl = f.fluxo;
@@ -28,7 +29,7 @@ export function FluxoMesa({ f, atualizar, registrar, toast }) {
         <>
           <div className="mb-2 flex items-end justify-between">
             <div><span className="legenda">% atual</span><div className={`text-3xl font-bold ${pronto ? 'text-ok glow-ciano' : 'text-texto'}`}>{atual}%</div></div>
-            <div className="text-right"><span className="legenda">Aura {aura.nome}</span><div className="text-xl text-suave">precisa de {necessario}%</div></div>
+            <div className="text-right"><span className="legenda"><Termo id="aura">Aura</Termo> {aura.nome}</span><div className="text-xl text-suave">precisa de {necessario}%</div></div>
           </div>
           <div className="barra mb-4"><i style={{ width: `${Math.min(100, (atual / necessario) * 100)}%` }} /></div>
         </>

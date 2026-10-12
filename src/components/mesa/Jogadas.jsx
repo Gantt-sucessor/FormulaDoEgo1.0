@@ -3,6 +3,7 @@ import { JOGADAS } from '../../data/jogadas.js';
 import { PERICIAS } from '../../data/pericias.js';
 import { ATRIBUTOS } from '../../data/atributos.js';
 import { Secao, Contador } from '../ui.jsx';
+import { Termo } from '../Termo.jsx';
 import { nomeAtributo, valorPericiaDaJogada, sinal } from '../../lib/ficha.js';
 
 const GRUPOS = { chutes: 'Chutes', passes: 'Passes', dribles: 'Dribles', defesa: 'Defesa', goleiro: 'Goleiro', outras: 'Outras' };
@@ -47,7 +48,7 @@ export function Jogadas({ f, rolar, toast, existe, abrirFita }) {
         <span className="legenda">Na próxima rolagem</span>
         {[['Vantagens', vant, setVant, 0], ['Desvantagens', desv, setDesv, 0], ['Bônus', bonus, setBonus, -99]].map(([rotulo, v, set, min]) => (
           <span key={rotulo} className="flex items-center gap-2 text-[12px]">
-            {rotulo}
+            {rotulo === 'Bônus' ? rotulo : <Termo id="vantagem">{rotulo}</Termo>}
             <Contador valor={v} min={min} rotulo={rotulo} onMenos={() => set(v - 1)} onMais={() => set(v + 1)} formato={rotulo === 'Bônus' ? sinal : undefined} />
           </span>
         ))}
@@ -79,7 +80,7 @@ export function Jogadas({ f, rolar, toast, existe, abrirFita }) {
               return (
                 <button key={j.id} type="button" className="cartao" disabled={!rolavel || !existe} onClick={() => clicar(j)} title={j.anormalidade}>
                   <div className="text-[13px] font-semibold">{j.nome}</div>
-                  <div className="text-[11px] text-suave">{def ? def.nome : j.pericias_compostas ? rotuloPericiaComposta(j) : '—'} · Dj {j.dj ?? '—'}</div>
+                  <div className="text-[11px] text-suave">{def ? def.nome : j.pericias_compostas ? rotuloPericiaComposta(j) : '—'} · <Termo id="dj">Dj</Termo> {j.dj ?? '—'}</div>
                   <div className="text-[10px] text-mudo">{j.acao}</div>
                 </button>
               );

@@ -2,6 +2,7 @@ import { CATALISADORES } from '../../data/catalisadores.js';
 import { NIVEL_MINIMO_CATALISADOR, NIVEL_MINIMO_HABILIDADE_CATALISADOR } from '../../data/fluxo.js';
 import { catalisadoresDaOtica } from '../../lib/ficha.js';
 import { Secao } from '../ui.jsx';
+import { Termo } from '../Termo.jsx';
 import { TextoLivro } from '../Habilidade.jsx';
 
 export function CatalisadorMesa({ f, atualizar, registrar, toast }) {
@@ -30,7 +31,7 @@ export function CatalisadorMesa({ f, atualizar, registrar, toast }) {
           <div className="mb-2 flex items-center gap-2"><strong className="uppercase tracking-[0.16em]">{cat.nome}</strong></div>
           <p className="mb-2 text-[12px] text-suave">Passiva — <strong className="text-texto">{cat.passiva.nome}:</strong> {cat.passiva.texto}</p>
           <div className="mb-1 flex items-center justify-between">
-            <span className="legenda">Potencial</span>
+            <span className="legenda"><Termo id="potencial">Potencial</Termo></span>
             <strong className="text-xl text-ciano">{pot}<span className="text-sm text-mudo">/10</span></strong>
           </div>
           <div className="barra mb-3"><i style={{ width: `${pot * 10}%` }} /></div>

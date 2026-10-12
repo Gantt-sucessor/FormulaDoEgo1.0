@@ -2,11 +2,12 @@ import { useState } from 'react';
 import { novaRodada, passarTurno, reacoesMaximas } from '../../regras/habilidades.js';
 import { estadoDoMotor, aplicarEstadoDoMotor, folegoMaximo } from '../../lib/ficha.js';
 import { Secao } from '../ui.jsx';
+import { Termo } from '../Termo.jsx';
 
-function Acao({ rotulo, gasta, onClick, sub }) {
+function Acao({ rotulo, gasta, onClick, sub, termo }) {
   return (
     <button type="button" onClick={onClick} className={`cartao ${gasta ? 'cartao-gasto' : 'cartao-ativo'}`} aria-pressed={gasta}>
-      <div className="text-[12px] font-semibold uppercase tracking-[0.12em]">{rotulo}</div>
+      <div className="text-[12px] font-semibold uppercase tracking-[0.12em]">{termo ? <Termo id={termo}>{rotulo}</Termo> : rotulo}</div>
       <div className="text-[11px] text-suave">{gasta ? 'gasta' : sub || 'disponível'}</div>
     </button>
   );
@@ -38,7 +39,7 @@ export function Turno({ f, atualizar, registrar, toast }) {
   };
 
   return (
-    <Secao titulo="Turno e ações" tag={`rodada ${f.rodada} · turno ${f.turno}`}>
+    <Secao titulo="Turno e ações" tag={<><Termo id="rodada">rodada</Termo> {f.rodada} · <Termo id="turno">turno</Termo> {f.turno}</>}>
       <div className="mb-4 flex flex-wrap items-center gap-2">
         <button type="button" className="btn btn-primario" onClick={nova}>Nova rodada</button>
         <button type="button" className="btn" onClick={passar}>Passar turno</button>
@@ -54,12 +55,12 @@ export function Turno({ f, atualizar, registrar, toast }) {
         </div>
       </div>
       <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
-        <Acao rotulo="Tática" gasta={a.tatica} onClick={() => alternar('tatica')} />
-        <Acao rotulo="Egoísta" gasta={a.egoista} onClick={() => alternar('egoista')} />
-        {f.nivel >= 8 && <Acao rotulo="Egoísta extra" gasta={a.egoistaExtra} onClick={() => alternar('egoistaExtra')} sub="nível 8" />}
-        <Acao rotulo="Movimento" gasta={a.movimento} onClick={() => alternar('movimento')} />
+        <Acao termo="tatica" rotulo="Tática" gasta={a.tatica} onClick={() => alternar('tatica')} />
+        <Acao termo="egoista" rotulo="Egoísta" gasta={a.egoista} onClick={() => alternar('egoista')} />
+        {f.nivel >= 8 && <Acao termo="egoista" rotulo="Egoísta extra" gasta={a.egoistaExtra} onClick={() => alternar('egoistaExtra')} sub="nível 8" />}
+        <Acao termo="movimento" rotulo="Movimento" gasta={a.movimento} onClick={() => alternar('movimento')} />
         {Array.from({ length: nReacoes }, (_, i) => (
-          <Acao key={i} rotulo={`Reação ${i + 1}`} gasta={a.regulares[i]} onClick={() => alternarReacao(i)} />
+          <Acao key={i} termo="reacao" rotulo={`Reação ${i + 1}`} gasta={a.regulares[i]} onClick={() => alternarReacao(i)} />
         ))}
       </div>
     </Secao>

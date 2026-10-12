@@ -1,5 +1,7 @@
 import { Fragment } from 'react';
 import { condicaoDeBola, somenteUmaVezEmFluxo } from '../regras/habilidades.js';
+import { Termo } from './Termo.jsx';
+import { chaveDeRotulo } from '../data/glossario.js';
 
 /** Texto do livro: bullets "• " viram lista; [condições] ficam laranja e em itálico. */
 export function TextoLivro({ texto, className = '' }) {
@@ -35,7 +37,7 @@ export function StatLinha({ h }) {
   if (!itens.length) return null;
   return (
     <div className="stat-linha">
-      {itens.map(([k, rotulo]) => <span key={k}><b>{rotulo}</b>{h[k]}</span>)}
+      {itens.map(([k, rotulo]) => <span key={k}><b><Termo id={chaveDeRotulo(rotulo)}>{rotulo}</Termo></b>{h[k]}</span>)}
     </div>
   );
 }
@@ -51,7 +53,7 @@ export function SeloTipo({ h }) {
   if (!h.tipo) return null;
   return (
     <span className={`rounded-sm border px-1.5 py-px text-[10px] font-semibold uppercase tracking-[0.14em] ${TIPO_COR[h.tipo] || 'border-linha-forte text-suave'}`}>
-      {h.tipo}{h.simbolo ? ` ${h.simbolo}` : ''}
+      <Termo id={h.tipo}>{h.tipo}</Termo>{h.simbolo ? <Termo id={h.simbolo === '✪' ? 'zona_dourada' : h.simbolo === '❖' ? 'reacao_quimica' : ''} className="ml-1">{h.simbolo}</Termo> : null}
     </span>
   );
 }
@@ -69,7 +71,7 @@ export function HabilidadeLivro({ h, acoes, compacta = false }) {
       <header className="mb-1 flex flex-wrap items-center gap-2">
         <h4 className="text-[13px] font-bold uppercase tracking-[0.18em]">{h.nome}</h4>
         <SeloTipo h={h} />
-        {somenteUmaVezEmFluxo(h) && h.tipo !== 'fluxo' && <span className="chip">1× por fluxo</span>}
+        {somenteUmaVezEmFluxo(h) && h.tipo !== 'fluxo' && <span className="chip"><Termo id="uma_vez_fluxo">1× por fluxo</Termo></span>}
       </header>
       {h.frase && !compacta && <p className="mb-2"><span className="frase">“{h.frase}”</span></p>}
       {h.condicao && <p className="tag-condicao mb-1 text-[12px]">[{h.condicao}]</p>}

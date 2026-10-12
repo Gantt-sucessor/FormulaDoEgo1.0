@@ -162,3 +162,19 @@ html, body { overflow-x: hidden; }
 img, svg { max-width: 100%; }
 
 @media (min-width: 640px) { .toast-caixa { bottom: 24px; } }
+
+/* ---- Dicas dos termos ---- */
+.termo { position: relative; cursor: help; border-bottom: 1px dotted currentColor; outline-offset: 2px; }
+.termo::after {
+  content: attr(data-dica);
+  position: absolute; z-index: 60; left: 0; bottom: calc(100% + 8px);
+  width: max-content; max-width: min(280px, 80vw);
+  padding: 8px 10px; background: #000; color: var(--color-texto);
+  border: 1px solid var(--color-ciano); border-radius: 3px;
+  font-size: 12px; font-weight: 400; letter-spacing: 0; text-transform: none; line-height: 1.45; font-style: normal; white-space: normal; text-align: left;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.7);
+  opacity: 0; visibility: hidden; transform: translateY(4px); pointer-events: none;
+  transition: opacity .12s, transform .12s, visibility .12s;
+}
+.termo:hover::after, .termo:focus::after, .termo:focus-visible::after { opacity: 1; visibility: visible; transform: none; }
+.legenda.termo, .campo-label.termo { display: inline-block; }

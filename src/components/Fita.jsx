@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { Termo } from './Termo.jsx';
 
 export function formatarDetalhe(d) {
   if (!d) return '';
@@ -33,7 +34,7 @@ function ItemFita({ r, destaque }) {
           <span className={`text-3xl font-bold leading-none ${corTotal}`}>{r.resultado}</span>
         </div>
       )}
-      {abs && <p className={`mt-1 text-[11px] font-bold uppercase tracking-[0.16em] ${corTotal}`}>{abs === 'positiva' ? 'Execução absoluta!' : 'Falha absoluta'}</p>}
+      {abs && <p className={`mt-1 text-[11px] font-bold uppercase tracking-[0.16em] ${corTotal}`}><Termo id="execucao_absoluta">{abs === 'positiva' ? 'Execução absoluta!' : 'Falha absoluta'}</Termo></p>}
     </li>
   );
 }
