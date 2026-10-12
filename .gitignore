@@ -1,14 +1,5 @@
-# Segredos e configuracoes locais
+node_modules
+dist
 .env
-.env.*
-!.env.example
-
-# Supabase CLI e artefatos locais
-.supabase/
-supabase/.branches/
-supabase/.temp/
-
-# Dependencias e saidas de ferramentas
-node_modules/
-coverage/
-.DS_Store
+.env.local
+.vercel

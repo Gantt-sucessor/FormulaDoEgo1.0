@@ -1,153 +1,24 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-BR">
-<head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Fórmula do Ego</title>
-<link rel="stylesheet" href="css/base.css" />
-<link rel="stylesheet" href="css/player.css" />
-<style>
-  .hero {
-    position: relative;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    padding: 40px 24px;
-  }
-  .hero-title {
-    font-size: clamp(2.4rem, 8vw, 4.2rem);
-    line-height: 0.95;
-    margin-bottom: 0.2em;
-  }
-  .hero-title .ego {
-    color: var(--accent-blue);
-    text-shadow: 0 0 40px rgba(59, 123, 255, 0.5);
-  }
-  .hero-sub {
-    max-width: 480px;
-    margin-bottom: 2em;
-  }
-  .campo-nome-index {
-    width: 100%;
-    max-width: 360px;
-    text-align: left;
-    margin-bottom: 24px;
-  }
-  .bloco-fichas-index {
-    width: 100%;
-    max-width: 560px;
-    text-align: left;
-    margin-bottom: 8px;
-  }
-  .choices {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
-    width: 100%;
-    max-width: 560px;
-  }
-  @media (max-width: 560px) {
-    .choices { grid-template-columns: 1fr; }
-  }
-  .choice-card {
-    background: var(--bg-surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
-    padding: 28px 20px;
-    cursor: pointer;
-    transition: border-color 0.15s ease, transform 0.15s ease;
-    text-align: left;
-  }
-  .choice-card:hover {
-    border-color: var(--accent-blue);
-    transform: translateY(-2px);
-  }
-  .choice-card h3 { margin-bottom: 8px; }
-  .choice-card p { font-size: 0.9rem; margin-bottom: 1.2em; }
-</style>
-</head>
-<body>
-  <div class="hero">
-    <a href="index.html" data-sair class="btn btn-ghost btn-sair" style="position: absolute; top: 16px; right: 16px; padding: 8px 16px;">Sair da conta</a>
-    <div class="eyebrow">Sistema de RPG · Fórmula do Ego 1.0</div>
-    <h1 class="hero-title">FÓRMULA DO<br /><span class="ego">EGO</span></h1>
-    <p class="hero-sub">Centralize suas campanhas, gerencie fichas e veja cada rolagem de dado acontecer em tempo real.</p>
-
-    <div class="campo-nome-index">
-      <label for="input-nome-index">Seu nome</label>
-      <input id="input-nome-index" type="text" placeholder="Como você quer ser chamado" />
-    </div>
-
-    <div id="bloco-minhas-fichas" class="bloco-fichas-index" style="display: none;">
-      <div class="eyebrow" style="color: var(--accent-gold)">Minhas fichas</div>
-      <div id="lista-fichas-index" class="fichas-lista"></div>
-      <div class="divider"></div>
-    </div>
-
-    <button id="btn-mostrar-entrada" class="btn btn-primary" style="margin-bottom: 24px;" onclick="window.location.href='player.html'">Entrar / Criar sala</button>
-  </div>
-
-  <script type="module">
-    import { exigirAutenticacao } from './js/auth.js';
-    import { listarTodasFichasDoJogador, apagarFicha } from './js/player/ficha.js';
-    import { getNomeSalvo, setNomeSalvo } from './js/player/local.js';
-    import { mostrarToast } from './js/ui/toast.js';
-
-    const usuarioLogado = await exigirAutenticacao();
-
-    const inputNome = document.getElementById('input-nome-index');
-    inputNome.value = getNomeSalvo();
-    carregarMinhasFichas();
-    inputNome.addEventListener('blur', () => {
-      setNomeSalvo(inputNome.value.trim());
-      carregarMinhasFichas();
-    });
-
-    async function carregarMinhasFichas() {
-      const nome = inputNome.value.trim();
-      const bloco = document.getElementById('bloco-minhas-fichas');
-      if (!nome) { bloco.style.display = 'none'; return; }
-
-      const fichas = await listarTodasFichasDoJogador(nome, usuarioLogado?.id || null);
-      if (fichas.length === 0) { bloco.style.display = 'none'; return; }
-
-      bloco.style.display = 'block';
-      document.getElementById('lista-fichas-index').innerHTML = fichas.map((f) => `
-        <div class="linha-com-exclusao">
-          <button class="item-clicavel" data-ficha-id="${f.id}">
-            <span>
-              <div class="nome">${f.nome_personagem}</div>
-              <div class="sub">${f.campanhas ? f.campanhas.nome : 'sem campanha'}</div>
-            </span>
-          </button>
-          <button class="btn-excluir" data-excluir-ficha-id="${f.id}" title="Excluir ficha">✕</button>
-        </div>
-      `).join('');
-
-      document.querySelectorAll('#lista-fichas-index .item-clicavel').forEach((btn) => {
-        btn.addEventListener('click', () => {
-          window.location.href = `player.html?ficha=${btn.dataset.fichaId}`;
-        });
-      });
-      document.querySelectorAll('#lista-fichas-index .btn-excluir').forEach((btn) => {
-        btn.addEventListener('click', async (e) => {
-          e.stopPropagation();
-          const f = fichas.find((x) => x.id === btn.dataset.excluirFichaId);
-          const confirmado = confirm(`Apagar a ficha "${f.nome_personagem}" de vez? Essa ação não pode ser desfeita.`);
-          if (!confirmado) return;
-          try {
-            await apagarFicha(f.id);
-            mostrarToast('Ficha apagada.');
-            await carregarMinhasFichas();
-          } catch (err) {
-            mostrarToast(err.message, 'erro');
-          }
-        });
-      });
-    }
-  </script>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#050507" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Fórmula do Ego" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <link rel="icon" type="image/svg+xml" href="/icone.svg" />
+    <link rel="apple-touch-icon" href="/icone-192.png" />
+    <meta name="description" content="Fórmula do Ego 1.0 — fichas, mesa e salas ao vivo para o RPG de futebol." />
+    <title>Fórmula do Ego</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap" rel="stylesheet" />
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
 </html>

@@ -29,27 +29,8 @@ const CAMINHOS_IMAGENS = {
     devoto_iluminado: 'assets/armas/Devoto.png',
 };  
 
-/** Monograma automático (círculo com a inicial) pras armas sem imagem ainda. */
-function monograma(nome) {
-  const letra = (nome || '?').trim().charAt(0).toUpperCase();
-  return `
-    <svg viewBox="0 0 40 40" class="icone-arma-svg">
-      <circle cx="20" cy="20" r="18" class="icone-arma-fundo" />
-      <text x="20" y="21" text-anchor="middle" dominant-baseline="central" class="icone-arma-letra">${letra}</text>
-    </svg>
-  `;
-}
-
-/**
- * Retorna o markup HTML do ícone de uma arma (por id).
- * Usa a imagem de CAMINHOS_IMAGENS se existir; senão cai no monograma.
- * onerror: se o arquivo de imagem não for encontrado (caminho errado, ainda não
- * enviado, etc), troca sozinho pelo monograma em vez de mostrar ícone quebrado.
- */
-export function iconeArmaHTML(armaId, armaNome) {
-  const caminho = CAMINHOS_IMAGENS[armaId];
-  if (!caminho) return monograma(armaNome);
-
-  const fallback = monograma(armaNome).replace(/"/g, '&quot;').replace(/'/g, '&#39;');
-  return `<img src="${caminho}" alt="${armaNome}" class="icone-arma-img" onerror="this.outerHTML = '${fallback}';" />`;
+/** Caminho absoluto da imagem da arma (ou null se ainda não tem). */
+export function caminhoIconeArma(armaId) {
+  const c = CAMINHOS_IMAGENS[armaId];
+  return c ? `/${c.replace(/^\//, '')}` : null;
 }
