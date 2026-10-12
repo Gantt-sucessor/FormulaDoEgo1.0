@@ -29,11 +29,44 @@ export const EFEITOS_POSITIVOS = {
   ego_inflado: { nome: 'Ego inflado', texto: '+6 em qualquer jogada, +4 fôlegos máximos, +1 reação máxima, -3 PdE.', acumulativo: false },
 };
 
+/**
+ * Efeitos que só existem por causa de uma arma (texto do livro). `tipo` diz se aparece como
+ * benefício ou malefício na lista de condições; `origem` é o nome da arma que o libera.
+ */
+export const EFEITOS_DE_CLASSE = {
+  adaptado: {
+    nome: 'Adaptado', tipo: 'positivo', acumulativo: true, origem: 'Indômito Mutável',
+    texto: 'Sempre que acumular x1, escolha uma jogada de J vs J: oponentes recebem -1 em executá-la contra você (acumulável, máx. -5 por jogada). Dura até o fim da partida.',
+  },
+  subjugado: {
+    nome: 'Subjugado', tipo: 'negativo', acumulativo: false, origem: 'Tirano Atroz',
+    texto: 'Alvo devorado pelo Tirano. Dura d4+1 turnos (1ª vez), d6+1 rodadas (2ª) ou até o fim da partida (3ª em diante). Falha automaticamente nos testes contra as habilidades do Tirano.',
+  },
+  orbitando: {
+    nome: 'Orbitando', tipo: 'positivo', acumulativo: false, origem: 'Esqualo Sideral',
+    texto: 'Só vale para o alvo do passe curto/antecipado. Quando o receptor se mover 1 m, você se move na mesma direção. Ao receber um passe, pode passar em vez de dominar/voleio. Dura até o aliado perder a posse.',
+  },
+  enaltecido: {
+    nome: 'Enaltecido', tipo: 'positivo', acumulativo: false, origem: 'Graça Ascendente',
+    texto: 'Você: pode usar cabeceios [defensivos] em passes altos, fica no ar e ignora bônus negativos. Aliado: ignora bônus negativos e recebe -1 PdE ao usar habilidades (exceto se já ganharia +1 PdE).',
+  },
+  destruido: {
+    nome: 'Destruído', tipo: 'negativo', acumulativo: true, origem: 'Amálgamo Lúgubre',
+    texto: 'Cada acúmulo: -1 na perícia usada no teste em que foi causado. Dura até o fim da partida (máx. igual ao consumir de quem causou, numa única perícia).',
+  },
+  travesso: {
+    nome: 'Travesso', tipo: 'positivo', acumulativo: false, origem: 'Diabrete Arruaceiro',
+    texto: 'Seus passes são passes altos para alvos estressados. Alvos que perderem em testes contra você ficam estressados até o fim do efeito. Trash talks causam +1x estressado.',
+  },
+};
+
 export function buscarEfeito(id) {
-  return EFEITOS_NEGATIVOS[id] || EFEITOS_POSITIVOS[id] || null;
+  return EFEITOS_NEGATIVOS[id] || EFEITOS_POSITIVOS[id] || EFEITOS_DE_CLASSE[id] || null;
 }
 
 /** Catálogo único (negativos + positivos) pra popular a lista clicável do painel de partida. */
+export const CATALOGO_EFEITOS_CLASSE = Object.entries(EFEITOS_DE_CLASSE).map(([id, def]) => ({ id, ...def }));
+
 export const CATALOGO_EFEITOS = [
   ...Object.entries(EFEITOS_NEGATIVOS).map(([id, def]) => ({ id, tipo: 'negativo', ...def })),
   ...Object.entries(EFEITOS_POSITIVOS).map(([id, def]) => ({ id, tipo: 'positivo', ...def })),
@@ -49,13 +82,20 @@ export function aplicarEfeito(efeitosAtivos, idEfeito, duracao = '') {
   const def = buscarEfeito(idEfeito);
   if (!def) return efeitosAtivos;
 
+  // duracao pode ser texto livre ou { texto, turnos, rodadas } (contagem automática)
+  const dados = typeof duracao === 'object' && duracao !== null ? duracao : { texto: duracao };
+  const extra = { duracao: dados.texto || '' };
+  if (typeof dados.turnos === 'number') extra.turnos = dados.turnos;
+  if (typeof dados.rodadas === 'number') extra.rodadas = dados.rodadas;
+
   if (existente && def.acumulativo) {
-    return efeitosAtivos.map((e) => (e.id === idEfeito ? { ...e, quantidade: e.quantidade + 1 } : e));
+    return efeitosAtivos.map((e) => (e.id === idEfeito ? { ...e, quantidade: e.quantidade + 1, ...extra } : e));
   }
   if (existente && !def.acumulativo) {
-    return efeitosAtivos;
+    // Reaplicar renova a contagem (a mais longa vale), sem empilhar
+    return efeitosAtivos.map((e) => (e.id === idEfeito ? { ...e, ...extra } : e));
   }
-  return [...efeitosAtivos, { id: idEfeito, quantidade: 1, duracao }];
+  return [...efeitosAtivos, { id: idEfeito, quantidade: 1, ...extra }];
 }
 
 /** Remove um efeito inteiro da lista (independente da quantidade acumulada). */

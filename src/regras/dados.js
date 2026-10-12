@@ -5,17 +5,17 @@
 // Execução absoluta positiva: tirou 12 no d12 = +5 na jogada + 1 PdS.
 // Execução absoluta negativa: tirou 1 no d12 = -5 na jogada, +1 PdE, -1 PdS.
 
-function rolarDado(faces) {
-  return Math.floor(Math.random() * faces) + 1;
+function rolarDado(faces, aleatorio = Math.random) {
+  return Math.floor(aleatorio() * faces) + 1;
 }
 
-function rolarD12ComAtributo(valorAtributo) {
+function rolarD12ComAtributo(valorAtributo, aleatorio) {
   if (valorAtributo === -1) {
-    const a = rolarDado(12);
-    const b = rolarDado(12);
+    const a = rolarDado(12, aleatorio);
+    const b = rolarDado(12, aleatorio);
     return { valor: Math.min(a, b), detalhe: `2d12 (pega o menor): [${a}, ${b}]` };
   }
-  const d = rolarDado(12);
+  const d = rolarDado(12, aleatorio);
   return { valor: d, detalhe: `d12: ${d}` };
 }
 
@@ -28,13 +28,15 @@ function rolarD12ComAtributo(valorAtributo) {
  * @param {number} [params.desvantagens=0] - desvantagens acumuladas (cada = +1d6 rolado à parte e subtraído)
  * @param {number} [params.bonus=0] - bônus fixo somado/subtraído do resultado final
  */
-export function rolarJogada({ valorAtributo, valorPericia = 0, vantagens = 0, desvantagens = 0, bonus = 0 }) {
-  const base = rolarD12ComAtributo(valorAtributo);
+export function rolarJogada({ valorAtributo, valorPericia = 0, vantagens = 0, desvantagens = 0, bonus = 0, aleatorio = Math.random }) {
+  const base = rolarD12ComAtributo(valorAtributo, aleatorio);
 
+  // Vantagens e desvantagens se cancelam: só a diferença líquida vira d6 na mesa.
+  const liquido = vantagens - desvantagens;
   const dadosAtributo = Math.max(valorAtributo, 0);
-  const rolagensAtributo = Array.from({ length: dadosAtributo }, () => rolarDado(6));
-  const rolagensVantagem = Array.from({ length: Math.max(vantagens, 0) }, () => rolarDado(6));
-  const rolagensDesvantagem = Array.from({ length: Math.max(desvantagens, 0) }, () => rolarDado(6));
+  const rolagensAtributo = Array.from({ length: dadosAtributo }, () => rolarDado(6, aleatorio));
+  const rolagensVantagem = Array.from({ length: Math.max(liquido, 0) }, () => rolarDado(6, aleatorio));
+  const rolagensDesvantagem = Array.from({ length: Math.max(-liquido, 0) }, () => rolarDado(6, aleatorio));
 
   const somaPositiva = [...rolagensAtributo, ...rolagensVantagem].reduce((a, b) => a + b, 0);
   const somaDesvantagem = rolagensDesvantagem.reduce((a, b) => a + b, 0);
@@ -67,4 +69,14 @@ export function rolarJogada({ valorAtributo, valorPericia = 0, vantagens = 0, de
  */
 export function contraDj(resultado, dj) {
   return resultado >= dj;
+}
+
+/**
+ * Resolve o resultado contra uma DJ numérica (sucesso + margem). DJ de confronto
+ * ("J vs J", "J vs G"…) fica pendente: quem compara é a mesa.
+ */
+export function resolverJogada(resultado, dj) {
+  const alvo = typeof dj === 'number' ? dj : (/^\d+$/.test(String(dj).trim()) ? Number(dj) : null);
+  if (alvo === null) return { resolvida: false, sucesso: null, margem: null, dj };
+  return { resolvida: true, sucesso: resultado >= alvo, margem: resultado - alvo, dj: alvo };
 }
