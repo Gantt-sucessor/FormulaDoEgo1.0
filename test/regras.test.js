@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { contraDj, rolarJogada, resolverJogada } from '../js/regras/dados.js';
+import { contraDj, rolarJogada, resolverJogada } from '../src/regras/dados.js';
 
 test('aplica a desvantagem líquida como dados subtraídos', () => {
   const resultado = rolarJogada({
