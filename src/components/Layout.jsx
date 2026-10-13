@@ -24,7 +24,7 @@ export function Topbar({ publica = false }) {
   const { ir } = useRouter();
   return (
     <header className="pt-seguro sticky top-0 z-30 border-b border-linha bg-fundo/90 backdrop-blur">
-      <div className="mx-auto flex max-w-6xl items-center justify-between gap-2 px-3 py-2.5 sm:px-5">
+      <div className="mx-auto flex max-w-[1800px] items-center justify-between gap-2 px-3 py-2.5 sm:px-5">
         <Logo />
         {publica ? (
           <span className="text-[11px] text-mudo">somente leitura</span>
@@ -45,7 +45,7 @@ export function Pagina({ children, larga = false, publica = false }) {
   return (
     <>
       <Topbar publica={publica} />
-      <main className={`mx-auto px-3 pb-24 pt-5 sm:px-5 sm:pb-12 ${larga ? 'max-w-6xl' : 'max-w-3xl'}`}>{children}</main>
+      <main className={`mx-auto px-3 pb-24 pt-5 sm:px-5 sm:pb-12 ${larga ? "max-w-[1800px]" : "max-w-3xl"}`}>{children}</main>
     </>
   );
 }

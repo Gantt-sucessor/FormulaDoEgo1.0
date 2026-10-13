@@ -94,7 +94,7 @@ export function HabilidadesAtivas({ f, atualizar, registrar, toast, existe }) {
               só as usáveis {f.comBola ? 'com a bola' : 'sem a bola'}
             </label>
           </div>
-          <div className="grid gap-3 lg:grid-cols-2">
+          <div className="grid gap-3 lg:grid-cols-2 min-[1500px]:grid-cols-3">
             {visiveis.map((item) => <CartaoUso key={item.chave} item={item} f={f} atualizar={atualizar} registrar={registrar} toast={toast} existe={existe} />)}
           </div>
           {visiveis.length === 0 && <p className="py-4 text-center text-[13px] text-mudo">Nenhuma habilidade nesse filtro.</p>}
