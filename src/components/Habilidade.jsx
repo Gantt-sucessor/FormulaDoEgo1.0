@@ -4,9 +4,30 @@ import { Termo } from './Termo.jsx';
 import { chaveDeRotulo } from '../data/glossario.js';
 
 /** Texto do livro: bullets "• " viram lista; [condições] ficam laranja e em itálico. */
+/**
+ * Texto corrido do livro → parágrafos: o gatilho ("Ao receber…, pode ativar…") fica à parte do efeito
+ * ("Com a ativação de tal, …"), e o efeito é quebrado de 2 em 2 frases. Colchetes [..] nunca são cortados.
+ */
+export function paragrafar(texto) {
+  const t = String(texto || '').trim();
+  if (!t || t.includes('\n')) return t;
+  const guardados = [];
+  const mascarado = t.replace(/\[[^\]]*\]/g, (m) => { guardados.push(m); return `\u0000${guardados.length - 1}\u0000`; });
+  const frases = mascarado.split(/(?<=[.!?])\s+(?=[A-ZÁÉÍÓÚÂÊÔÃÕÇ0-9"“'(])/).map((x) => x.trim()).filter(Boolean);
+  if (frases.length < 3) return t;
+  const i = frases.findIndex((x) => /^com a ativa[cç][aã]o de tal/i.test(x));
+  const blocos = i > 0 ? [frases.slice(0, i), frases.slice(i)] : [frases];
+  const paragrafos = blocos.flatMap((b) => {
+    const out = [];
+    for (let k = 0; k < b.length; k += 2) out.push(b.slice(k, k + 2).join(' '));
+    return out;
+  });
+  return paragrafos.join('\n').replace(/\u0000(\d+)\u0000/g, (_, n) => guardados[Number(n)]);
+}
+
 export function TextoLivro({ texto, className = '' }) {
   if (!texto) return null;
-  const linhas = String(texto).split('\n').filter((l) => l.trim() !== '');
+  const linhas = paragrafar(texto).split('\n').filter((l) => l.trim() !== '');
   const marcar = (linha) =>
     linha.split(/(\[[^\]]+\])/g).map((parte, i) =>
       /^\[[^\]]+\]$/.test(parte) ? <span key={i} className="tag-condicao">{parte}</span> : <Fragment key={i}>{parte}</Fragment>,
@@ -15,7 +36,7 @@ export function TextoLivro({ texto, className = '' }) {
   const soltas = linhas.filter((l) => !l.trim().startsWith('•'));
   return (
     <div className={`texto-livro ${className}`}>
-      {soltas.map((l, i) => <p key={`p${i}`} className="mb-2">{marcar(l)}</p>)}
+      {soltas.map((l, i) => <p key={`p${i}`} className="mb-3">{marcar(l)}</p>)}
       {bullets.length > 0 && (
         <ul className="list-none space-y-2">
           {bullets.map((l, i) => (

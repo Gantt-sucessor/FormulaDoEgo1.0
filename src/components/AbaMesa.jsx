@@ -1,5 +1,6 @@
 import { Turno } from './mesa/Turno.jsx';
 import { HabilidadesAtivas } from './mesa/HabilidadesAtivas.jsx';
+import { TalentosMesa } from './mesa/TalentosMesa.jsx';
 import { PassivasMesa } from './mesa/PassivasMesa.jsx';
 import { Efeitos } from './mesa/Efeitos.jsx';
 import { Jogadas } from './mesa/Jogadas.jsx';
@@ -24,9 +25,10 @@ export function AbaMesa({ ficha, toast, abrirFita }) {
       )}
       <Turno f={f} atualizar={atualizar} registrar={registrar} toast={toast} somenteMestre={somenteMestre} />
       <HabilidadesAtivas f={f} atualizar={atualizar} registrar={registrar} toast={toast} existe={existe} />
+      <TalentosMesa f={f} atualizar={atualizar} registrar={registrar} toast={toast} existe={existe} />
       <PassivasMesa f={f} />
       <Efeitos f={f} atualizar={atualizar} />
-      <Jogadas f={f} rolar={rolar} toast={toast} existe={existe} abrirFita={abrirFita} />
+      <Jogadas f={f} rolar={rolar} atualizar={atualizar} toast={toast} existe={existe} abrirFita={abrirFita} />
       <Secao titulo="Distâncias e iniciativa"><Distancias f={f} atualizar={atualizar} /></Secao>
       <div className="grid gap-4 lg:grid-cols-2">
         <FluxoMesa f={f} atualizar={atualizar} registrar={registrar} toast={toast} />

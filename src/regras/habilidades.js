@@ -383,11 +383,15 @@ export function aplicarUso(estado, h, chave, ctx = {}, opcoes = {}) {
     efeitos = aplicarEfeito(efeitos, item.efeito, dados);
     efeitosAplicados.push(item.efeito);
   }
-  if (!efeitosAplicados.length && (duracao.tipo === 'tempo' || duracao.tipo === 'evento')) {
+  // Bônus automáticos da habilidade (vantagens, bônus, distância) — ficam num efeito "hab:" que a ficha lê nas jogadas.
+  const mods = (h.mods || []).map(({ escolha, ...m }) => (escolha ? { ...m, pericias: opcoes.escolha?.length ? opcoes.escolha : escolha.entre.slice(0, escolha.qtd) } : m));
+  if (!efeitosAplicados.length && (duracao.tipo === 'tempo' || duracao.tipo === 'evento' || mods.length)) {
+    const proximaJogada = mods.length && mods.every((m) => m.consome === 'jogada');
     efeitos = colocarEfeitoLivre(efeitos, {
       id: `hab:${chave}`, nome: h.nome, quantidade: 1, origem: 'habilidade', texto: h.texto,
-      duracao: duracao.tipo === 'tempo' ? descreverDuracao(duracao) : duracao.texto,
+      duracao: duracao.tipo === 'tempo' ? descreverDuracao(duracao) : duracao.tipo === 'evento' || duracao.tipo === 'manual' ? duracao.texto : proximaJogada ? 'até a próxima jogada' : duracao.texto,
       ...(duracao.tipo === 'tempo' ? { turnos: duracao.turnos, rodadas: duracao.rodadas } : {}),
+      ...(mods.length ? { mods } : {}),
     });
   }
   if (prep) {

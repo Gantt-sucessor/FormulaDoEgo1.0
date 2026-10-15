@@ -11,6 +11,7 @@ export function formatarDetalhe(d) {
   if (d.rolagensDesvantagem?.length) dados += ` − ${d.rolagensDesvantagem.length}d6 desvantagem [${d.rolagensDesvantagem.join(', ')}]`;
   if (d.valorPericia) dados += ` + perícia ${d.valorPericia}`;
   if (d.bonus) dados += d.bonus > 0 ? ` + ${d.bonus} bônus` : ` − ${Math.abs(d.bonus)} bônus`;
+  if (d.notas?.length) dados += ` · automático: ${d.notas.join('; ')}`;
   return cabecalho ? `${cabecalho} — ${dados}` : dados;
 }
 

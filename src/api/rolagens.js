@@ -2,9 +2,9 @@ import { supabase } from '../lib/supabase.js';
 import { rolarJogada } from '../regras/dados.js';
 
 /** Rola a jogada; com campanha, também publica para a sala em tempo real. */
-export async function rolarEEnviar({ campanhaId = null, fichaId, nomePersonagem, nomeJogada, valorAtributo, valorPericia, vantagens = 0, desvantagens = 0, bonus = 0, atributoNome = null, periciaNome = null }) {
+export async function rolarEEnviar({ campanhaId = null, fichaId, nomePersonagem, nomeJogada, valorAtributo, valorPericia, vantagens = 0, desvantagens = 0, bonus = 0, atributoNome = null, periciaNome = null, notas = null }) {
   const base = rolarJogada({ valorAtributo, valorPericia, vantagens, desvantagens, bonus });
-  const resultado = { ...base, atributoNome, periciaNome };
+  const resultado = { ...base, atributoNome, periciaNome, ...(notas?.length ? { notas } : {}) };
   if (campanhaId) {
     const { error } = await supabase.from('rolagens').insert({
       campanha_id: campanhaId, ficha_id: fichaId, nome_personagem: nomePersonagem,

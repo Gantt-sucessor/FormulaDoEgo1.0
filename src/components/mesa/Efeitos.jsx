@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { CATALOGO_EFEITOS, CATALOGO_EFEITOS_CLASSE, aplicarEfeito, buscarEfeito, removerEfeito } from '../../regras/efeitos.js';
 import { Secao } from '../ui.jsx';
+import { descreverMod } from '../../regras/modificadores.js';
 
 function restante(e) {
   const partes = [];
@@ -46,6 +47,7 @@ export function Efeitos({ f, atualizar }) {
                     <button type="button" className="btn btn-mini btn-perigo" onClick={() => remover(e.id)} aria-label={`Remover ${e.nome || def?.nome || e.id}`}>✕</button>
                   </span>
                 </div>
+                {Array.isArray(e.mods) && e.mods.length > 0 && <p className="mt-1 text-[14px] font-semibold text-ciano">⚡ {e.mods.map(descreverMod).join(' · ')}</p>}
                 {(def?.texto || e.texto) && <p className="mt-1 line-clamp-3 text-[14px] text-suave">{def?.texto || e.texto}</p>}
               </li>
             );

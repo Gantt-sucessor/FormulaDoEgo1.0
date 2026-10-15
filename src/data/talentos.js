@@ -15,6 +15,11 @@ export const TALENTOS_EVOLUTIVOS = [
       'Escolhe chute regular ou curvo; 1 vantagem → 1 vantagem+3 bônus.',
       'Inclui chute de poder; 2 vantagens+3 bônus.',
     ],
+    modsNiveis: [
+      [{ jogadas: ['chute_regular'], vantagens: 1, distancia: { chute: 2 }, consome: 'jogada' }],
+      [{ jogadas: ['chute_regular', 'chute_curvo'], vantagens: 1, bonus: 3, distancia: { chute: 2 }, consome: 'jogada' }],
+      [{ jogadas: ['chute_regular', 'chute_curvo', 'chute_de_poder'], vantagens: 2, bonus: 3, distancia: { chute: 2 }, consome: 'jogada' }],
+    ],
   },
   {
     id: 'passe_celestial',
@@ -24,6 +29,11 @@ export const TALENTOS_EVOLUTIVOS = [
       'Passe longo com 1 vantagem +2m DdP.',
       'Alcança qualquer setor adjacente; 2 vantagens.',
       'Qualquer distância, garantido, vira passe alto.',
+    ],
+    modsNiveis: [
+      [{ jogadas: ['passe_longo'], vantagens: 1, distancia: { passe: 2 }, consome: 'jogada' }],
+      [{ jogadas: ['passe_longo'], vantagens: 2, distancia: { passe: 2 }, consome: 'jogada' }],
+      [],
     ],
   },
   {
@@ -36,6 +46,11 @@ export const TALENTOS_EVOLUTIVOS = [
       '1 vantagem+3 bônus; avança 3m; retira 2 fôlegos do desarmado.',
       '2 vantagens+3 bônus; avança 4m; passe curto garantido ao final.',
     ],
+    modsNiveis: [
+      [{ jogadas: ['roubo'], vantagens: 1, consome: 'jogada' }],
+      [{ jogadas: ['roubo'], vantagens: 1, bonus: 3, consome: 'jogada' }],
+      [{ jogadas: ['roubo'], vantagens: 2, bonus: 3, consome: 'jogada' }],
+    ],
   },
   {
     id: 'ala_messi',
@@ -47,6 +62,12 @@ export const TALENTOS_EVOLUTIVOS = [
       '1 vantagem+3 bônus; 2 perícias; Drible+1 turnos.',
       '2 vantagens+3 bônus; todas perícias de Drible; Drible+2 turnos.',
     ],
+    durNiveis: ['Drible turnos', 'Drible + 1 turnos', 'Drible + 2 turnos'],
+    modsNiveis: [
+      [{ pericias: null, escolha: { qtd: 1, entre: ['pressao', 'criatividade', 'posse'] }, vantagens: 1 }],
+      [{ pericias: null, escolha: { qtd: 2, entre: ['pressao', 'criatividade', 'posse'] }, vantagens: 1, bonus: 3 }],
+      [{ pericias: ['pressao', 'criatividade', 'posse'], vantagens: 2, bonus: 3 }],
+    ],
   },
   {
     id: 'inutil',
@@ -57,6 +78,12 @@ export const TALENTOS_EVOLUTIVOS = [
       'Trash talk com 1 vantagem; se ganhar, alvo recebe ego ferido por Emocional turnos.',
       '1 vantagem+3 bônus; Emocional+1 turnos.',
       '2 vantagens+3 bônus; Emocional+2 turnos; ego ferido x2.',
+    ],
+    durNiveis: ['Emocional turnos', 'Emocional + 1 turnos', 'Emocional + 2 turnos'],
+    modsNiveis: [
+      [{ jogadas: ['trash_talk'], vantagens: 1, consome: 'jogada' }],
+      [{ jogadas: ['trash_talk'], vantagens: 1, bonus: 3, consome: 'jogada' }],
+      [{ jogadas: ['trash_talk'], vantagens: 2, bonus: 3, consome: 'jogada' }],
     ],
   },
 ];
@@ -72,14 +99,14 @@ export const TALENTOS_SIMPLES = [
 export const TALENTOS_RAZOAVEIS = [
   { id: 'finta_imprevisivel', nome: 'Finta imprevisível', frase: 'Eu te enganei gêniozinho!', esf: '+4 PdE', dis: 'pessoal', dur: 'instantâneo', tda: '2 reações', gex: '3 fôlegos', texto: 'Se declarar chute e alguém declarar interceptação, finta e faz novo chute/passe; interceptador -2 desvantagens naquele turno.' },
   { id: 'calcanhar_de_aquiles', nome: 'Calcanhar de Aquiles', frase: 'É GOL DO DRAGÃO!', esf: '+4 PdE', dis: 'DdC[-3m]', dur: 'instantâneo', tda: 'Ação egoísta + tática', texto: 'Com bola + ângulo cortado/flanqueado: remove um malefício da perna ruim; flanqueadores não interceptam.' },
-  { id: 'pisar_na_bola', nome: 'Pisar na Bola', esf: '+4 PdE', dis: '4m/DdP', dur: 'instantâneo/3 turnos', tda: 'Ação de movimento', texto: 'Todos aliados avançam 4m; escolhe um na DdP e passa +3; se dominar, ganha inspirado por 3 turnos.' },
-  { id: 'pegx_pegx', nome: 'PEGx PEGx', esf: '+4 PdE', dis: 'adjacente/4x4m', dur: '4 turnos', tda: 'Ação egoísta + tática', texto: 'Sem bola, adjacente a alvo: marcação com 2 vantagens na 1ª rodada; área 4x4m que te acompanha.' },
+  { id: 'pisar_na_bola', nome: 'Pisar na Bola', esf: '+4 PdE', dis: '4m/DdP', dur: 'instantâneo/3 turnos', tda: 'Ação de movimento', texto: 'Todos aliados avançam 4m; escolhe um na DdP e passa +3; se dominar, ganha inspirado por 3 turnos.', mods: [{ jogadas: ['passe_longo'], bonus: 3, consome: 'jogada' }] },
+  { id: 'pegx_pegx', nome: 'PEGx PEGx', esf: '+4 PdE', dis: 'adjacente/4x4m', dur: '4 turnos', tda: 'Ação egoísta + tática', texto: 'Sem bola, adjacente a alvo: marcação com 2 vantagens na 1ª rodada; área 4x4m que te acompanha.', mods: [{ jogadas: ['marcacao'], vantagens: 2, consome: 'jogada' }] },
   { id: 'ganancia_do_polvo', nome: 'Ganância do Polvo', esf: '+4 PdE', dis: 'pessoal', dur: '2 turnos', tda: 'Ação egoísta (+reação/alvo)', texto: 'Sem bola: escolhe aliados, dá +3 no próximo teste deles; se ganharem, você ganha bônus extra.' },
 ];
 
 export const TALENTOS_COMPLEXOS = [
   { id: 'topo_da_cadeia', nome: 'Topo da Cadeia', frase: 'Predador! Devorando todos tipo um egoísta!', esf: '+5 PdE', dis: 'pessoal', dur: 'Consumir+4 turnos', tda: 'Ação egoísta', gex: '1 PdS', texto: 'Sem bola: "devorar" pode ser feito contra inimigos também; devorar aliados nesse modo tem +3 bônus.' },
-  { id: 'salto_de_conejito', nome: 'Salto de Conejito', esf: '+4 PdE', dis: 'pessoal/6x6m', dur: 'Especialização+3 turnos', tda: 'Ação egoísta + movimento', texto: 'Sem bola: fica no ar, alvos em 6x6m perdem 4 fôlegos; se receber passe, voleio +2 vantagens+2 bônus.' },
+  { id: 'salto_de_conejito', nome: 'Salto de Conejito', esf: '+4 PdE', dis: 'pessoal/6x6m', dur: 'Especialização+3 turnos', tda: 'Ação egoísta + movimento', texto: 'Sem bola: fica no ar, alvos em 6x6m perdem 4 fôlegos; se receber passe, voleio +2 vantagens+2 bônus.', mods: [{ jogadas: ['voleio'], vantagens: 2, bonus: 2, consome: 'jogada' }] },
   { id: 'visoes_cruzadas', nome: 'Visões Cruzadas', esf: '+4 PdE', dis: '8m/5m', dur: 'Emocional+5 turnos', tda: 'Ação egoísta + 2 reações', texto: 'Aliado com bola a 8m: anda 5m, pede passe (+4 bônus); ao dominar, ambos andam e testam pra reação química.' },
   { id: 'ainda_ta_morno', nome: 'Ainda tá morno...', esf: '+4 PdE', dis: 'pessoal', dur: '2 rodadas', tda: 'Ação egoísta', gex: '2 PdS', texto: 'Ao ganhar J vs J, alvo testa Determinação; se falhar, tem que testar antes de qualquer chute/drible/passe por 2 rodadas.' },
   { id: 'avanco_estracalhador', nome: 'Avanço Estraçalhador', esf: '+4 PdE', dis: 'pessoal', dur: 'd6+2 turnos', tda: 'Ação egoísta', prep: 'M/3 turnos', texto: 'Com bola: Drible usa Robustez, oponentes -5 bônus pra roubar; cada drible dá ego alto acumulativo.' },

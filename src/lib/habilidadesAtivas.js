@@ -43,8 +43,10 @@ export function listarHabilidadesAtivas(f) {
     const t = TODOS_TALENTOS.find((x) => x.id === id);
     if (!t) return;
     const nivel = f.talentosNiveis?.[id] || 1;
-    const texto = t.niveis ? t.niveis.map((n, i) => `${i + 1 === nivel ? '▶ ' : ''}Nível ${i + 1}: ${n}`).join('\n') : t.texto;
-    empurrar('talento', 'Talento', { ...t, texto, tipo: undefined });
+    const texto = t.niveis ? t.niveis[nivel - 1] : t.texto;
+    const dur = t.durNiveis ? t.durNiveis[nivel - 1] || t.dur : t.dur;
+    const mods = (t.modsNiveis ? t.modsNiveis[nivel - 1] : t.mods) || [];
+    empurrar('talento', 'Talento', { ...t, texto, dur, mods, tipo: undefined });
   });
 
   return lista;

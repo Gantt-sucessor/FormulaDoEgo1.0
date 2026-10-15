@@ -139,12 +139,12 @@ export function useFicha(idOuNova, usuario) {
 
   const empurrarHistorico = (item) => setHistorico((h) => [item, ...h].slice(0, 60));
 
-  const rolar = useCallback(async ({ nomeJogada, valorAtributo, valorPericia, atributoNome, periciaNome, vantagens = 0, desvantagens = 0, bonus = 0 }) => {
+  const rolar = useCallback(async ({ nomeJogada, valorAtributo, valorPericia, atributoNome, periciaNome, vantagens = 0, desvantagens = 0, bonus = 0, notas = null }) => {
     const reg = registroRef.current;
     if (!reg?.id) throw new Error('Crie a ficha primeiro (aba Personagem → Criar ficha).');
     const resultado = await rolarEEnviar({
       campanhaId: reg.campanha_id || null, fichaId: reg.id, nomePersonagem: reg.nome_personagem,
-      nomeJogada, valorAtributo, valorPericia, atributoNome, periciaNome, vantagens, desvantagens, bonus,
+      nomeJogada, valorAtributo, valorPericia, atributoNome, periciaNome, vantagens, desvantagens, bonus, notas,
     });
     empurrarHistorico({ jogada: nomeJogada, resultado: resultado.resultado, detalhe: resultado, hora: new Date().toISOString() });
     return resultado;
