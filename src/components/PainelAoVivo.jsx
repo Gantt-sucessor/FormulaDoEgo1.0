@@ -24,6 +24,7 @@ function CartaoJogador({ row, mestre, aberto, aoAbrir, aoSalvar }) {
   const folego = Math.min(f.folego ?? fMax, fMax);
   const gastas = (f.acoes.tatica ? 1 : 0) + (f.acoes.egoista ? 1 : 0) + (f.acoes.movimento ? 1 : 0) + f.acoes.regulares.filter(Boolean).length;
   const [efeitoNovo, setEfeitoNovo] = useState('');
+  const [aliviar, setAliviar] = useState(false);
 
   // Ajuste feito pelo mestre: grava direto na ficha do jogador (ele vê na hora, por tempo real).
   const salvar = (novo) => aoSalvar(row, novo);
@@ -70,7 +71,8 @@ function CartaoJogador({ row, mestre, aberto, aoAbrir, aoSalvar }) {
           </div>
           <div className="flex flex-wrap gap-2">
             <button type="button" className="btn btn-mini" onClick={() => { const r = passarTurno(estadoDoMotor(f)); salvar(aplicarEstadoDoMotor(f, r.estado)); }}>Passar turno</button>
-            <button type="button" className="btn btn-mini" onClick={() => { const r = novaRodada(estadoDoMotor(f), { folegoMax: fMax }); salvar(aplicarEstadoDoMotor(f, r.estado)); }}>Nova rodada</button>
+            <label className="flex items-center gap-2 text-[14px] text-suave"><input type="checkbox" checked={aliviar} onChange={(e) => setAliviar(e.target.checked)} />−2 PdE</label>
+            <button type="button" className="btn btn-mini" onClick={() => { const r = novaRodada(estadoDoMotor(f), { aliviarPdE: aliviar, folegoMax: fMax }); salvar(aplicarEstadoDoMotor(f, r.estado)); }}>Nova rodada</button>
           </div>
           <div className="flex gap-2">
             <select className="entrada !py-1.5 !text-[14px]" value={efeitoNovo} onChange={(e) => setEfeitoNovo(e.target.value)} aria-label="Aplicar efeito">
@@ -120,6 +122,7 @@ export function PainelAoVivo({ campanha, mestre = false }) {
   const [fichas, setFichas] = useState([]);
   const [rolagens, setRolagens] = useState([]);
   const [aberta, setAberta] = useState(null);
+  const [aliviarTodos, setAliviarTodos] = useState(false);
   const [dj, setDj] = useState('');
   const [filtro, setFiltro] = useState('');
   const [novas, setNovas] = useState(new Set());
@@ -156,7 +159,7 @@ export function PainelAoVivo({ campanha, mestre = false }) {
   const paraTodos = async (tipo) => {
     await Promise.all(fichas.map((row) => {
       const f = fichaDoBanco(row);
-      const r = tipo === 'rodada' ? novaRodada(estadoDoMotor(f), { folegoMax: folegoMaximo(f) }) : passarTurno(estadoDoMotor(f));
+      const r = tipo === 'rodada' ? novaRodada(estadoDoMotor(f), { aliviarPdE: aliviarTodos, folegoMax: folegoMaximo(f) }) : passarTurno(estadoDoMotor(f));
       return salvarComoMestre(row, aplicarEstadoDoMotor(f, r.estado));
     }));
     toast(tipo === 'rodada' ? 'Nova rodada para todos.' : 'Turno passado para todos.');
@@ -172,6 +175,7 @@ export function PainelAoVivo({ campanha, mestre = false }) {
           <Titulo>Fichas · {fichas.length}</Titulo>
           {mestre && fichas.length > 0 && (
             <div className="flex gap-2">
+              <label className="flex items-center gap-2 text-[14px] text-suave"><input type="checkbox" checked={aliviarTodos} onChange={(e) => setAliviarTodos(e.target.checked)} />−2 PdE na rodada</label>
               <button type="button" className="btn btn-mini" onClick={() => paraTodos('turno')}>Passar turno (todos)</button>
               <button type="button" className="btn btn-mini btn-ouro" onClick={() => paraTodos('rodada')}>Nova rodada (todos)</button>
             </div>

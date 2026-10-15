@@ -1,6 +1,6 @@
 import { supabase } from '../lib/supabase.js';
 
-const SELECAO_COM_CAMPANHA = '*, campanhas(id, nome, codigo)';
+const SELECAO_COM_CAMPANHA = '*, campanhas(id, nome, codigo, criador_id, criador_nome)';
 
 export async function listarTodasFichasDoJogador(jogadorId) {
   const { data, error } = await supabase.from('fichas').select(SELECAO_COM_CAMPANHA).eq('jogador_id', jogadorId).order('criada_em', { ascending: false });
