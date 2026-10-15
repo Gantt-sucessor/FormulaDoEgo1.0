@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Termo } from './Termo.jsx';
+import { som } from '../lib/som.js';
 
 export function formatarDetalhe(d) {
   if (!d) return '';
@@ -21,7 +22,7 @@ function ItemFita({ r, destaque }) {
   const abs = r.detalhe?.execucaoAbsoluta?.tipo;
   const corTotal = abs === 'positiva' ? 'text-ok' : abs === 'negativa' ? 'text-perigo' : 'text-ciano';
   return (
-    <li className={`rounded border p-3 ${destaque ? 'border-ciano bg-ciano/5' : 'border-linha bg-black/40'}`}>
+    <li className={`rounded border p-3 ${abs === 'positiva' ? 'border-ok bg-ok/10' : abs === 'negativa' ? 'border-perigo bg-perigo/10' : destaque ? 'border-ciano bg-ciano/5' : 'border-linha bg-black/40'} ${destaque && abs === 'positiva' ? 'fx-critico' : ''} ${destaque && abs === 'negativa' ? 'fx-falha' : ''}`}>
       <div className="flex items-center gap-2 text-[13px] text-mudo">
         <span>{hora}</span>
         <span className="font-semibold uppercase tracking-[0.14em] text-texto">{r.jogada}</span>
@@ -35,7 +36,7 @@ function ItemFita({ r, destaque }) {
           <span className={`text-3xl font-bold leading-none ${corTotal}`}>{r.resultado}</span>
         </div>
       )}
-      {abs && <p className={`mt-1 text-[13px] font-bold uppercase tracking-[0.16em] ${corTotal}`}><Termo id="execucao_absoluta">{abs === 'positiva' ? 'Execução absoluta!' : 'Falha absoluta'}</Termo></p>}
+      {abs && <p className={`mt-1 text-[13px] font-bold uppercase tracking-[0.16em] ${corTotal}`}><Termo id="execucao_absoluta">{abs === 'positiva' ? 'Execução absoluta! · crítico' : 'Falha absoluta · falha crítica'}</Termo></p>}
     </li>
   );
 }
@@ -62,6 +63,7 @@ export function Fita({ historico, aoRolarAvulso, abrirSinal }) {
     const dados = Array.from({ length: q }, () => Math.floor(Math.random() * nf) + 1);
     const soma = dados.reduce((a, b) => a + b, 0) + m;
     const texto = `${q}d${nf}: [${dados.join(', ')}]${m ? (m > 0 ? ` + ${m}` : ` − ${Math.abs(m)}`) : ''}`;
+    som.tocar('rolar');
     aoRolarAvulso({ nome: `Dado avulso (${q}d${nf}${m ? (m > 0 ? `+${m}` : m) : ''})`, soma, texto });
   };
 

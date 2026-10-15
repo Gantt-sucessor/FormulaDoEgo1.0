@@ -18,3 +18,10 @@ export const getAbaSalva = () => {
   return ['mesa', 'personagem', 'fluxo'].includes(aba) ? aba : 'mesa';
 };
 export const setAbaSalva = (v) => gravar(CHAVE_ABA, v);
+
+const CHAVE_MESA = 'fde-mesa-secoes';
+/** Seções da mesa que o jogador escolheu ver (null = nunca escolheu). */
+export const getSecoesMesa = () => {
+  try { const v = JSON.parse(ler(CHAVE_MESA, 'null')); return Array.isArray(v) ? v : null; } catch { return null; }
+};
+export const setSecoesMesa = (lista) => gravar(CHAVE_MESA, JSON.stringify(lista));

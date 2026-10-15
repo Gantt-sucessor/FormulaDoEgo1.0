@@ -5,10 +5,13 @@ const ROTULO_ABA = { mesa: 'Na mesa', personagem: 'Personagem', fluxo: 'Talentos
 
 /** Faixa no topo da ficha: lista o que está errado ou faltando, com atalho para corrigir. */
 export function AvisosFicha({ f, existe, irPara }) {
-  const [aberto, setAberto] = useState(true);
   const problemas = validarFicha(f).filter((p) => existe || p.alvo !== 'sec-identidade' || p.nivel === 'erro');
-  if (problemas.length === 0) return null;
   const erros = problemas.filter((p) => p.nivel === 'erro').length;
+  // Erro abre sozinho; aviso de "falta preencher" fica recolhido até a pessoa querer ver.
+  const [escolha, setEscolha] = useState(null);
+  const aberto = escolha ?? erros > 0;
+  const setAberto = (fn) => setEscolha(fn(aberto));
+  if (problemas.length === 0) return null;
   const avisos = problemas.length - erros;
   const cor = erros ? 'border-perigo/60 bg-perigo/10' : 'border-laranja/50 bg-laranja/10';
 

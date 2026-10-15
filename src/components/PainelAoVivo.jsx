@@ -7,6 +7,7 @@ import { buscarFichasDaCampanha, buscarHistoricoRolagens, escutarFichas, escutar
 import { atualizarFicha } from '../api/fichas.js';
 import { CATALOGO_EFEITOS, CATALOGO_EFEITOS_CLASSE, aplicarEfeito, buscarEfeito, removerEfeito } from '../regras/efeitos.js';
 import { novaRodada, passarTurno, LIMITE_PDE } from '../regras/habilidades.js';
+import { som } from '../lib/som.js';
 import { resolverJogada } from '../regras/dados.js';
 import { aplicarEstadoDoMotor, camposParaBanco, estadoDoMotor, fichaDoBanco, folegoMaximo, pdsMaximo } from '../lib/ficha.js';
 import { useToast } from '../lib/toast.jsx';
@@ -96,7 +97,7 @@ function ItemRolagem({ r, dj, destacar }) {
   const teste = !acao && !avulso && dj !== '' && !Number.isNaN(Number(dj)) ? resolverJogada(r.resultado, Number(dj)) : null;
   const cor = abs === 'positiva' ? 'text-ok' : abs === 'negativa' ? 'text-perigo' : acao ? 'text-ouro' : 'text-ciano';
   return (
-    <li className={`flex gap-3 rounded border p-2.5 ${destacar ? 'border-ciano bg-ciano/5' : 'border-linha bg-black/40'}`}>
+    <li className={`flex gap-3 rounded border p-2.5 ${abs === 'positiva' ? 'border-ok bg-ok/10' : abs === 'negativa' ? 'border-perigo bg-perigo/10' : destacar ? 'border-ciano bg-ciano/5' : 'border-linha bg-black/40'} ${destacar && abs === 'positiva' ? 'fx-critico' : ''} ${destacar && abs === 'negativa' ? 'fx-falha' : ''}`}>
       <div className={`w-14 shrink-0 text-center text-2xl font-bold leading-tight ${cor}`}>{acao ? <span className="text-[13px] uppercase tracking-[0.14em]">Ação</span> : r.resultado}</div>
       <div className="min-w-0 flex-1">
         <div className="flex items-baseline justify-between gap-2">
@@ -105,7 +106,7 @@ function ItemRolagem({ r, dj, destacar }) {
         </div>
         <div className="text-[15px]">{r.jogada}</div>
         {(acao || avulso) ? (detalhe.texto && <p className="line-clamp-2 text-[13px] text-suave">{detalhe.texto}</p>) : <p className="text-[13px] text-suave">{formatarDetalhe(detalhe)}</p>}
-        {abs && <p className={`text-[13px] font-bold uppercase tracking-[0.14em] ${cor}`}>{abs === 'positiva' ? 'Execução absoluta!' : 'Falha absoluta'}</p>}
+        {abs && <p className={`text-[13px] font-bold uppercase tracking-[0.14em] ${cor}`}>{abs === 'positiva' ? 'Execução absoluta! · crítico' : 'Falha absoluta · falha crítica'}</p>}
         {teste?.resolvida && (
           <p className={`text-[13px] font-bold uppercase tracking-[0.14em] ${teste.sucesso ? 'text-ok' : 'text-perigo'}`}>
             {teste.sucesso ? '✓ passou' : '✗ falhou'} (DJ {teste.dj}, {teste.margem >= 0 ? '+' : ''}{teste.margem})
@@ -135,6 +136,7 @@ export function PainelAoVivo({ campanha, mestre = false }) {
   useEffect(() => {
     carregar().catch(() => toast('Não deu pra carregar a campanha.', 'erro'));
     const parar1 = escutarRolagens(campanha.id, (r) => {
+      if (r?.detalhe?.execucaoAbsoluta?.tipo) som.rolagem(r.detalhe);
       setRolagens((l) => (l.some((x) => x.id === r.id) ? l : [r, ...l].slice(0, 120)));
       setNovas((s) => new Set(s).add(r.id));
       setTimeout(() => setNovas((s) => { const n = new Set(s); n.delete(r.id); return n; }), 4000);
@@ -162,6 +164,7 @@ export function PainelAoVivo({ campanha, mestre = false }) {
       const r = tipo === 'rodada' ? novaRodada(estadoDoMotor(f), { aliviarPdE: aliviarTodos, folegoMax: folegoMaximo(f) }) : passarTurno(estadoDoMotor(f));
       return salvarComoMestre(row, aplicarEstadoDoMotor(f, r.estado));
     }));
+    som.tocar(tipo === 'rodada' ? 'rodada' : 'turno');
     toast(tipo === 'rodada' ? 'Nova rodada para todos.' : 'Turno passado para todos.');
   };
 

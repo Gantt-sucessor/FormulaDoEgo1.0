@@ -1,4 +1,5 @@
 import { createContext, useCallback, useContext, useState } from 'react';
+import { som } from './som.js';
 
 const ToastCtx = createContext(() => {});
 
@@ -6,6 +7,7 @@ export function ToastProvider({ children }) {
   const [itens, setItens] = useState([]);
   const mostrar = useCallback((mensagem, tipo = 'sucesso') => {
     const id = Math.random().toString(36).slice(2);
+    if (tipo === 'erro') som.tocar('erro');
     setItens((l) => [...l, { id, mensagem, tipo }]);
     setTimeout(() => setItens((l) => l.filter((i) => i.id !== id)), tipo === 'erro' ? 4500 : 2800);
   }, []);

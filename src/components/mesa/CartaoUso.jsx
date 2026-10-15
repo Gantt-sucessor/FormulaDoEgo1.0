@@ -3,6 +3,7 @@ import { aplicarUso, descreverDuracao, parseEsforco, parseGex, parseTdA, verific
 import { aplicarEstadoDoMotor, estadoDoMotor } from '../../lib/ficha.js';
 import { descreverMod } from '../../regras/modificadores.js';
 import { PERICIAS } from '../../data/pericias.js';
+import { som } from '../../lib/som.js';
 import { SeloBola, SeloTipo, StatLinha, TextoLivro } from '../Habilidade.jsx';
 
 const nomePericia = (id) => PERICIAS.find((p) => p.id === id)?.nome || id;
@@ -44,6 +45,7 @@ export function CartaoUso({ item, f, atualizar, registrar, toast, existe, aberto
     const ctx = { pericias: f.pericias, atributos: f.atributos };
     const r = aplicarUso(estado, h, chave, ctx, opcoes);
     atualizar(aplicarEstadoDoMotor(f, r.estado));
+    som.tocar('usar');
     const dur = r.duracao.tipo === 'tempo' ? ` Duração: ${descreverDuracao(r.duracao)}.` : '';
     const bonus = modsPrevistos.length ? ` Bônus automático: ${modsPrevistos.map(descreverMod).join('; ')}.` : '';
     toast(`${h.nome} usada.${modsPrevistos.length ? ' Bônus aplicado nas jogadas.' : ''}${r.avisos.length ? ` ${r.avisos.join(' ')}` : ''}`);
@@ -52,6 +54,7 @@ export function CartaoUso({ item, f, atualizar, registrar, toast, existe, aberto
 
   const encerrar = () => {
     atualizar({ efeitos: f.efeitos.filter((e) => e.id !== `hab:${chave}`) });
+    som.tocar('encerrar');
     toast(`${h.nome} encerrada.`);
   };
 

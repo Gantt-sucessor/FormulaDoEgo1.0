@@ -3,6 +3,7 @@ import { novaRodada, passarTurno, reacoesMaximas } from '../../regras/habilidade
 import { estadoDoMotor, aplicarEstadoDoMotor, folegoMaximo } from '../../lib/ficha.js';
 import { Secao } from '../ui.jsx';
 import { Termo } from '../Termo.jsx';
+import { som } from '../../lib/som.js';
 
 function Acao({ rotulo, gasta, onClick, sub, termo }) {
   return (
@@ -27,6 +28,7 @@ export function Turno({ f, atualizar, registrar, toast, somenteMestre = false })
   const passar = () => {
     const r = passarTurno(estadoDoMotor(f));
     atualizar(aplicarEstadoDoMotor(f, r.estado));
+    som.tocar('turno');
     avisarExpirados(r.expirados);
   };
 
@@ -34,6 +36,7 @@ export function Turno({ f, atualizar, registrar, toast, somenteMestre = false })
     const r = novaRodada(estadoDoMotor(f), { aliviarPdE: aliviar, folegoMax: folegoMaximo(f) });
     atualizar(aplicarEstadoDoMotor(f, r.estado));
     avisarExpirados(r.expirados);
+    som.tocar('rodada');
     registrar(`Rodada ${r.estado.rodada}`, aliviar ? 'Nova rodada: ações liberadas, fôlegos restaurados e −2 PdE.' : 'Nova rodada: ações liberadas e fôlegos restaurados.');
     toast(`Rodada ${r.estado.rodada} — ações e fôlegos restaurados.`);
   };

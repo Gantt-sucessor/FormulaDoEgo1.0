@@ -1,6 +1,7 @@
 import { MARCAS_DESPERTAR, TIPOS_AURA, calcularPercentualFluxoComUsos } from '../../data/fluxo.js';
 import { Secao } from '../ui.jsx';
 import { Termo } from '../Termo.jsx';
+import { som } from '../../lib/som.js';
 
 export function FluxoMesa({ f, atualizar, registrar, toast }) {
   const fl = f.fluxo;
@@ -17,6 +18,7 @@ export function FluxoMesa({ f, atualizar, registrar, toast }) {
     const ligando = !fl.ativo;
     // Ao ligar: usos de marca zeram e as habilidades "uma vez em fluxo" ficam disponíveis de novo.
     atualizar({ fluxo: { ...fl, ativo: ligando, marcasUsos: ligando ? {} : fl.marcasUsos }, usadasFluxo: [] });
+    som.tocar(ligando ? 'fluxo' : 'encerrar');
     toast(ligando ? 'Fluxo ativado!' : 'Fluxo desativado.');
     registrar(ligando ? 'Entrou em fluxo' : 'Saiu do fluxo', ligando ? `Aura ${aura?.nome || ''}: ${atual}% (precisava de ${necessario}%).` : '');
   };

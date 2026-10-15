@@ -5,6 +5,7 @@ import { ATRIBUTOS } from '../../data/atributos.js';
 import { Secao, Contador } from '../ui.jsx';
 import { Termo } from '../Termo.jsx';
 import { nomeAtributo, valorPericiaDaJogada, sinal } from '../../lib/ficha.js';
+import { som } from '../../lib/som.js';
 import { modsAtivos, modsParaJogada, consumirEfeitos, descreverMod } from '../../regras/modificadores.js';
 
 const GRUPOS = { chutes: 'Chutes', passes: 'Passes', dribles: 'Dribles', defesa: 'Defesa', goleiro: 'Goleiro', outras: 'Outras' };
@@ -25,12 +26,13 @@ export function Jogadas({ f, rolar, atualizar, toast, existe, abrirFita }) {
   const executar = async (args, jogada = null) => {
     const auto = jogada ? modsParaJogada(f.efeitos, jogada) : null;
     try {
-      await rolar({
+      const resultado = await rolar({
         ...args,
         vantagens: vant + (auto?.vantagens || 0), desvantagens: desv + (auto?.desvantagens || 0), bonus: bonus + (auto?.bonus || 0),
         notas: auto?.fontes.map((x) => `${x.fonte}: ${x.texto}`),
       });
       if (auto?.consumir.length) atualizar((atual) => ({ efeitos: consumirEfeitos(atual.efeitos, auto.consumir) }));
+      som.rolagem(resultado);
       setVant(0); setDesv(0); setBonus(0);
       abrirFita();
     } catch (e) {
