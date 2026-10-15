@@ -55,3 +55,12 @@ test('talento sem número fixo não cria efeito de bônus', () => {
   const e = usar(f, listarHabilidadesAtivas(f).find((i) => i.h.id === 'cabeca_dura'));
   assert.equal(modsAtivos(e.efeitos).length, 0);
 });
+
+test('dica da perícia lista as jogadas que a usam', async () => {
+  const { dicaDaPericia } = await import('../src/data/usosPericias.js');
+  const d = dicaDaPericia('precisao');
+  assert.match(d, /Chute regular/);
+  assert.match(d, /Voleio/);
+  assert.match(d, /DdC/);
+  assert.match(dicaDaPericia('elastico_inexistente'), /^$/);
+});

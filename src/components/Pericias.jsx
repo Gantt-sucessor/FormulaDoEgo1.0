@@ -1,6 +1,7 @@
 import { ATRIBUTOS } from '../data/atributos.js';
 import { PERICIAS, MAX_PONTOS_PERICIA } from '../data/pericias.js';
 import { Contador } from './ui.jsx';
+import { dicaDaPericia } from '../data/usosPericias.js';
 
 /** Perícias agrupadas por atributo, com limite de pontos (nível + categoria + tendência). */
 export function Pericias({ pericias, onChange, maximo, somenteLeitura = false }) {
@@ -21,8 +22,8 @@ export function Pericias({ pericias, onChange, maximo, somenteLeitura = false })
             <div className="legenda mb-1 border-b border-linha pb-1">{a.nome}</div>
             <ul>
               {PERICIAS.filter((p) => p.atributo === a.id).map((p) => (
-                <li key={p.id} className="flex items-center justify-between gap-2 py-1" title={p.descricao}>
-                  <span className="text-[15px]">{p.nome}</span>
+                <li key={p.id} className="flex items-center justify-between gap-2 py-1">
+                  <span className="termo termo-longo text-[15px]" tabIndex={0} data-dica={dicaDaPericia(p.id)}>{p.nome}</span>
                   {somenteLeitura
                     ? <strong>{pericias?.[p.id] || 0}</strong>
                     : <Contador valor={pericias?.[p.id] || 0} max={MAX_PONTOS_PERICIA} rotulo={p.nome} onMenos={() => ajustar(p.id, -1)} onMais={() => ajustar(p.id, 1)} />}

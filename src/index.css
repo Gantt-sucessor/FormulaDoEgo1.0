@@ -179,3 +179,4 @@ img, svg { max-width: 100%; }
 }
 .termo:hover::after, .termo:focus::after, .termo:focus-visible::after { opacity: 1; visibility: visible; transform: none; }
 .legenda.termo, .campo-label.termo { display: inline-block; }
+.termo-longo::after { white-space: pre-line; max-width: min(340px, 80vw); }
