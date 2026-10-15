@@ -7,8 +7,8 @@ import { Termo } from '../Termo.jsx';
 function Acao({ rotulo, gasta, onClick, sub, termo }) {
   return (
     <button type="button" onClick={onClick} className={`cartao ${gasta ? 'cartao-gasto' : 'cartao-ativo'}`} aria-pressed={gasta}>
-      <div className="text-[12px] font-semibold uppercase tracking-[0.12em]">{termo ? <Termo id={termo}>{rotulo}</Termo> : rotulo}</div>
-      <div className="text-[11px] text-suave">{gasta ? 'gasta' : sub || 'disponível'}</div>
+      <div className="text-[14px] font-semibold uppercase tracking-[0.12em]">{termo ? <Termo id={termo}>{rotulo}</Termo> : rotulo}</div>
+      <div className="text-[13px] text-suave">{gasta ? 'gasta' : sub || 'disponível'}</div>
     </button>
   );
 }
@@ -43,15 +43,15 @@ export function Turno({ f, atualizar, registrar, toast }) {
       <div className="mb-4 flex flex-wrap items-center gap-2">
         <button type="button" className="btn btn-primario" onClick={nova}>Nova rodada</button>
         <button type="button" className="btn" onClick={passar}>Passar turno</button>
-        <label className="flex items-center gap-2 text-[12px] text-suave">
+        <label className="flex items-center gap-2 text-[14px] text-suave">
           <input type="checkbox" checked={aliviar} onChange={(e) => setAliviar(e.target.checked)} />
           −2 PdE ao fim da rodada
         </label>
         <div className="ml-auto flex overflow-hidden rounded border border-linha-forte" role="group" aria-label="Posse de bola">
           <button type="button" aria-pressed={f.comBola} onClick={() => atualizar({ comBola: true })}
-            className={`px-3 py-1.5 text-[12px] font-semibold uppercase tracking-[0.12em] ${f.comBola ? 'bg-ciano text-black' : 'bg-black text-suave'}`}>● Com bola</button>
+            className={`px-3 py-1.5 text-[14px] font-semibold uppercase tracking-[0.12em] ${f.comBola ? 'bg-ciano text-black' : 'bg-black text-suave'}`}>● Com bola</button>
           <button type="button" aria-pressed={!f.comBola} onClick={() => atualizar({ comBola: false })}
-            className={`px-3 py-1.5 text-[12px] font-semibold uppercase tracking-[0.12em] ${!f.comBola ? 'bg-azul text-white' : 'bg-black text-suave'}`}>○ Sem bola</button>
+            className={`px-3 py-1.5 text-[14px] font-semibold uppercase tracking-[0.12em] ${!f.comBola ? 'bg-azul text-white' : 'bg-black text-suave'}`}>○ Sem bola</button>
         </div>
       </div>
       <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">

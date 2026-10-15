@@ -1,5 +1,6 @@
 import { Turno } from './mesa/Turno.jsx';
 import { HabilidadesAtivas } from './mesa/HabilidadesAtivas.jsx';
+import { PassivasMesa } from './mesa/PassivasMesa.jsx';
 import { Efeitos } from './mesa/Efeitos.jsx';
 import { Jogadas } from './mesa/Jogadas.jsx';
 import { FluxoMesa } from './mesa/FluxoMesa.jsx';
@@ -13,12 +14,13 @@ export function AbaMesa({ ficha, toast, abrirFita }) {
   return (
     <div className="space-y-4">
       {!existe && (
-        <p className="rounded border border-laranja/50 bg-laranja/10 p-3 text-[13px] text-laranja">
+        <p className="rounded border border-laranja/50 bg-laranja/10 p-3 text-[15px] text-laranja">
           Essa ficha ainda não foi criada. Vá na aba <strong>Personagem</strong>, dê um nome e clique em <strong>Criar ficha</strong> — depois disso dá para rolar e usar habilidades.
         </p>
       )}
       <Turno f={f} atualizar={atualizar} registrar={registrar} toast={toast} />
       <HabilidadesAtivas f={f} atualizar={atualizar} registrar={registrar} toast={toast} existe={existe} />
+      <PassivasMesa f={f} />
       <Efeitos f={f} atualizar={atualizar} />
       <Jogadas f={f} rolar={rolar} toast={toast} existe={existe} abrirFita={abrirFita} />
       <Secao titulo="Distâncias e iniciativa"><Distancias f={f} atualizar={atualizar} /></Secao>

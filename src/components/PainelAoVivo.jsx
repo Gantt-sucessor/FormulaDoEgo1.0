@@ -14,7 +14,7 @@ import { useToast } from '../lib/toast.jsx';
 const hora = (iso) => new Date(iso).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
 
 function Pilula({ rotulo, valor, max, cor = 'text-texto' }) {
-  return <span className="text-[11px] text-suave">{rotulo} <strong className={cor}>{valor}{max !== undefined ? `/${max}` : ''}</strong></span>;
+  return <span className="text-[13px] text-suave">{rotulo} <strong className={cor}>{valor}{max !== undefined ? `/${max}` : ''}</strong></span>;
 }
 
 function CartaoJogador({ row, mestre, aberto, aoAbrir, aoSalvar }) {
@@ -34,8 +34,8 @@ function CartaoJogador({ row, mestre, aberto, aoAbrir, aoSalvar }) {
       <button type="button" className="flex w-full items-center gap-3 text-left" onClick={aoAbrir} aria-expanded={aberto}>
         <IconeArma id={arma?.id} nome={arma?.nome || f.nome} tamanho={44} />
         <span className="min-w-0 flex-1">
-          <span className="block truncate text-[14px] font-bold uppercase tracking-[0.1em]">{f.nome}</span>
-          <span className="block truncate text-[11px] text-mudo">{row.nome_jogador} · nível {f.nivel}{arma ? ` · ${arma.nome}` : ''}</span>
+          <span className="block truncate text-[16px] font-bold uppercase tracking-[0.1em]">{f.nome}</span>
+          <span className="block truncate text-[13px] text-mudo">{row.nome_jogador} · nível {f.nivel}{arma ? ` · ${arma.nome}` : ''}</span>
         </span>
         <span className="text-ciano">{aberto ? '▾' : '▸'}</span>
       </button>
@@ -45,8 +45,8 @@ function CartaoJogador({ row, mestre, aberto, aoAbrir, aoSalvar }) {
         <Pilula rotulo="PdS" valor={f.pds} max={pdsMaximo()} />
         <Pilula rotulo="Ações" valor={`${gastas} usadas`} />
         <Pilula rotulo="Rodada" valor={f.rodada} />
-        <span className="text-[11px] text-suave">{f.comBola ? '● com bola' : '○ sem bola'}</span>
-        {f.fluxo.ativo && <span className="text-[11px] font-bold text-ouro">● FLUXO</span>}
+        <span className="text-[13px] text-suave">{f.comBola ? '● com bola' : '○ sem bola'}</span>
+        {f.fluxo.ativo && <span className="text-[13px] font-bold text-ouro">● FLUXO</span>}
       </div>
       <div className="barra mt-2"><i style={{ width: `${fMax ? (folego / fMax) * 100 : 0}%` }} /></div>
       {f.efeitos.length > 0 && (
@@ -63,7 +63,7 @@ function CartaoJogador({ row, mestre, aberto, aoAbrir, aoSalvar }) {
       {mestre && aberto && (
         <div className="mt-3 space-y-3 rounded border border-ouro/30 bg-black/40 p-3">
           <div className="legenda text-ouro">Controle do mestre</div>
-          <div className="flex flex-wrap gap-x-5 gap-y-2 text-[12px]">
+          <div className="flex flex-wrap gap-x-5 gap-y-2 text-[14px]">
             <span className="flex items-center gap-2">Fôlego <Contador valor={folego} max={fMax} rotulo="Fôlego" onMenos={() => ajustar('folego', -1, fMax)} onMais={() => ajustar('folego', 1, fMax)} /></span>
             <span className="flex items-center gap-2">PdE <Contador valor={f.pde} rotulo="PdE" onMenos={() => ajustar('pde', -1)} onMais={() => ajustar('pde', 1)} /></span>
             <span className="flex items-center gap-2">PdS <Contador valor={f.pds} max={pdsMaximo()} rotulo="PdS" onMenos={() => ajustar('pds', -1, pdsMaximo())} onMais={() => ajustar('pds', 1, pdsMaximo())} /></span>
@@ -73,7 +73,7 @@ function CartaoJogador({ row, mestre, aberto, aoAbrir, aoSalvar }) {
             <button type="button" className="btn btn-mini" onClick={() => { const r = novaRodada(estadoDoMotor(f), { folegoMax: fMax }); salvar(aplicarEstadoDoMotor(f, r.estado)); }}>Nova rodada</button>
           </div>
           <div className="flex gap-2">
-            <select className="entrada !py-1.5 !text-[12px]" value={efeitoNovo} onChange={(e) => setEfeitoNovo(e.target.value)} aria-label="Aplicar efeito">
+            <select className="entrada !py-1.5 !text-[14px]" value={efeitoNovo} onChange={(e) => setEfeitoNovo(e.target.value)} aria-label="Aplicar efeito">
               <option value="">+ aplicar efeito…</option>
               {[...CATALOGO_EFEITOS, ...CATALOGO_EFEITOS_CLASSE].map((ef) => <option key={ef.id} value={ef.id}>{ef.nome}</option>)}
             </select>
@@ -95,17 +95,17 @@ function ItemRolagem({ r, dj, destacar }) {
   const cor = abs === 'positiva' ? 'text-ok' : abs === 'negativa' ? 'text-perigo' : acao ? 'text-ouro' : 'text-ciano';
   return (
     <li className={`flex gap-3 rounded border p-2.5 ${destacar ? 'border-ciano bg-ciano/5' : 'border-linha bg-black/40'}`}>
-      <div className={`w-14 shrink-0 text-center text-2xl font-bold leading-tight ${cor}`}>{acao ? <span className="text-[11px] uppercase tracking-[0.14em]">Ação</span> : r.resultado}</div>
+      <div className={`w-14 shrink-0 text-center text-2xl font-bold leading-tight ${cor}`}>{acao ? <span className="text-[13px] uppercase tracking-[0.14em]">Ação</span> : r.resultado}</div>
       <div className="min-w-0 flex-1">
         <div className="flex items-baseline justify-between gap-2">
-          <strong className="truncate text-[12px] uppercase tracking-[0.1em]">{r.nome_personagem}</strong>
-          <span className="shrink-0 text-[11px] text-mudo">{hora(r.criada_em)}</span>
+          <strong className="truncate text-[14px] uppercase tracking-[0.1em]">{r.nome_personagem}</strong>
+          <span className="shrink-0 text-[13px] text-mudo">{hora(r.criada_em)}</span>
         </div>
-        <div className="text-[13px]">{r.jogada}</div>
-        {(acao || avulso) ? (detalhe.texto && <p className="line-clamp-2 text-[11px] text-suave">{detalhe.texto}</p>) : <p className="text-[11px] text-suave">{formatarDetalhe(detalhe)}</p>}
-        {abs && <p className={`text-[11px] font-bold uppercase tracking-[0.14em] ${cor}`}>{abs === 'positiva' ? 'Execução absoluta!' : 'Falha absoluta'}</p>}
+        <div className="text-[15px]">{r.jogada}</div>
+        {(acao || avulso) ? (detalhe.texto && <p className="line-clamp-2 text-[13px] text-suave">{detalhe.texto}</p>) : <p className="text-[13px] text-suave">{formatarDetalhe(detalhe)}</p>}
+        {abs && <p className={`text-[13px] font-bold uppercase tracking-[0.14em] ${cor}`}>{abs === 'positiva' ? 'Execução absoluta!' : 'Falha absoluta'}</p>}
         {teste?.resolvida && (
-          <p className={`text-[11px] font-bold uppercase tracking-[0.14em] ${teste.sucesso ? 'text-ok' : 'text-perigo'}`}>
+          <p className={`text-[13px] font-bold uppercase tracking-[0.14em] ${teste.sucesso ? 'text-ok' : 'text-perigo'}`}>
             {teste.sucesso ? '✓ passou' : '✗ falhou'} (DJ {teste.dj}, {teste.margem >= 0 ? '+' : ''}{teste.margem})
           </p>
         )}
@@ -190,15 +190,15 @@ export function PainelAoVivo({ campanha, mestre = false }) {
         <div className="mb-3 flex items-center justify-between"><Titulo>Rolagens ao vivo</Titulo><span className="legenda">{lista.length}</span></div>
         <div className="mb-3 grid grid-cols-2 gap-2">
           <label><span className="campo-label">Filtrar jogador</span>
-            <select className="entrada !py-1.5 !text-[12px]" value={filtro} onChange={(e) => setFiltro(e.target.value)}>
+            <select className="entrada !py-1.5 !text-[14px]" value={filtro} onChange={(e) => setFiltro(e.target.value)}>
               <option value="">Todos</option>{nomes.map((n) => <option key={n}>{n}</option>)}
             </select></label>
           <label><span className="campo-label">{mestre ? 'Teste: DJ' : 'DJ de referência'}</span>
-            <input className="entrada !py-1.5 !text-[12px]" type="number" inputMode="numeric" placeholder="ex: 14" value={dj} onChange={(e) => setDj(e.target.value)} /></label>
+            <input className="entrada !py-1.5 !text-[14px]" type="number" inputMode="numeric" placeholder="ex: 14" value={dj} onChange={(e) => setDj(e.target.value)} /></label>
         </div>
-        {dj !== '' && <p className="mb-2 text-[11px] text-suave">Cada rolagem abaixo mostra se passou ou falhou contra a DJ {dj}.</p>}
+        {dj !== '' && <p className="mb-2 text-[13px] text-suave">Cada rolagem abaixo mostra se passou ou falhou contra a DJ {dj}.</p>}
         <ul className="max-h-[70vh] space-y-2 overflow-y-auto pr-1" aria-live="polite">
-          {lista.length === 0 ? <li className="py-6 text-center text-[13px] text-mudo">Aguardando a primeira rolagem…</li>
+          {lista.length === 0 ? <li className="py-6 text-center text-[15px] text-mudo">Aguardando a primeira rolagem…</li>
             : lista.map((r) => <ItemRolagem key={r.id} r={r} dj={dj} destacar={novas.has(r.id)} />)}
         </ul>
       </section>

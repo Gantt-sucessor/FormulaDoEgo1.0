@@ -76,17 +76,17 @@ function Lista() {
           <ul className="space-y-2">
             {campanhas.map((c) => (
               <li key={c.id}><Link para={`/mestre/${c.codigo}`} className="cartao no-underline">
-                <div className="text-[14px] font-bold uppercase tracking-[0.1em]">{c.nome}</div><div className="text-[11px] text-suave">código {c.codigo}</div>
+                <div className="text-[16px] font-bold uppercase tracking-[0.1em]">{c.nome}</div><div className="text-[13px] text-suave">código {c.codigo}</div>
               </Link></li>
             ))}
           </ul>
         )}
         <hr className="border-linha" />
-        <p className="text-[13px] text-suave">Dê um nome para uma campanha nova. Um código é gerado para você compartilhar com os jogadores.</p>
+        <p className="text-[15px] text-suave">Dê um nome para uma campanha nova. Um código é gerado para você compartilhar com os jogadores.</p>
         <label className="block"><span className="campo-label">Nome da campanha</span>
           <input className="entrada" placeholder="ex: Blue Lock — Segunda Seleção" value={nomeCampanha} onChange={(e) => setNomeCampanha(e.target.value)} /></label>
         <button type="button" className="btn btn-ouro w-full" onClick={criar}>Criar campanha</button>
-        {erro && <p role="alert" className="text-[13px] text-perigo">{erro}</p>}
+        {erro && <p role="alert" className="text-[15px] text-perigo">{erro}</p>}
       </div>
     </Pagina>
   );

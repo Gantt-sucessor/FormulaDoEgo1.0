@@ -21,20 +21,20 @@ function ItemFita({ r, destaque }) {
   const corTotal = abs === 'positiva' ? 'text-ok' : abs === 'negativa' ? 'text-perigo' : 'text-ciano';
   return (
     <li className={`rounded border p-3 ${destaque ? 'border-ciano bg-ciano/5' : 'border-linha bg-black/40'}`}>
-      <div className="flex items-center gap-2 text-[11px] text-mudo">
+      <div className="flex items-center gap-2 text-[13px] text-mudo">
         <span>{hora}</span>
         <span className="font-semibold uppercase tracking-[0.14em] text-texto">{r.jogada}</span>
         {acao && <span className="chip ml-auto">Ação</span>}
       </div>
       {acao ? (
-        r.detalhe.texto && <p className="mt-1 line-clamp-4 text-[12px] text-suave">{r.detalhe.texto}</p>
+        r.detalhe.texto && <p className="mt-1 line-clamp-4 text-[14px] text-suave">{r.detalhe.texto}</p>
       ) : (
         <div className="mt-1 flex items-end justify-between gap-3">
-          <span className="text-[12px] text-suave">{formatarDetalhe(r.detalhe)}</span>
+          <span className="text-[14px] text-suave">{formatarDetalhe(r.detalhe)}</span>
           <span className={`text-3xl font-bold leading-none ${corTotal}`}>{r.resultado}</span>
         </div>
       )}
-      {abs && <p className={`mt-1 text-[11px] font-bold uppercase tracking-[0.16em] ${corTotal}`}><Termo id="execucao_absoluta">{abs === 'positiva' ? 'Execução absoluta!' : 'Falha absoluta'}</Termo></p>}
+      {abs && <p className={`mt-1 text-[13px] font-bold uppercase tracking-[0.16em] ${corTotal}`}><Termo id="execucao_absoluta">{abs === 'positiva' ? 'Execução absoluta!' : 'Falha absoluta'}</Termo></p>}
     </li>
   );
 }
@@ -78,7 +78,7 @@ export function Fita({ historico, aoRolarAvulso, abrirSinal }) {
           </div>
           <ol className="flex-1 space-y-2 overflow-y-auto p-3" aria-live="polite">
             {historico.length === 0
-              ? <li className="py-8 text-center text-[13px] text-mudo">A fita sai aqui. Clique numa jogada na aba <strong>Na mesa</strong> para rolar.</li>
+              ? <li className="py-8 text-center text-[15px] text-mudo">A fita sai aqui. Clique numa jogada na aba <strong>Na mesa</strong> para rolar.</li>
               : historico.map((r, i) => <ItemFita key={`${r.hora}-${i}`} r={r} destaque={i === 0} />)}
           </ol>
           <details className="border-t border-linha p-3">

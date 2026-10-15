@@ -15,7 +15,7 @@ export default function FichaPublica({ id }) {
         <div className="painel text-center"><h1 className="titulo-pagina mb-2">Não achei essa ficha</h1><p className="text-suave">O link pode estar errado, ou a ficha foi apagada.</p></div>
       ) : !row ? <p className="py-16 text-center text-mudo">Carregando ficha…</p> : (
         <>
-          <p className="mb-4 text-[12px] text-mudo">Visualização compartilhada — somente leitura.</p>
+          <p className="mb-4 text-[14px] text-mudo">Visualização compartilhada — somente leitura.</p>
           <FichaLeitura row={row} />
         </>
       )}

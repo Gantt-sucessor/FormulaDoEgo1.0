@@ -25,7 +25,7 @@ export function Efeitos({ f, atualizar }) {
   return (
     <Secao titulo="Efeitos e condições" tag={`${f.efeitos.length} ativo${f.efeitos.length === 1 ? '' : 's'}`}>
       {f.efeitos.length === 0 ? (
-        <p className="mb-3 text-[13px] text-mudo">Nenhum efeito ativo. Habilidades usadas que aplicam efeitos aparecem aqui com a contagem regressiva.</p>
+        <p className="mb-3 text-[15px] text-mudo">Nenhum efeito ativo. Habilidades usadas que aplicam efeitos aparecem aqui com a contagem regressiva.</p>
       ) : (
         <ul className="mb-4 space-y-2">
           {f.efeitos.map((e) => {
@@ -35,25 +35,25 @@ export function Efeitos({ f, atualizar }) {
             return (
               <li key={e.id} className={`rounded border bg-black/40 p-2.5 ${negativo ? 'border-perigo/40' : 'border-linha'}`}>
                 <div className="flex flex-wrap items-center gap-2">
-                  <strong className={`text-[13px] uppercase tracking-[0.1em] ${negativo ? 'text-perigo' : 'text-ciano'}`}>
+                  <strong className={`text-[15px] uppercase tracking-[0.1em] ${negativo ? 'text-perigo' : 'text-ciano'}`}>
                     {e.nome || def?.nome || e.id}{e.quantidade > 1 ? ` ×${e.quantidade}` : ''}
                   </strong>
                   {contagem ? <span className="chip border-ciano text-ciano">⏳ {contagem}</span> : (
-                    <input className="entrada !w-44 !py-1 !text-[12px]" placeholder="duração (anote)" value={e.duracao || ''} onChange={(ev) => editarTexto(e.id, ev.target.value)} aria-label="Duração" />
+                    <input className="entrada !w-44 !py-1 !text-[14px]" placeholder="duração (anote)" value={e.duracao || ''} onChange={(ev) => editarTexto(e.id, ev.target.value)} aria-label="Duração" />
                   )}
                   <span className="ml-auto flex gap-1">
                     {e.quantidade > 1 && <button type="button" className="btn btn-mini btn-fantasma" onClick={() => diminuir(e.id)} title="Tirar 1 acúmulo">−1</button>}
                     <button type="button" className="btn btn-mini btn-perigo" onClick={() => remover(e.id)} aria-label={`Remover ${e.nome || def?.nome || e.id}`}>✕</button>
                   </span>
                 </div>
-                {(def?.texto || e.texto) && <p className="mt-1 line-clamp-3 text-[12px] text-suave">{def?.texto || e.texto}</p>}
+                {(def?.texto || e.texto) && <p className="mt-1 line-clamp-3 text-[14px] text-suave">{def?.texto || e.texto}</p>}
               </li>
             );
           })}
         </ul>
       )}
       <details>
-        <summary className="cursor-pointer text-[12px] font-semibold uppercase tracking-[0.14em] text-ciano">+ Marcar efeito</summary>
+        <summary className="cursor-pointer text-[14px] font-semibold uppercase tracking-[0.14em] text-ciano">+ Marcar efeito</summary>
         {[['Negativos', CATALOGO_EFEITOS.filter((x) => x.tipo === 'negativo')], ['Positivos', CATALOGO_EFEITOS.filter((x) => x.tipo === 'positivo')], ['De classe', CATALOGO_EFEITOS_CLASSE]].map(([titulo, lista]) => (
           <div key={titulo} className="mt-3">
             <div className="legenda mb-1">{titulo}</div>
@@ -63,8 +63,8 @@ export function Efeitos({ f, atualizar }) {
                 return (
                   <button key={ef.id} type="button" title={ef.texto} onClick={() => alternar(ef.id)}
                     className={`cartao !py-1.5 ${ativo ? 'cartao-ativo' : ''}`}>
-                    <div className="text-[12px] font-semibold">{ef.nome}{ativo?.quantidade > 1 ? ` ×${ativo.quantidade}` : ''}</div>
-                    <div className="text-[10px] text-mudo">{ef.acumulativo ? 'empilha' : 'ativar'}</div>
+                    <div className="text-[14px] font-semibold">{ef.nome}{ativo?.quantidade > 1 ? ` ×${ativo.quantidade}` : ''}</div>
+                    <div className="text-[12px] text-mudo">{ef.acumulativo ? 'empilha' : 'ativar'}</div>
                   </button>
                 );
               })}

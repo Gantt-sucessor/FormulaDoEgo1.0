@@ -54,7 +54,7 @@ export function AbaFluxo({ ficha, toast }) {
                 return (
                   <article key={t.id} className={`rounded border p-3 ${marcado ? 'border-ciano bg-ciano/5' : 'border-linha bg-black/40'}`}>
                     <header className="flex items-center gap-2">
-                      <h4 className="text-[13px] font-bold uppercase tracking-[0.14em]">{t.nome}</h4>
+                      <h4 className="text-[15px] font-bold uppercase tracking-[0.14em]">{t.nome}</h4>
                       <button type="button" className={`btn btn-mini ml-auto ${marcado ? 'btn-primario' : ''}`} aria-pressed={marcado} onClick={() => alternarTalento(t.id)}>{marcado ? '✓ Guardado' : 'Guardar'}</button>
                     </header>
                     {t.frase && <p className="my-1"><span className="frase">“{t.frase}”</span></p>}
@@ -62,7 +62,7 @@ export function AbaFluxo({ ficha, toast }) {
                     <div className="mt-2">
                       {t.niveis ? (
                         <>
-                          <select className="entrada mb-2 !w-auto !py-1 !text-[12px]" value={nivel} aria-label={`Nível de ${t.nome}`}
+                          <select className="entrada mb-2 !w-auto !py-1 !text-[14px]" value={nivel} aria-label={`Nível de ${t.nome}`}
                             onChange={(e) => atualizar({ talentosNiveis: { ...f.talentosNiveis, [t.id]: Number(e.target.value) } })}>
                             {t.niveis.map((_, i) => <option key={i} value={i + 1}>Nível {i + 1}</option>)}
                           </select>
@@ -91,7 +91,7 @@ export function AbaFluxo({ ficha, toast }) {
           </Campo>
         </div>
         {aura && (
-          <div className="mt-3 rounded border border-linha bg-black/40 p-3 text-[12px]">
+          <div className="mt-3 rounded border border-linha bg-black/40 p-3 text-[14px]">
             <p className="mb-2 text-suave">{aura.tema}</p>
             <p><strong className="text-ciano">% necessário:</strong> {aura.percentual_necessario}% · <strong className="text-ciano">Efeitos de Aura:</strong> {aura.efeitos_permitidos} · <strong className="text-ciano">Marcas extras:</strong> {aura.marcas_adicionais}</p>
           </div>
@@ -103,7 +103,7 @@ export function AbaFluxo({ ficha, toast }) {
             <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
               {ATRIBUTOS.map((a) => (
                 <div key={a.id} className="cartao flex items-center justify-between !p-2">
-                  <span className="text-[12px]">{a.nome}</span>
+                  <span className="text-[14px]">{a.nome}</span>
                   <Contador valor={fl.pontosApice[a.id] || 0} max={(fl.pontosApice[a.id] || 0) + (usadosBasico >= 6 ? 0 : 1)} rotulo={a.nome}
                     onMenos={() => setFluxo({ pontosApice: { ...fl.pontosApice, [a.id]: Math.max(0, (fl.pontosApice[a.id] || 0) - 1) } })}
                     onMais={() => usadosBasico < 6 && setFluxo({ pontosApice: { ...fl.pontosApice, [a.id]: (fl.pontosApice[a.id] || 0) + 1 } })} />
@@ -149,10 +149,10 @@ export function AbaFluxo({ ficha, toast }) {
                         if (e.target.checked) tentar({ vantagens: 0, bonus: 0 });
                         else { const c = { ...fl.apiceComplexo }; delete c[a.id]; setFluxo({ apiceComplexo: c }); }
                       }} />{a.nome}</span>
-                      {incluido && <span className="text-[11px] text-mudo">{custoAtributoComplexo(d.vantagens, d.bonus)} pts</span>}
+                      {incluido && <span className="text-[13px] text-mudo">{custoAtributoComplexo(d.vantagens, d.bonus)} pts</span>}
                     </label>
                     {incluido && (
-                      <div className="mt-2 space-y-1 text-[12px]">
+                      <div className="mt-2 space-y-1 text-[14px]">
                         <div className="flex items-center justify-between">Vantagens<Contador valor={d.vantagens} max={MAX_VANTAGENS_COMPLEXO} rotulo="Vantagens" onMenos={() => mudarComplexo(a.id, { ...d, vantagens: d.vantagens - 1 })} onMais={() => tentar({ ...d, vantagens: d.vantagens + 1 })} /></div>
                         <div className="flex items-center justify-between">Bônus<Contador valor={d.bonus} max={MAX_BONUS_COMPLEXO} rotulo="Bônus" formato={(v) => `+${v}`} onMenos={() => mudarComplexo(a.id, { ...d, bonus: d.bonus - 2 })} onMais={() => tentar({ ...d, bonus: d.bonus + 2 })} /></div>
                       </div>
@@ -176,8 +176,8 @@ export function AbaFluxo({ ficha, toast }) {
                 if (fl.efeitosAuraSelecionados.length >= aura.efeitos_permitidos) return toast(`Sua Aura só permite ${aura.efeitos_permitidos} efeito(s).`, 'erro');
                 return setFluxo({ efeitosAuraSelecionados: [...fl.efeitosAuraSelecionados, ef.id] });
               }}>
-                <div className="text-[13px] font-semibold uppercase tracking-[0.1em]">{ef.nome}</div>
-                <div className="text-[12px] text-suave">{ef.texto}</div>
+                <div className="text-[15px] font-semibold uppercase tracking-[0.1em]">{ef.nome}</div>
+                <div className="text-[14px] text-suave">{ef.texto}</div>
               </button>
             );
           })}
@@ -202,8 +202,8 @@ export function AbaFluxo({ ficha, toast }) {
                       const usos = { ...fl.marcasUsos }; delete usos[m.id];
                       return setFluxo({ marcasConhecidas: fl.marcasConhecidas.filter((x) => x !== m.id), marcasUsos: usos });
                     }} />
-                    <strong className="text-[13px]">{m.nome}</strong>
-                    <div className="text-[12px] text-suave">{m.texto}</div>
+                    <strong className="text-[15px]">{m.nome}</strong>
+                    <div className="text-[14px] text-suave">{m.texto}</div>
                   </label>
                 );
               })}

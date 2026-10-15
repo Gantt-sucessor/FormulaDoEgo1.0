@@ -88,13 +88,13 @@ export default function Fichas() {
           </section>
           <section className="painel space-y-3">
             <span className="titulo-caixa">Criar uma sala</span>
-            <p className="text-[12px] text-suave">Quem cria a sala vira o mestre: acompanha fichas e rolagens em tempo real.</p>
+            <p className="text-[14px] text-suave">Quem cria a sala vira o mestre: acompanha fichas e rolagens em tempo real.</p>
             <label className="block"><span className="campo-label">Nome da sala</span><input className="entrada" placeholder="ex: Blue Lock — Segunda Seleção" value={nomeSala} onChange={(e) => setNomeSala(e.target.value)} /></label>
             <button type="button" className="btn btn-ouro w-full" onClick={criarSala}>Criar sala</button>
           </section>
         </div>
       )}
-      {erro && <p role="alert" className="mt-3 text-[13px] text-perigo">{erro}</p>}
+      {erro && <p role="alert" className="mt-3 text-[15px] text-perigo">{erro}</p>}
 
       <section className="painel mt-4">
         <div className="mb-3 flex items-center justify-between">

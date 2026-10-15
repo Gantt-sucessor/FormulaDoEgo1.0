@@ -47,14 +47,14 @@ export function Jogadas({ f, rolar, toast, existe, abrirFita }) {
       <div className={`mb-4 flex flex-wrap items-center gap-x-5 gap-y-2 rounded border p-3 ${algumMod ? 'border-ciano bg-ciano/5' : 'border-linha'}`}>
         <span className="legenda">Na próxima rolagem</span>
         {[['Vantagens', vant, setVant, 0], ['Desvantagens', desv, setDesv, 0], ['Bônus', bonus, setBonus, -99]].map(([rotulo, v, set, min]) => (
-          <span key={rotulo} className="flex items-center gap-2 text-[12px]">
+          <span key={rotulo} className="flex items-center gap-2 text-[14px]">
             {rotulo === 'Bônus' ? rotulo : <Termo id="vantagem">{rotulo}</Termo>}
             <Contador valor={v} min={min} rotulo={rotulo} onMenos={() => set(v - 1)} onMais={() => set(v + 1)} formato={rotulo === 'Bônus' ? sinal : undefined} />
           </span>
         ))}
         {algumMod > 0 || algumMod < 0 ? <button type="button" className="btn btn-mini btn-fantasma" onClick={() => { setVant(0); setDesv(0); setBonus(0); }}>zerar</button> : null}
       </div>
-      {!existe && <p className="mb-3 text-[13px] text-laranja">Crie a ficha (aba Personagem) para poder rolar.</p>}
+      {!existe && <p className="mb-3 text-[15px] text-laranja">Crie a ficha (aba Personagem) para poder rolar.</p>}
       {Object.entries(JOGADAS).map(([grupo, lista]) => (
         <div key={grupo} className="mb-4">
           <div className="legenda mb-2">{GRUPOS[grupo] || grupo}</div>
@@ -65,7 +65,7 @@ export function Jogadas({ f, rolar, toast, existe, abrirFita }) {
               if (escolhendo === j.id) {
                 return (
                   <div key={j.id} className="cartao cartao-ativo">
-                    <div className="mb-1 text-[12px] font-semibold">{j.nome} — atributo:</div>
+                    <div className="mb-1 text-[14px] font-semibold">{j.nome} — atributo:</div>
                     <div className="flex gap-1">
                       {j.atributo_opcoes.map((a) => (
                         <button key={a} type="button" className="btn btn-mini" onClick={() => {
@@ -79,9 +79,9 @@ export function Jogadas({ f, rolar, toast, existe, abrirFita }) {
               }
               return (
                 <button key={j.id} type="button" className="cartao" disabled={!rolavel || !existe} onClick={() => clicar(j)} title={j.anormalidade}>
-                  <div className="text-[13px] font-semibold">{j.nome}</div>
-                  <div className="text-[11px] text-suave">{def ? def.nome : j.pericias_compostas ? rotuloPericiaComposta(j) : '—'} · <Termo id="dj">Dj</Termo> {j.dj ?? '—'}</div>
-                  <div className="text-[10px] text-mudo">{j.acao}</div>
+                  <div className="text-[15px] font-semibold">{j.nome}</div>
+                  <div className="text-[13px] text-suave">{def ? def.nome : j.pericias_compostas ? rotuloPericiaComposta(j) : '—'} · <Termo id="dj">Dj</Termo> {j.dj ?? '—'}</div>
+                  <div className="text-[12px] text-mudo">{j.acao}</div>
                 </button>
               );
             })}
@@ -89,7 +89,7 @@ export function Jogadas({ f, rolar, toast, existe, abrirFita }) {
         </div>
       ))}
       <details className="mt-2">
-        <summary className="cursor-pointer text-[12px] font-semibold uppercase tracking-[0.14em] text-ciano">Rolagem livre (atributo + perícia)</summary>
+        <summary className="cursor-pointer text-[14px] font-semibold uppercase tracking-[0.14em] text-ciano">Rolagem livre (atributo + perícia)</summary>
         <div className="mt-3 grid gap-2 sm:grid-cols-3">
           <label><span className="campo-label">Atributo</span>
             <select className="entrada" value={livreAtr} onChange={(e) => setLivreAtr(e.target.value)}>

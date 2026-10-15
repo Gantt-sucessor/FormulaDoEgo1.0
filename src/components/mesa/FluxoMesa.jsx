@@ -24,7 +24,7 @@ export function FluxoMesa({ f, atualizar, registrar, toast }) {
   return (
     <Secao titulo="Fluxo" tag={fl.ativo ? '● ativo' : 'inativo'} className={fl.ativo ? 'painel-neon' : ''}>
       {!aura ? (
-        <p className="text-[13px] text-mudo">Escolha o tipo de Aura na aba <strong>Talentos &amp; Fluxo</strong> para definir a % necessária.</p>
+        <p className="text-[15px] text-mudo">Escolha o tipo de Aura na aba <strong>Talentos &amp; Fluxo</strong> para definir a % necessária.</p>
       ) : (
         <>
           <div className="mb-2 flex items-end justify-between">
@@ -35,7 +35,7 @@ export function FluxoMesa({ f, atualizar, registrar, toast }) {
         </>
       )}
       {fl.marcasConhecidas.length === 0 ? (
-        <p className="mb-3 text-[13px] text-mudo">Marque as marcas de despertar que você conhece na aba Talentos &amp; Fluxo.</p>
+        <p className="mb-3 text-[15px] text-mudo">Marque as marcas de despertar que você conhece na aba Talentos &amp; Fluxo.</p>
       ) : (
         <div className="mb-4 grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3">
           {fl.marcasConhecidas.map((id) => {
@@ -45,8 +45,8 @@ export function FluxoMesa({ f, atualizar, registrar, toast }) {
             return (
               <div key={id} className="cartao !p-2">
                 <button type="button" className="w-full text-left" onClick={() => usarMarca(id)}>
-                  <div className="text-[13px] font-semibold">{m.nome}</div>
-                  <div className="text-[11px] text-suave">+{m.recompensa}% · usada {usos}×</div>
+                  <div className="text-[15px] font-semibold">{m.nome}</div>
+                  <div className="text-[13px] text-suave">+{m.recompensa}% · usada {usos}×</div>
                 </button>
                 {usos > 0 && <button type="button" className="btn btn-mini btn-fantasma mt-1" onClick={() => desfazer(id)}>desfazer 1</button>}
               </div>

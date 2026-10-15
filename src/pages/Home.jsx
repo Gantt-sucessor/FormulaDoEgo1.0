@@ -27,7 +27,7 @@ export default function Home() {
         <h1 className="text-[clamp(34px,11vw,72px)] font-bold uppercase leading-[1.05] tracking-[0.18em] glow-azul">
           Fórmula<br />do <span className="text-ciano glow-ciano">Ego</span>
         </h1>
-        <p className="mx-auto mt-4 max-w-md text-[13px] text-suave">Fichas, mesa e salas ao vivo. Cada rolagem, habilidade e efeito aparece em tempo real para o mestre.</p>
+        <p className="mx-auto mt-4 max-w-md text-[15px] text-suave">Fichas, mesa e salas ao vivo. Cada rolagem, habilidade e efeito aparece em tempo real para o mestre.</p>
         <div className="mt-6 flex flex-wrap justify-center gap-3">
           <Link para="/ficha/nova" className="btn btn-primario">Nova ficha</Link>
           <Link para="/fichas" className="btn">Entrar numa sala</Link>

@@ -22,7 +22,7 @@ export function Pericias({ pericias, onChange, maximo, somenteLeitura = false })
             <ul>
               {PERICIAS.filter((p) => p.atributo === a.id).map((p) => (
                 <li key={p.id} className="flex items-center justify-between gap-2 py-1" title={p.descricao}>
-                  <span className="text-[13px]">{p.nome}</span>
+                  <span className="text-[15px]">{p.nome}</span>
                   {somenteLeitura
                     ? <strong>{pericias?.[p.id] || 0}</strong>
                     : <Contador valor={pericias?.[p.id] || 0} max={MAX_PONTOS_PERICIA} rotulo={p.nome} onMenos={() => ajustar(p.id, -1)} onMais={() => ajustar(p.id, 1)} />}
@@ -33,7 +33,7 @@ export function Pericias({ pericias, onChange, maximo, somenteLeitura = false })
         ))}
       </div>
       {!somenteLeitura && (
-        <div className={`mt-4 border-t border-linha pt-3 text-[13px] ${excedeu ? 'text-perigo' : 'text-suave'}`}>
+        <div className={`mt-4 border-t border-linha pt-3 text-[15px] ${excedeu ? 'text-perigo' : 'text-suave'}`}>
           <strong className="text-texto">{usados}</strong> / {maximo} pontos distribuídos
           {excedeu && ' — acima do limite do nível'}
           {!excedeu && usados < maximo && ` — ${maximo - usados} sobrando`}

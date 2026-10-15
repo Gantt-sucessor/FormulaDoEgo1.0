@@ -12,6 +12,7 @@ import { BarraRecursos } from '../components/mesa/Recursos.jsx';
 import { AbaMesa } from '../components/AbaMesa.jsx';
 import { AbaPersonagem } from '../components/AbaPersonagem.jsx';
 import { AbaFluxo } from '../components/AbaFluxo.jsx';
+import { AvisosFicha } from '../components/AvisosFicha.jsx';
 import { Fita } from '../components/Fita.jsx';
 
 const ABAS = [['mesa', 'Na mesa', '⚔'], ['personagem', 'Personagem', '☰'], ['fluxo', 'Talentos & Fluxo', '≋']];
@@ -30,6 +31,11 @@ export default function Ficha({ id }) {
   useEffect(() => { if (id === 'nova') setAba('personagem'); }, [id]);
 
   const mudarAba = (a) => { setAba(a); setAbaSalva(a); window.scrollTo({ top: 0 }); };
+  const irPara = (a, alvo) => {
+    if (a !== aba) { setAba(a); setAbaSalva(a); }
+    if (!alvo) return window.scrollTo({ top: 0, behavior: 'smooth' });
+    return setTimeout(() => document.getElementById(alvo)?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 60);
+  };
 
   const criarFicha = async () => {
     try {
@@ -70,11 +76,13 @@ export default function Ficha({ id }) {
           </div>
         </div>
         <div className="flex items-center gap-2">
-          <span className={`text-[11px] ${status === 'erro' ? 'text-perigo' : 'text-mudo'}`} role="status">{STATUS[status]}</span>
+          <span className={`text-[13px] ${status === 'erro' ? 'text-perigo' : 'text-mudo'}`} role="status">{STATUS[status]}</span>
           {existe && <button type="button" className="btn btn-mini" onClick={compartilhar}>🔗 Compartilhar</button>}
           <Link para="/fichas" className="btn btn-mini btn-fantasma" onClick={() => ficha.salvarAgora()}>← fichas</Link>
         </div>
       </div>
+
+      <AvisosFicha f={f} existe={existe} irPara={irPara} />
 
       {/* Abas (desktop) + recursos grudados no topo */}
       <div className="sticky top-[45px] z-20 -mx-3 border-b border-linha bg-fundo/95 px-3 backdrop-blur sm:-mx-5 sm:px-5">
@@ -94,7 +102,7 @@ export default function Ficha({ id }) {
       <nav className="pb-seguro fixed inset-x-0 bottom-0 z-40 grid grid-cols-3 border-t border-linha-forte bg-fundo/95 backdrop-blur sm:hidden" role="tablist" aria-label="Partes da ficha">
         {ABAS.map(([k, r, icone]) => (
           <button key={k} type="button" role="tab" aria-selected={aba === k} onClick={() => mudarAba(k)}
-            className={`flex flex-col items-center gap-0.5 py-2 text-[10px] font-semibold uppercase tracking-[0.12em] ${aba === k ? 'text-ciano' : 'text-mudo'}`}>
+            className={`flex flex-col items-center gap-0.5 py-2 text-[12px] font-semibold uppercase tracking-[0.12em] ${aba === k ? 'text-ciano' : 'text-mudo'}`}>
             <span className="text-lg leading-none">{icone}</span>{r.replace(' & ', ' & ')}
           </button>
         ))}

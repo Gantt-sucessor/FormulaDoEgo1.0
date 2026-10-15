@@ -38,10 +38,10 @@ export default function Login() {
         <label className="block"><span className="campo-label">Senha</span>
           <input className="entrada" type="password" autoComplete={cadastro ? 'new-password' : 'current-password'} minLength={8} required value={senha} onChange={(e) => setSenha(e.target.value)} /></label>
         <button className="btn btn-primario w-full" disabled={ocupado}>{ocupado ? 'Aguarde…' : cadastro ? 'Criar conta' : 'Entrar'}</button>
-        <button type="button" className="w-full text-center text-[12px] uppercase tracking-[0.14em] text-suave hover:text-ciano" onClick={() => { setCadastro(!cadastro); setMsg(''); }}>
+        <button type="button" className="w-full text-center text-[14px] uppercase tracking-[0.14em] text-suave hover:text-ciano" onClick={() => { setCadastro(!cadastro); setMsg(''); }}>
           {cadastro ? 'Já tenho uma conta' : 'Criar conta'}
         </button>
-        {msg && <p role="status" className="text-[12px] text-laranja">{msg}</p>}
+        {msg && <p role="status" className="text-[14px] text-laranja">{msg}</p>}
       </form>
       <div className="mt-8 opacity-60"><Logo /></div>
     </div>

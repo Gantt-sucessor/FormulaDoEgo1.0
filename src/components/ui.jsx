@@ -15,7 +15,7 @@ export function Secao({ titulo, tag, children, id, className = '' }) {
   );
 }
 
-export const Passo = ({ children }) => <p className="mb-3 text-[12px] text-suave">{children}</p>;
+export const Passo = ({ children }) => <p className="mb-3 text-[14px] text-suave">{children}</p>;
 
 export function Contador({ valor, onMenos, onMais, max, min = 0, rotulo, formato }) {
   return (
@@ -62,7 +62,7 @@ export function IconeArma({ id, nome, tamanho = 40 }) {
 export const Estrelas = ({ n }) => <span className="text-ouro tracking-widest" aria-label={`dificuldade ${n} de 5`}>{'★'.repeat(n)}<span className="text-linha-forte">{'★'.repeat(5 - n)}</span></span>;
 
 export function Vazio({ children }) {
-  return <p className="py-6 text-center text-[13px] text-mudo">{children}</p>;
+  return <p className="py-6 text-center text-[15px] text-mudo">{children}</p>;
 }
 
 export function Confirmar(mensagem) {

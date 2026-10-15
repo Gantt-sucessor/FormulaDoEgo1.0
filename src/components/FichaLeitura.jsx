@@ -79,31 +79,31 @@ export function FichaLeitura({ row }) {
 
       {otica && (
         <Secao titulo="Ótica">
-          <p className="mb-2 text-[12px] italic text-suave">{otica.tema}</p>
+          <p className="mb-2 text-[14px] italic text-suave">{otica.tema}</p>
           <div className="grid gap-2 md:grid-cols-3">
             {otica.niveis.map((t, i) => (
               <div key={i} className={`cartao ${f.visoes.includes(i + 1) ? 'cartao-ativo' : 'opacity-60'}`}>
-                <div className="legenda">Nível {i + 1}{f.visoes.includes(i + 1) ? ' · desbloqueado' : ''}</div><p className="text-[12px] text-suave">{t}</p>
+                <div className="legenda">Nível {i + 1}{f.visoes.includes(i + 1) ? ' · desbloqueado' : ''}</div><p className="text-[14px] text-suave">{t}</p>
               </div>
             ))}
           </div>
-          {catalisador && <p className="mt-3 text-[12px]"><span className="legenda mr-2">Catalisador</span><strong>{catalisador.nome}</strong> — potencial {f.catalisador.potencial}/10</p>}
+          {catalisador && <p className="mt-3 text-[14px]"><span className="legenda mr-2">Catalisador</span><strong>{catalisador.nome}</strong> — potencial {f.catalisador.potencial}/10</p>}
         </Secao>
       )}
 
       {(tp || ts) && (
         <Secao titulo="Tendências">
-          {tp && <p className="text-[13px]"><span className="legenda mr-2">Principal</span><strong>{tp.nome}</strong>{tp.dom ? ` — ${tp.dom.nome}` : ''}</p>}
+          {tp && <p className="text-[15px]"><span className="legenda mr-2">Principal</span><strong>{tp.nome}</strong>{tp.dom ? ` — ${tp.dom.nome}` : ''}</p>}
           {tp?.dom && <TextoLivro texto={tp.dom.texto} />}
-          {ts && <p className="mt-2 text-[13px]"><span className="legenda mr-2">Secundária</span><strong>{ts.nome}</strong>{ts.passiva_secundaria ? ` — ${ts.passiva_secundaria.nome}` : ''}</p>}
+          {ts && <p className="mt-2 text-[15px]"><span className="legenda mr-2">Secundária</span><strong>{ts.nome}</strong>{ts.passiva_secundaria ? ` — ${ts.passiva_secundaria.nome}` : ''}</p>}
           {ts?.passiva_secundaria && <TextoLivro texto={ts.passiva_secundaria.texto} />}
         </Secao>
       )}
 
       {aura && (
         <Secao titulo="Fluxo">
-          <p className="text-[13px]">Aura <strong>{aura.nome}</strong> ({aura.percentual_necessario}%) · fluxo {f.fluxo.tipo}</p>
-          {f.fluxo.efeitosAuraSelecionados.length > 0 && <p className="mt-1 text-[12px] text-suave">Efeitos de Aura: {f.fluxo.efeitosAuraSelecionados.map((id) => EFEITOS_AURA.find((e) => e.id === id)?.nome || id).join(', ')}</p>}
+          <p className="text-[15px]">Aura <strong>{aura.nome}</strong> ({aura.percentual_necessario}%) · fluxo {f.fluxo.tipo}</p>
+          {f.fluxo.efeitosAuraSelecionados.length > 0 && <p className="mt-1 text-[14px] text-suave">Efeitos de Aura: {f.fluxo.efeitosAuraSelecionados.map((id) => EFEITOS_AURA.find((e) => e.id === id)?.nome || id).join(', ')}</p>}
         </Secao>
       )}
 
@@ -114,7 +114,7 @@ export function FichaLeitura({ row }) {
           </div>
         </Secao>
       )}
-      {f.nivel > 0 && cat && <p className="text-center text-[11px] text-mudo">Nível de categoria {nivelCategoria(f.nivel)}</p>}
+      {f.nivel > 0 && cat && <p className="text-center text-[13px] text-mudo">Nível de categoria {nivelCategoria(f.nivel)}</p>}
     </div>
   );
 }

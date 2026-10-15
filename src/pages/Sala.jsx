@@ -26,12 +26,12 @@ export default function Sala({ codigo }) {
       <Pagina>
         <div className="painel mx-auto max-w-md space-y-3">
           <span className="titulo-caixa">Sala</span>
-          <p className="text-[13px] text-suave">Aqui todo mundo vê as fichas e as rolagens de todo mundo, em tempo real.</p>
+          <p className="text-[15px] text-suave">Aqui todo mundo vê as fichas e as rolagens de todo mundo, em tempo real.</p>
           <label className="block"><span className="campo-label">Código da sala</span>
             <input className="entrada text-center text-lg uppercase tracking-[0.3em]" maxLength={6} value={digitado} onChange={(e) => setDigitado(e.target.value.toUpperCase())} placeholder="EX: 7K2QXP" /></label>
           <button type="button" className="btn btn-primario w-full" onClick={() => digitado && ir(`/sala/${digitado}`)}>Entrar</button>
-          {erro && <p className="text-[13px] text-perigo" role="alert">{erro}</p>}
-          <p className="text-[12px] text-mudo">Ainda não tem uma sala? <Link para="/fichas" className="text-ciano">Crie uma na tela de fichas</Link>.</p>
+          {erro && <p className="text-[15px] text-perigo" role="alert">{erro}</p>}
+          <p className="text-[14px] text-mudo">Ainda não tem uma sala? <Link para="/fichas" className="text-ciano">Crie uma na tela de fichas</Link>.</p>
         </div>
       </Pagina>
     );

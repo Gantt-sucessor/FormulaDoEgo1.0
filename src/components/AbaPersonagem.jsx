@@ -29,7 +29,7 @@ function Checklist({ f, existe }) {
   const feitos = itens.filter((i) => i[2]).length;
   return (
     <div className={`painel ${feitos === itens.length ? 'border-ok/60' : ''}`}>
-      <div className="mb-2 flex justify-between text-[12px] uppercase tracking-[0.16em]">
+      <div className="mb-2 flex justify-between text-[14px] uppercase tracking-[0.16em]">
         <strong>{feitos === itens.length ? 'Ficha completa ✓' : 'Montando o personagem'}</strong>
         <span className="text-mudo">{feitos}/{itens.length}</span>
       </div>
@@ -40,7 +40,7 @@ function Checklist({ f, existe }) {
           </button>
         ))}
       </div>
-      {!existe && <p className="mt-2 text-[11px] text-mudo">Tudo é salvo sozinho depois que a ficha é criada.</p>}
+      {!existe && <p className="mt-2 text-[13px] text-mudo">Tudo é salvo sozinho depois que a ficha é criada.</p>}
     </div>
   );
 }
@@ -96,7 +96,7 @@ export function AbaPersonagem({ ficha, toast, criarFicha }) {
         </Secao>
         <Secao id="sec-pericias" titulo="Perícias" tag="máx. 5 por perícia">
           <Passo>O livro recomenda 10 pontos na criação; o limite sobe com o nível, a categoria e a tendência — mas a mesa decide.</Passo>
-          {f.tendPericia && <p className="mb-3 rounded border border-ciano/40 bg-ciano/5 p-2 text-[12px]"><strong className="text-ciano">+2 de bônus</strong> em {PERICIAS.find((p) => p.id === f.tendPericia)?.nome} pela sua Tendência — já incluído no total.</p>}
+          {f.tendPericia && <p className="mb-3 rounded border border-ciano/40 bg-ciano/5 p-2 text-[14px]"><strong className="text-ciano">+2 de bônus</strong> em {PERICIAS.find((p) => p.id === f.tendPericia)?.nome} pela sua Tendência — já incluído no total.</p>}
           <Pericias pericias={f.pericias} onChange={(pericias) => atualizar({ pericias })} maximo={pontosPericiaMaximos(f)} />
         </Secao>
       </div>
@@ -110,7 +110,7 @@ export function AbaPersonagem({ ficha, toast, criarFicha }) {
         <Selecao valor={f.oticaId} onChange={(v) => atualizar({ oticaId: v, visoes: [], catalisador: { id: '', potencial: 0 } })} vazio="— nenhuma escolhida —" opcoes={OTICAS} />
         {otica && (
           <div className="mt-4 space-y-3">
-            <p className="text-[12px] italic text-suave">{otica.tema}</p>
+            <p className="text-[14px] italic text-suave">{otica.tema}</p>
             <div className="grid gap-2 md:grid-cols-3">
               {otica.niveis.map((texto, i) => {
                 const n = i + 1;
@@ -119,14 +119,14 @@ export function AbaPersonagem({ ficha, toast, criarFicha }) {
                   <label key={n} className={`cartao cursor-pointer ${marcado ? 'cartao-ativo' : ''}`}>
                     <input type="checkbox" className="mr-2" checked={marcado}
                       onChange={() => atualizar({ visoes: marcado ? f.visoes.filter((x) => x !== n) : [...f.visoes, n] })} />
-                    <strong className="text-[12px] uppercase tracking-[0.14em]">Nível {n}</strong>
-                    <p className="mt-1 text-[12px] text-suave">{texto}</p>
+                    <strong className="text-[14px] uppercase tracking-[0.14em]">Nível {n}</strong>
+                    <p className="mt-1 text-[14px] text-suave">{texto}</p>
                   </label>
                 );
               })}
             </div>
             {otica.habilidade_nv3 && <HabilidadeLivro h={{ ...otica.habilidade_nv3, tipo: 'variante' }} />}
-            <p className="text-[12px] text-suave"><span className="legenda mr-2">Catalisadores</span>{otica.catalisadores}</p>
+            <p className="text-[14px] text-suave"><span className="legenda mr-2">Catalisadores</span>{otica.catalisadores}</p>
             {f.nivel >= NIVEL_MINIMO_CATALISADOR && (
               <Campo rotulo="Seu catalisador">
                 <Selecao valor={f.catalisador.id} onChange={(v) => atualizar({ catalisador: { ...f.catalisador, id: v, potencial: 0 } })} vazio="— nenhum —" opcoes={catalisadores} />
@@ -153,7 +153,7 @@ export function AbaPersonagem({ ficha, toast, criarFicha }) {
           <div className="mt-4 rounded border border-linha bg-black/40 p-3">
             {principal.dom
               ? <><div className="legenda mb-1">Dom — {principal.nome}</div><h4 className="mb-1 font-bold uppercase tracking-[0.12em]">{principal.dom.nome}</h4><TextoLivro texto={principal.dom.texto} /></>
-              : <p className="text-[12px] text-suave"><strong className="text-texto">{principal.nome}</strong> não tem Dom próprio — só dá a Passiva quando usada como secundária.</p>}
+              : <p className="text-[14px] text-suave"><strong className="text-texto">{principal.nome}</strong> não tem Dom próprio — só dá a Passiva quando usada como secundária.</p>}
             {principal.pericia_adicional?.length > 0 && (
               <div className="mt-3">
                 <div className="legenda mb-2">Escolha a perícia adicional (+2)</div>
@@ -189,7 +189,7 @@ export function AbaPersonagem({ ficha, toast, criarFicha }) {
               {cat.evolucao.map((e) => (
                 <div key={e.nivel} className={`cartao ${nc === e.nivel ? 'cartao-ativo' : nc > e.nivel ? '!border-ok/40' : ''}`}>
                   <div className="legenda">Nível de categoria {e.nivel}{nc === e.nivel ? ' · atual' : nc > e.nivel ? ' · concluído' : ''}</div>
-                  <p className="mt-1 text-[12px] text-suave">{e.ganhos}</p>
+                  <p className="mt-1 text-[14px] text-suave">{e.ganhos}</p>
                 </div>
               ))}
             </div>
