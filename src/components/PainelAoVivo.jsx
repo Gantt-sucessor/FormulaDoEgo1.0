@@ -11,6 +11,7 @@ import { som } from '../lib/som.js';
 import { resolverJogada } from '../regras/dados.js';
 import { aplicarEstadoDoMotor, camposParaBanco, estadoDoMotor, fichaDoBanco, folegoMaximo, pdsMaximo } from '../lib/ficha.js';
 import { useToast } from '../lib/toast.jsx';
+import { GoleiroBot } from './GoleiroBot.jsx';
 
 const hora = (iso) => new Date(iso).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
 
@@ -193,7 +194,8 @@ export function PainelAoVivo({ campanha, mestre = false }) {
         )}
       </section>
 
-      <section className="lg:sticky lg:top-16 lg:self-start">
+      <section className="space-y-4 lg:self-start">
+        {mestre && <GoleiroBot campanha={campanha} rolagens={rolagens} aoRolar={(r) => setRolagens((l) => [r, ...l].slice(0, 120))} />}
         <div className="mb-3 flex items-center justify-between"><Titulo>Rolagens ao vivo</Titulo><span className="legenda">{lista.length}</span></div>
         <div className="mb-3 grid grid-cols-2 gap-2">
           <label><span className="campo-label">Filtrar jogador</span>
