@@ -1,12 +1,13 @@
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import { listarHabilidadesAtivas, TODOS_TALENTOS } from '../../lib/habilidadesAtivas.js';
 import { MAX_SLOTS_TALENTOS } from '../../data/talentos.js';
 import { Secao } from '../ui.jsx';
 import { CartaoUso } from './CartaoUso.jsx';
+import { BotaoRetrair, useTextosAbertos } from '../Retratil.jsx';
 
 /** Os talentos guardados, prontos para usar. Ao usar, o bônus entra sozinho nas jogadas e na distância. */
 export function TalentosMesa({ f, atualizar, registrar, toast, existe }) {
-  const [textosAbertos, setTextosAbertos] = useState(true);
+  const [textosAbertos, setTextosAbertos] = useTextosAbertos('tal');
   const itens = useMemo(() => listarHabilidadesAtivas(f).filter((t) => t.origem === 'talento'), [f.talentos, f.talentosNiveis, f.nivel]);
 
   const mudarNivel = (id, nivel) => atualizar({ talentosNiveis: { ...f.talentosNiveis, [id]: nivel } });
@@ -19,7 +20,7 @@ export function TalentosMesa({ f, atualizar, registrar, toast, existe }) {
         <>
           <div className="mb-3 flex flex-wrap items-center gap-3">
             <p className="text-[14px] text-suave">Ao usar um talento, o bônus dele entra sozinho nas jogadas (⚡) e a duração é contada pelos turnos.</p>
-            <button type="button" className="btn btn-mini btn-fantasma ml-auto" onClick={() => setTextosAbertos((v) => !v)}>{textosAbertos ? 'Recolher textos' : 'Mostrar textos'}</button>
+            <BotaoRetrair aberto={textosAbertos} onChange={setTextosAbertos} className="ml-auto" />
           </div>
           <div className="grid gap-4 lg:grid-cols-2 min-[1500px]:grid-cols-3">
             {itens.map((item) => {

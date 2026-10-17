@@ -3,11 +3,12 @@ import { listarHabilidadesAtivas, ORIGENS } from '../../lib/habilidadesAtivas.js
 import { condicaoDeBola } from '../../regras/habilidades.js';
 import { Secao } from '../ui.jsx';
 import { CartaoUso } from './CartaoUso.jsx';
+import { BotaoRetrair, useTextosAbertos } from '../Retratil.jsx';
 
 export function HabilidadesAtivas({ f, atualizar, registrar, toast, existe }) {
   const [origem, setOrigem] = useState('todas');
   const [soUsaveis, setSoUsaveis] = useState(false);
-  const [textosAbertos, setTextosAbertos] = useState(true);
+  const [textosAbertos, setTextosAbertos] = useTextosAbertos('hab');
   const todas = useMemo(() => listarHabilidadesAtivas(f).filter((t) => t.origem !== 'talento'), [f.armaId, f.oticaId, f.visoes, f.catalisador?.id, f.nivel, f.habilidadesCategoria, f.talentos, f.talentosNiveis]);
 
   const visiveis = todas.filter(({ origem: o, h }) => {
@@ -32,7 +33,7 @@ export function HabilidadesAtivas({ f, atualizar, registrar, toast, existe }) {
             {presentes.map((o) => (
               <button key={o.id} type="button" aria-pressed={origem === o.id} className={`btn btn-mini ${origem === o.id ? 'btn-primario' : 'btn-fantasma'}`} onClick={() => setOrigem(o.id)}>{o.rotulo}</button>
             ))}
-            <button type="button" className="btn btn-mini btn-fantasma ml-auto" onClick={() => setTextosAbertos((v) => !v)}>{textosAbertos ? 'Recolher textos' : 'Mostrar textos'}</button>
+            <BotaoRetrair aberto={textosAbertos} onChange={setTextosAbertos} className="ml-auto" />
             <label className="flex items-center gap-2 text-[14px] text-suave">
               <input type="checkbox" checked={soUsaveis} onChange={(e) => setSoUsaveis(e.target.checked)} />
               só as usáveis {f.comBola ? 'com a bola' : 'sem a bola'}

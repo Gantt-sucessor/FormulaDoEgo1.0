@@ -25,3 +25,7 @@ export const getSecoesMesa = () => {
   try { const v = JSON.parse(ler(CHAVE_MESA, 'null')); return Array.isArray(v) ? v : null; } catch { return null; }
 };
 export const setSecoesMesa = (lista) => gravar(CHAVE_MESA, JSON.stringify(lista));
+
+/** Lembra, por lista, se os textos das habilidades ficam abertos (padrão: recolhidos, para não lotar a tela). */
+export const getTextosAbertos = (lista) => ler(`fde-textos-${lista}`, '0') === '1';
+export const setTextosAbertos = (lista, v) => gravar(`fde-textos-${lista}`, v ? '1' : '0');

@@ -7,6 +7,7 @@ import { Hexagono } from './Hexagono.jsx';
 import { Pericias } from './Pericias.jsx';
 import { ArmaDetalhe } from './ArmaDetalhe.jsx';
 import { HabilidadeLivro, TextoLivro } from './Habilidade.jsx';
+import { Retratil } from './Retratil.jsx';
 import { buscarEfeito } from '../regras/efeitos.js';
 import { listarHabilidadesAtivas } from '../lib/habilidadesAtivas.js';
 import {
@@ -109,9 +110,13 @@ export function FichaLeitura({ row }) {
 
       {ativas.filter((a) => a.origem !== 'arma').length > 0 && (
         <Secao titulo="Outras habilidades ativas">
-          <div className="grid gap-3 lg:grid-cols-2">
-            {ativas.filter((a) => a.origem !== 'arma').map((a) => <HabilidadeLivro key={a.chave} h={a.h} />)}
-          </div>
+          <Retratil lista="leitura">
+            {(aberto) => (
+              <div className="grid gap-4 lg:grid-cols-2">
+                {ativas.filter((a) => a.origem !== 'arma').map((a) => <HabilidadeLivro key={`${a.chave}-${aberto}`} h={a.h} aberto={aberto} />)}
+              </div>
+            )}
+          </Retratil>
         </Secao>
       )}
       {f.nivel > 0 && cat && <p className="text-center text-[13px] text-mudo">Nível de categoria {nivelCategoria(f.nivel)}</p>}

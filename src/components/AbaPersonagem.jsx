@@ -8,6 +8,7 @@ import { Hexagono } from './Hexagono.jsx';
 import { Pericias } from './Pericias.jsx';
 import { ArmaDetalhe } from './ArmaDetalhe.jsx';
 import { HabilidadeLivro, TextoLivro } from './Habilidade.jsx';
+import { Retratil } from './Retratil.jsx';
 import {
   NIVEL_MAXIMO, categoriaDe, catalisadoresDaOtica, limiteHabilidadesCategoria, nivelCategoria, oticaDe,
   pontosPericiaMaximos, pontosPericiaUsados, tendenciaPrincipalDe, tendenciaSecundariaDe,
@@ -198,18 +199,22 @@ export function AbaPersonagem({ ficha, toast, criarFicha }) {
         {f.arquetipoId && (
           <div className="mt-4">
             <div className="legenda mb-2">Habilidades de categoria · {f.habilidadesCategoria.length}/{limiteCat} desbloqueadas</div>
-            <div className="grid gap-3 lg:grid-cols-2">
-              {habilidadesCat.map((h) => {
-                const marcada = f.habilidadesCategoria.includes(h.nome);
-                return (
-                  <HabilidadeLivro key={h.nome} h={h} acoes={(
-                    <button type="button" className={`btn btn-mini ${marcada ? 'btn-primario' : ''}`} onClick={() => alternarCat(h.nome)} aria-pressed={marcada}>
-                      {marcada ? '✓ Desbloqueada' : 'Desbloquear'}
-                    </button>
-                  )} />
-                );
-              })}
-            </div>
+            <Retratil lista="categoria">
+              {(aberto) => (
+                <div className="grid gap-4 lg:grid-cols-2">
+                  {habilidadesCat.map((h) => {
+                    const marcada = f.habilidadesCategoria.includes(h.nome);
+                    return (
+                      <HabilidadeLivro key={`${h.nome}-${aberto}`} h={h} aberto={aberto} acoes={(
+                        <button type="button" className={`btn btn-mini ${marcada ? 'btn-primario' : ''}`} onClick={() => alternarCat(h.nome)} aria-pressed={marcada}>
+                          {marcada ? '✓ Desbloqueada' : 'Desbloquear'}
+                        </button>
+                      )} />
+                    );
+                  })}
+                </div>
+              )}
+            </Retratil>
           </div>
         )}
       </Secao>

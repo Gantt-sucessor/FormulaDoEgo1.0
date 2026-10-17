@@ -72,12 +72,12 @@ export function CartaoUso({ item, f, atualizar, registrar, toast, existe, aberto
           <button type="button" className="btn btn-mini btn-fantasma ml-auto" onClick={encerrar}>Encerrar</button>
         </p>
       )}
-      {h.frase && <p className="mt-3"><span className="frase">“{h.frase}”</span></p>}
       {h.condicao && <p className="tag-condicao mt-3 text-[14px]">[{h.condicao}]</p>}
       {h.requisito && <p className="mt-2 text-[14px] text-suave">{h.requisito}</p>}
       <div className="mt-3"><StatLinha h={h} /></div>
       <details key={String(aberto)} open={aberto} className="mt-4 border-t border-linha pt-3">
         <summary className="cursor-pointer text-[14px] text-ciano">texto da habilidade</summary>
+        {h.frase && <p className="mt-3"><span className="frase">“{h.frase}”</span></p>}
         <div className="mt-3"><TextoLivro texto={texto ?? h.texto} /></div>
         {depois}
       </details>

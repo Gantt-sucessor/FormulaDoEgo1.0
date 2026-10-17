@@ -229,3 +229,8 @@ label:has(> input[type="checkbox"]:checked), label:has(> input[type="radio"]:che
 .fx-critico { animation: brilho-critico .9s ease-out both; }
 .fx-falha { animation: tremor-falha .55s ease-in-out both, escurecer-falha .9s ease-out both; }
 @media (prefers-reduced-motion: reduce) { .fx-critico, .fx-falha { animation: none; } }
+
+/* Cartões que abrem e fecham: seta à direita do título */
+.retratil > summary { position: relative; padding-right: 22px; }
+.retratil > summary::after { content: '▸'; position: absolute; right: 0; top: 0; color: var(--color-ciano); }
+.retratil[open] > summary::after { content: '▾'; }

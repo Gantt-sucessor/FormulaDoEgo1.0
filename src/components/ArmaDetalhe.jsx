@@ -1,5 +1,6 @@
 import { IconeArma, Estrelas } from './ui.jsx';
 import { HabilidadeLivro, TextoLivro } from './Habilidade.jsx';
+import { Retratil } from './Retratil.jsx';
 import { nomePericia } from '../lib/ficha.js';
 
 function Bloco({ titulo, nome, children }) {
@@ -42,9 +43,13 @@ export function ArmaDetalhe({ arma }) {
           </Bloco>
         )}
       </div>
-      <div className="grid gap-3 lg:grid-cols-2">
-        {arma.habilidades.map((h) => <HabilidadeLivro key={h.nome} h={h} />)}
-      </div>
+      <Retratil lista="arma">
+        {(aberto) => (
+          <div className="grid gap-4 lg:grid-cols-2">
+            {arma.habilidades.map((h) => <HabilidadeLivro key={`${h.nome}-${aberto}`} h={h} aberto={aberto} />)}
+          </div>
+        )}
+      </Retratil>
     </div>
   );
 }

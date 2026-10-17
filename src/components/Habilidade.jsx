@@ -1,4 +1,4 @@
-import { Fragment } from 'react';
+import { Fragment, useState } from 'react';
 import { condicaoDeBola, somenteUmaVezEmFluxo } from '../regras/habilidades.js';
 import { Termo } from './Termo.jsx';
 import { chaveDeRotulo } from '../data/glossario.js';
@@ -85,20 +85,31 @@ export function SeloBola({ h }) {
   return <span className="chip">{c === 'com' ? '● com a bola' : '○ sem a bola'}</span>;
 }
 
-/** Habilidade no formato do livro: nome, tipo, frase, condição, estatísticas e texto. */
-export function HabilidadeLivro({ h, acoes, compacta = false }) {
+/** Habilidade no formato do livro: nome, tipo, condição e custos sempre à vista; frase e texto abrem e fecham. */
+export function HabilidadeLivro({ h, acoes, compacta = false, aberto = false }) {
+  const [vendo, setVendo] = useState(aberto);
+  const temTexto = !!(h.texto || (h.frase && !compacta));
   return (
     <article className="rounded border border-linha bg-black/40 p-4">
-      <header className="mb-1 flex flex-wrap items-center gap-2">
-        <h4 className="text-[15px] font-bold uppercase tracking-[0.18em]">{h.nome}</h4>
+      <header className="mb-1 flex flex-wrap items-center gap-x-3 gap-y-2">
+        <h4 className="text-[16px] font-bold uppercase tracking-[0.18em]">{h.nome}</h4>
         <SeloTipo h={h} />
         {somenteUmaVezEmFluxo(h) && h.tipo !== 'fluxo' && <span className="chip"><Termo id="uma_vez_fluxo">1× por fluxo</Termo></span>}
+        {temTexto && (
+          <button type="button" className="btn btn-mini btn-fantasma ml-auto" aria-expanded={vendo} onClick={() => setVendo((v) => !v)}>
+            {vendo ? '▾ Recolher' : '▸ Expandir'}
+          </button>
+        )}
       </header>
-      {h.frase && !compacta && <p className="mb-2"><span className="frase">“{h.frase}”</span></p>}
       {h.condicao && <p className="tag-condicao mb-1 text-[14px]">[{h.condicao}]</p>}
       {h.requisito && <p className="mb-1 text-[14px] text-suave">Pré-requisito: {h.requisito}</p>}
       <StatLinha h={h} />
-      <div className="mt-2"><TextoLivro texto={h.texto} /></div>
+      {vendo && (
+        <div className="mt-3 border-t border-linha pt-3">
+          {h.frase && !compacta && <p className="mb-3"><span className="frase">“{h.frase}”</span></p>}
+          <TextoLivro texto={h.texto} />
+        </div>
+      )}
       {acoes && <div className="mt-3">{acoes}</div>}
     </article>
   );
