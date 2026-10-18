@@ -168,7 +168,7 @@ img, svg { max-width: 100%; }
 .termo { position: relative; cursor: help; border-bottom: 1px dotted currentColor; outline-offset: 2px; }
 .termo::after {
   content: attr(data-dica);
-  position: absolute; z-index: 60; left: 0; bottom: calc(100% + 8px);
+  position: absolute; z-index: 60; left: var(--dx, 0px); bottom: calc(100% + 8px);
   width: max-content; max-width: min(280px, 80vw);
   padding: 8px 10px; background: #000; color: var(--color-texto);
   border: 1px solid var(--color-ciano); border-radius: 3px;
@@ -178,6 +178,7 @@ img, svg { max-width: 100%; }
   transition: opacity .12s, transform .12s, visibility .12s;
 }
 .termo:hover::after, .termo:focus::after, .termo:focus-visible::after { opacity: 1; visibility: visible; transform: none; }
+.termo[data-baixo]::after { bottom: auto; top: calc(100% + 8px); }
 .legenda.termo, .campo-label.termo { display: inline-block; }
 .termo-longo::after { white-space: pre-line; max-width: min(340px, 80vw); }
 

@@ -100,9 +100,9 @@ export function AbaFluxo({ ficha, toast }) {
         {tipo === 'basico' ? (
           <div className="mt-4">
             <Passo>Pontos de ápice — cada ponto dá +1 de bônus fixo no atributo enquanto o fluxo estiver ativo. ({usadosBasico}/6 usados)</Passo>
-            <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
+            <div className="grid grid-cols-1 gap-2 min-[500px]:grid-cols-2 lg:grid-cols-3">
               {ATRIBUTOS.map((a) => (
-                <div key={a.id} className="cartao flex items-center justify-between !p-2">
+                <div key={a.id} className="cartao flex min-w-0 items-center justify-between gap-2 !p-2">
                   <span className="text-[14px]">{a.nome}</span>
                   <Contador valor={fl.pontosApice[a.id] || 0} max={(fl.pontosApice[a.id] || 0) + (usadosBasico >= 6 ? 0 : 1)} rotulo={a.nome}
                     onMenos={() => setFluxo({ pontosApice: { ...fl.pontosApice, [a.id]: Math.max(0, (fl.pontosApice[a.id] || 0) - 1) } })}

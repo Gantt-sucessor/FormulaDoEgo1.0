@@ -5,7 +5,7 @@ import { som } from '../lib/som.js';
 
 export function Logo() {
   return (
-    <Link para="/" className="text-[15px] font-bold uppercase tracking-[0.28em] text-texto no-underline">
+    <Link para="/" className="whitespace-nowrap text-[15px] font-bold uppercase tracking-[0.2em] text-texto no-underline sm:tracking-[0.28em]">
       Fórmula do <span className="text-ciano glow-ciano">Ego</span>
     </Link>
   );
@@ -37,12 +37,12 @@ export function Topbar({ publica = false }) {
   const { ir } = useRouter();
   return (
     <header className="pt-seguro sticky top-0 z-30 border-b border-linha bg-fundo/90 backdrop-blur">
-      <div className="mx-auto flex max-w-[1800px] items-center justify-between gap-2 px-3 py-2.5 sm:px-5">
+      <div className="mx-auto flex max-w-[1800px] flex-wrap items-center justify-between gap-x-2 gap-y-1 px-3 py-2 sm:flex-nowrap sm:px-5 sm:py-2.5">
         <Logo />
         {publica ? (
           <span className="flex items-center gap-2 text-[13px] text-mudo">somente leitura <BotaoSom /></span>
         ) : (
-          <nav className="flex items-center">
+          <nav className="-mx-2.5 flex w-full items-center justify-between sm:mx-0 sm:w-auto sm:justify-start">
             <NavLink para="/fichas">Fichas</NavLink>
             <NavLink para="/sala">Sala</NavLink>
             <NavLink para="/mestre">Mestre</NavLink>

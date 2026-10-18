@@ -51,7 +51,7 @@ export function FichaLeitura({ row }) {
       </div>
 
       <Secao titulo="Status">
-        <div className="grid grid-cols-3 gap-2 sm:grid-cols-6">
+        <div className="grid grid-cols-2 gap-2 min-[520px]:grid-cols-3 md:grid-cols-6">
           <Stat rotulo="Fôlego" valor={Math.min(f.folego ?? 0, folegoMaximo(f))} max={folegoMaximo(f)} />
           <Stat rotulo="PdE" valor={f.pde} max={8} />
           <Stat rotulo="PdS" valor={f.pds} max={pdsMaximo()} />

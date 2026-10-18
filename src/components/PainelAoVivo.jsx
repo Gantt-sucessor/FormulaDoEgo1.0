@@ -37,8 +37,8 @@ function CartaoJogador({ row, mestre, aberto, aoAbrir, aoSalvar }) {
       <button type="button" className="flex w-full items-center gap-3 text-left" onClick={aoAbrir} aria-expanded={aberto}>
         <IconeArma id={arma?.id} nome={arma?.nome || f.nome} tamanho={44} />
         <span className="min-w-0 flex-1">
-          <span className="block truncate text-[16px] font-bold uppercase tracking-[0.1em]">{f.nome}</span>
-          <span className="block truncate text-[13px] text-mudo">{row.nome_jogador} · nível {f.nivel}{arma ? ` · ${arma.nome}` : ''}</span>
+          <span className="block break-words text-[16px] font-bold uppercase tracking-[0.1em]">{f.nome}</span>
+          <span className="block break-words text-[13px] text-mudo">{row.nome_jogador} · nível {f.nivel}{arma ? ` · ${arma.nome}` : ''}</span>
         </span>
         <span className="text-ciano">{aberto ? '▾' : '▸'}</span>
       </button>
@@ -102,7 +102,7 @@ function ItemRolagem({ r, dj, destacar }) {
       <div className={`w-14 shrink-0 text-center text-2xl font-bold leading-tight ${cor}`}>{acao ? <span className="text-[13px] uppercase tracking-[0.14em]">Ação</span> : r.resultado}</div>
       <div className="min-w-0 flex-1">
         <div className="flex items-baseline justify-between gap-2">
-          <strong className="truncate text-[14px] uppercase tracking-[0.1em]">{r.nome_personagem}</strong>
+          <strong className="break-words text-[14px] uppercase tracking-[0.1em]">{r.nome_personagem}</strong>
           <span className="shrink-0 text-[13px] text-mudo">{hora(r.criada_em)}</span>
         </div>
         <div className="text-[15px]">{r.jogada}</div>
