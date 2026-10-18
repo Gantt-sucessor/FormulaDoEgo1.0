@@ -34,7 +34,7 @@ export const JOGADAS = {
   goleiro: [
     { id: 'defesa_de_goleiro', nome: 'Defesa de goleiro', pericia: 'agilidade', dj: 'chute inimigo', distancia: 'Adjacente', acao: '2 reações', anormalidade: 'Para a trajetória e toma posse. Obriga um passe logo em seguida.' },
     { id: 'espalmar', nome: 'Espalmar', pericia: 'instintos', dj: 'chute inimigo', distancia: 'Adjacente', acao: 'Reação', anormalidade: 'A bola volta metade da trajetória e fica livre.' },
-    { id: 'erguer_base', nome: 'Erguer base', pericia: 'constancia + posicionamento ÷ 2', pericias_compostas: ['constancia', 'posicionamento'], divisor: 2, atributo: 'cognicao', dj: 10, distancia: 'pessoal', acao: 'Ação de movimento', anormalidade: 'Facilita defesas seguintes; dj sobe +2 por turno seguido, tendo que rerolar no início de todo turno. Atributo usado: sempre Cognição.' },
+    { id: 'erguer_base', nome: 'Erguer base', pericia: 'constancia + posicionamento ÷ 2', pericias_compostas: ['constancia', 'posicionamento'], divisor: 2, atributo: 'cognicao', dj: 10, distancia: 'pessoal', acao: 'Ação de movimento', anormalidade: 'Pode fazer defesa de goleiro/espalmar gastando 1 reação a menos; a dj aumenta +2 por turno seguido usado, e deve ser rerolada a cada início de turno.' },
   ],
   outras: [
     { id: 'investida', nome: 'Investida', pericia: null, dj: null, distancia: 'Agilidade + 1m', acao: 'Ação tática', anormalidade: 'Avança uma quantidade de metros igual sua perícia de Agilidade + 1, em qualquer direção.' },

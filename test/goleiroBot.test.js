@@ -17,7 +17,7 @@ test('espalmar usa Instintos e dados de atributo', () => {
 });
 
 test('erguer base: Cognição e média arredondada para baixo; DJ sobe 2 por turno', () => {
-  assert.equal(periciaErguerBase({ constancia: 3, posicionamento: 2 }), 2);
+  assert.equal(periciaErguerBase({ constancia: 3, posicionamento: 2 }), 3);
   assert.equal(djErguerBase(0), 10);
   assert.equal(djErguerBase(3), 16);
   const r = rolarJogadaBot('erguer_base', { ...BOT_PADRAO, cognicao: 0, constancia: 4, posicionamento: 4 }, { aleatorio: fixo(0.5) });

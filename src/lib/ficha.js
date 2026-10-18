@@ -172,7 +172,7 @@ export function catalisadoresDaOtica(f) {
 export function valorPericiaDaJogada(f, jogada) {
   if (jogada.pericias_compostas) {
     const soma = jogada.pericias_compostas.reduce((acc, id) => acc + (f.pericias?.[id] || 0), 0);
-    return Math.floor(soma / jogada.divisor);
+    return Math.ceil(soma / jogada.divisor); // livro: resultado com vírgula arredonda para cima
   }
   const def = PERICIAS.find((p) => p.id === jogada.pericia);
   return def ? (f.pericias?.[def.id] || 0) : 0;

@@ -50,7 +50,7 @@ export function GoleiroBot({ campanha, rolagens, aoRolar }) {
     let veredito = null;
     if (tipo === 'erguer_base') {
       const dj = djErguerBase(turnos);
-      veredito = { resultado: r.resultado >= dj ? 'defendeu' : 'gol', texto: r.resultado >= dj ? `Base firme (DJ ${dj}). Defesas seguintes ficam mais fáceis.` : `Base falhou (DJ ${dj}).` };
+      veredito = { resultado: r.resultado >= dj ? 'defendeu' : 'gol', texto: r.resultado >= dj ? `Base firme (DJ ${dj}): defesa de goleiro/espalmar gastam 1 reação a menos.` : `Base falhou (DJ ${dj}).` };
     } else if (chute) {
       veredito = confrontoChute(chute.resultado, r.resultado, tipo);
       veredito.texto += ` (chute ${chute.resultado} de ${chute.nome_personagem} × ${r.resultado})`;
@@ -88,6 +88,7 @@ export function GoleiroBot({ campanha, rolagens, aoRolar }) {
               ))}
             </div>
           )}
+          <p className="text-[13px] text-mudo">O livro não traz atributos para um goleiro NPC: preencha em “Ajustar atributos”.</p>
           <p className="text-[13px] text-suave">Destreza {bot.destreza} · Cognição {bot.cognicao} · Agilidade {bot.agilidade} · Instintos {bot.instintos} · Erguer base {periciaErguerBase(bot)}</p>
 
           <div className="grid grid-cols-2 gap-2">

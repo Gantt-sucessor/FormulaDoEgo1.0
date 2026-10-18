@@ -1,14 +1,14 @@
 // Fórmula do Ego — Goleiro bot (NPC do mestre)
 // Rola sozinho as jogadas de goleiro do livro: Defesa de goleiro (Agilidade, Destreza), Espalmar (Instintos,
-// Destreza) e Erguer base (média de Constância e Posicionamento, Cognição, DJ 10, +2 por turno seguido).
-// Os números do bot não vêm do livro: o mestre ajusta (padrão: Destreza 2, Cognição 1, perícias 3).
+// Destreza) e Erguer base (Constância + Posicionamento ÷ 2, DJ 10, +2 por turno seguido).
+// O livro não define atributos para um goleiro NPC: começam zerados e o mestre preenche.
 
 import { rolarJogada } from './dados.js';
 
 export const BOT_PADRAO = {
   nome: 'Goleiro bot',
-  destreza: 2, cognicao: 1, potencia: 1,
-  agilidade: 3, instintos: 3, constancia: 3, posicionamento: 3,
+  destreza: 0, cognicao: 0, potencia: 0,
+  agilidade: 0, instintos: 0, constancia: 0, posicionamento: 0,
 };
 
 export const JOGADAS_BOT = {
@@ -16,8 +16,8 @@ export const JOGADAS_BOT = {
   espalmar: { nome: 'Espalmar', atributo: 'destreza', pericia: 'instintos', acao: '1 reação' },
 };
 
-/** Perícia de Erguer base = (Constância + Posicionamento) ÷ 2, arredondado para baixo. */
-export const periciaErguerBase = (bot) => Math.floor(((bot.constancia || 0) + (bot.posicionamento || 0)) / 2);
+/** Perícia de Erguer base = (Constância + Posicionamento) ÷ 2; o livro manda arredondar para cima. */
+export const periciaErguerBase = (bot) => Math.ceil(((bot.constancia || 0) + (bot.posicionamento || 0)) / 2);
 
 /** DJ de Erguer base: 10, +2 por turno seguido já mantido. */
 export const djErguerBase = (turnosSeguidos = 0) => 10 + 2 * Math.max(0, turnosSeguidos);
