@@ -177,7 +177,7 @@ export const TENDENCIAS = [
     tema: 'Limites não existem — evolui derrubando os mais fortes com sorte.',
     dom: {
       nome: 'Duelo de sorte',
-      texto: 'Ao declarar ou um alvo declarar um teste de J vs J contra você, pode ativar essa habilidade recebendo +2 PdE e gastando 1 PdS. Com a ativação, role d2: Resultado 1 = vitória garantida; Resultado 2 = derrota garantida.',
+      texto: 'Ao declarar ou um alvo declarar um teste de J vs J contra você, pode ativar essa habilidade recebendo +2 PdE e gastando 1 PdS. Com a ativação, role d2: Resultado 1 = falha garantida; Resultado 2 = vitória garantida.',
     },
     pericia_adicional: ['determinacao', 'posicionamento', 'instintos'],
     passiva_secundaria: {

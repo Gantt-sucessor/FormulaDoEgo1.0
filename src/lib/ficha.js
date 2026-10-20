@@ -4,7 +4,7 @@ import { OTICAS } from '../data/oticas.js';
 import { CATALISADORES } from '../data/catalisadores.js';
 import { PERICIAS } from '../data/pericias.js';
 import { ATRIBUTOS } from '../data/atributos.js';
-import { calcularFolegos, calcularDdC, calcularDdP, MAX_PDS_PADRAO } from '../regras/calculos.js';
+import { calcularFolegos, calcularIniciativa, calcularDdC, calcularDdP, MAX_PDS_PADRAO } from '../regras/calculos.js';
 import { acoesVazias, normalizarAcoes, modificadorFolegoMaximo } from '../regras/habilidades.js';
 import { modDistancia } from '../regras/modificadores.js';
 
@@ -111,9 +111,10 @@ export function camposParaBanco(f) {
 export const folegoMaximo = (f) =>
   Math.max(0, calcularFolegos(f.pericias?.constancia || 0) + (f.recompensa6 === 'folego' ? 1 : 0) + modificadorFolegoMaximo(f.efeitos));
 
-export const distanciaChute = (f) => calcularDdC(f.pericias?.[f.periciaChute] || 0, (f.recompensa6 === 'distancia_chute' ? 1 : 0) + modDistancia(f.efeitos, 'chute'));
-export const distanciaPasse = (f) => calcularDdP(f.pericias?.[f.periciaPasse] || 0, (f.recompensa6 === 'distancia_passe' ? 1 : 0) + modDistancia(f.efeitos, 'passe'));
-export const iniciativa = (f) => (f.pericias?.momento || 0) + (f.atributos?.destreza || 0);
+// Livro: DdC = 6 + Precisão; DdP = 6 + Visão de jogo; iniciativa = 5 + Momento.
+export const distanciaChute = (f) => calcularDdC(f.pericias?.precisao || 0, (f.recompensa6 === 'distancia_chute' ? 1 : 0) + modDistancia(f.efeitos, 'chute'));
+export const distanciaPasse = (f) => calcularDdP(f.pericias?.visao_de_jogo || 0, (f.recompensa6 === 'distancia_passe' ? 1 : 0) + modDistancia(f.efeitos, 'passe'));
+export const iniciativa = (f) => calcularIniciativa(f.pericias?.momento || 0);
 export const pdsMaximo = () => MAX_PDS_PADRAO;
 
 /** Nível de categoria (1-5): sobe nos níveis de personagem 4, 5, 6 e 8. */
@@ -144,7 +145,7 @@ export function limiteHabilidadesCategoria(f) {
 
 export function pontosPericiaMaximos(f) {
   let total = 10;
-  [2, 3, 6, 7].forEach((n) => { if (f.nivel >= n) total += 1; });
+  [3, 6, 7].forEach((n) => { if (f.nivel >= n) total += 1; });
   const cat = categoriaDe(f);
   if (cat) {
     const nc = nivelCategoria(f.nivel);

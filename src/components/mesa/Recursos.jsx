@@ -1,6 +1,5 @@
 import { Contador } from '../ui.jsx';
 import { Termo } from '../Termo.jsx';
-import { PERICIAS as PERICIAS_OPCOES } from '../../data/pericias.js';
 import { folegoMaximo, pdsMaximo, distanciaChute, distanciaPasse, iniciativa } from '../../lib/ficha.js';
 import { LIMITE_PDE } from '../../regras/habilidades.js';
 import { fontesDeDistancia } from '../../regras/modificadores.js';
@@ -39,22 +38,18 @@ export function Distancias({ f, atualizar }) {
         <div className="legenda"><Termo id="ddc">Distância de chute</Termo></div>
         <div className="text-2xl font-bold">{distanciaChute(f)}<span className="text-sm text-mudo"> m</span></div>
         {fontesDeDistancia(f.efeitos, 'chute').map((t) => <div key={t} className="text-[13px] text-ciano">⚡ {t}</div>)}
-        <select className="entrada mt-1 !py-1 !text-[14px]" value={f.periciaChute} onChange={(e) => atualizar({ periciaChute: e.target.value })} aria-label="Perícia do chute">
-          {PERICIAS_OPCOES.map((p) => <option key={p.id} value={p.id}>{p.nome} ({f.pericias[p.id] || 0})</option>)}
-        </select>
+        <div className="text-[13px] text-mudo">6 + Precisão ({f.pericias.precisao || 0})</div>
       </div>
       <div className="cartao">
         <div className="legenda"><Termo id="ddp">Distância de passe</Termo></div>
         <div className="text-2xl font-bold">{distanciaPasse(f)}<span className="text-sm text-mudo"> m</span></div>
         {fontesDeDistancia(f.efeitos, 'passe').map((t) => <div key={t} className="text-[13px] text-ciano">⚡ {t}</div>)}
-        <select className="entrada mt-1 !py-1 !text-[14px]" value={f.periciaPasse} onChange={(e) => atualizar({ periciaPasse: e.target.value })} aria-label="Perícia do passe">
-          {PERICIAS_OPCOES.map((p) => <option key={p.id} value={p.id}>{p.nome} ({f.pericias[p.id] || 0})</option>)}
-        </select>
+        <div className="text-[13px] text-mudo">6 + Visão de jogo ({f.pericias.visao_de_jogo || 0})</div>
       </div>
       <div className="cartao">
         <div className="legenda"><Termo id="iniciativa">Iniciativa</Termo></div>
         <div className="text-2xl font-bold">{iniciativa(f)}</div>
-        <div className="text-[13px] text-mudo">Momento + Destreza</div>
+        <div className="text-[13px] text-mudo">5 + Momento ({f.pericias.momento || 0})</div>
       </div>
     </div>
   );

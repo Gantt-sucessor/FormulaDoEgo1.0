@@ -33,8 +33,8 @@ test('Ala Messi: vale só nas perícias de Drible escolhidas e dura por turnos',
   const f = ficha({ talentos: ['ala_messi'], atributos: { drible: 2 } });
   const item = listarHabilidadesAtivas(f).find((i) => i.h.id === 'ala_messi');
   const e = usar(f, item, { escolha: ['criatividade'] });
-  assert.equal(modsParaJogada(e.efeitos, jogadaPorId('elastico')).vantagens, 1); // Elástico usa Criatividade
-  assert.equal(modsParaJogada(e.efeitos, jogadaPorId('chapeu')).vantagens, 0); // Chapéu usa Posse
+  assert.equal(modsParaJogada(e.efeitos, jogadaPorId('caneta')).vantagens, 1); // Caneta usa Criatividade (livro)
+  assert.equal(modsParaJogada(e.efeitos, jogadaPorId('chapeu')).vantagens, 0); // Chapéu usa Pressão
   const ef = e.efeitos.find((x) => x.id === 'hab:talento:ala_messi');
   assert.equal(ef.turnos, 2); // Drible 2
   let est = e;

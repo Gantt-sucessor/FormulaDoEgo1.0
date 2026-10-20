@@ -8,8 +8,7 @@ const EXTRAS = {
   precisao: ['Define a distância de chute (DdC = 6 + Precisão).'],
   visao_de_jogo: ['Define a distância de passe (DdP = 6 + Visão de jogo).'],
   constancia: ['Define seus fôlegos máximos (6 + Constância).'],
-  momento: ['Entra na iniciativa (Momento + Destreza).'],
-  agilidade: ['Define a distância da Investida (Agilidade + 1 m).'],
+  momento: ['Define sua iniciativa (5 + Momento).'],
   posicionamento: ['Dá o alcance e a duração de muitas habilidades (“posicionamento + 1 m”, “posicionamento + 1 turnos”).'],
   consumir: ['Dá a duração e o poder de habilidades de Ego (“Consumir + 4 turnos”).'],
   emocional: ['Quebra o emocional dos outros: Trash talk e resistência a ele (“Emocional vs Determinação”).'],
@@ -21,8 +20,8 @@ export function dicaDaPericia(id) {
   const def = PERICIAS.find((p) => p.id === id);
   if (!def) return '';
   const jogadas = Object.entries(JOGADAS).flatMap(([grupo, lista]) => lista
-    .filter((j) => j.pericia === id || j.pericias_compostas?.includes(id))
-    .map((j) => `• ${j.nome} (${GRUPOS[grupo] || grupo.toLowerCase()} · ${j.acao || '—'})${j.pericias_compostas ? ' — soma com outra perícia, dividido por 2' : ''}`));
+    .filter((j) => j.pericia === id || j.pericias_compostas?.includes(id) || j.usa?.includes(id))
+    .map((j) => `• ${j.nome} (${GRUPOS[grupo] || grupo.toLowerCase()} · ${j.acao || '—'})${j.pericias_compostas ? ' — soma com outra perícia, dividido por 2 (arredonda para cima)' : ''}`));
   const extras = (EXTRAS[id] || []).map((t) => `• ${t}`);
   const usos = [...jogadas, ...extras];
   return [def.descricao, usos.length ? `\n\nO que dá para fazer:\n${usos.join('\n')}` : ''].join('');
