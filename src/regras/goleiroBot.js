@@ -4,11 +4,15 @@
 // O livro não define atributos para um goleiro NPC: começam zerados e o mestre preenche.
 
 import { rolarJogada } from './dados.js';
+import { ATRIBUTOS } from '../data/atributos.js';
+import { PERICIAS } from '../data/pericias.js';
 
+// Todos os atributos (−1 a +4, como na criação) e todas as perícias (0 a 5) do livro, zerados.
+export const LIMITES_BOT = { atributo: [-1, 4], pericia: [0, 5] };
 export const BOT_PADRAO = {
   nome: 'Goleiro bot',
-  destreza: 0, cognicao: 0, potencia: 0,
-  agilidade: 0, instintos: 0, constancia: 0, posicionamento: 0,
+  ...Object.fromEntries(ATRIBUTOS.map((a) => [a.id, 0])),
+  ...Object.fromEntries(PERICIAS.map((p) => [p.id, 0])),
 };
 
 export const JOGADAS_BOT = {
@@ -53,12 +57,13 @@ export function facesPotencia(potencia) {
 const dado = (faces, aleatorio) => Math.floor(aleatorio() * faces) + 1;
 
 /**
- * Pênalti: chutador e goleiro rolam dados de Potência ao mesmo tempo. Empate: o goleiro defende ("defesa de goleiro").
- * `rebaixar`: o goleiro baixa o próprio dado um degrau (espalmar); se ainda assim vencer, todos reagem gastando 1 reação em vez de 2.
+ * Pênalti: o livro manda chutador e goleiro rolarem "dados iguais baseados em Potência" ao mesmo tempo, então os dois
+ * usam o MESMO dado, o da Potência do chutador. Empate: o goleiro defende ("defesa de goleiro").
+ * `rebaixar`: o goleiro baixa o próprio dado uma patente (espalmar); se ainda assim vencer, todos reagem gastando 1 reação em vez de 2.
  */
-export function rolarPenalti({ potenciaChutador, potenciaBot, rebaixar = false, aleatorio = Math.random }) {
+export function rolarPenalti({ potenciaChutador, rebaixar = false, aleatorio = Math.random }) {
   const facesChute = facesPotencia(potenciaChutador);
-  let facesBot = facesPotencia(potenciaBot);
+  let facesBot = facesChute;
   if (rebaixar) facesBot = Math.max(2, facesBot - 2);
   const chute = dado(facesChute, aleatorio);
   const defesa = dado(facesBot, aleatorio);

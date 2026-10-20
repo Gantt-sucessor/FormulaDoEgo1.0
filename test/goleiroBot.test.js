@@ -35,12 +35,22 @@ test('dados de Potência do pênalti', () => {
 });
 
 test('pênalti: empate o goleiro defende; rebaixar vira espalmar', () => {
-  const r = rolarPenalti({ potenciaChutador: 2, potenciaBot: 2, aleatorio: fixo(0.5) }); // 4 e 4
+  const r = rolarPenalti({ potenciaChutador: 2, aleatorio: fixo(0.5) }); // d6 e d6: 4 e 4
   assert.equal(r.chute, r.defesa);
   assert.ok(r.defendeu);
-  const e = rolarPenalti({ potenciaChutador: 2, potenciaBot: 3, rebaixar: true, aleatorio: fixo(0.5) });
+  const e = rolarPenalti({ potenciaChutador: 3, rebaixar: true, aleatorio: fixo(0.1, 0.9) }); // chutador d8 tira 1; goleiro (d6, rebaixado) tira 6
+  assert.equal(e.facesChute, 8);
   assert.equal(e.facesBot, 6);
   assert.ok(e.espalmou);
-  const g = rolarPenalti({ potenciaChutador: 4, potenciaBot: 0, aleatorio: fixo(0.99, 0) });
+  const g = rolarPenalti({ potenciaChutador: 4, aleatorio: fixo(0.99, 0) });
   assert.equal(g.defendeu, false);
+});
+
+test('pênalti: os dois rolam o mesmo dado (Potência do chutador)', () => {
+  const p = rolarPenalti({ potenciaChutador: 1, aleatorio: fixo(0.1) });
+  assert.equal(p.facesChute, p.facesBot);
+});
+
+test('bot tem todos os atributos e perícias do livro', () => {
+  for (const k of ['potencia', 'drible', 'destreza', 'robustez', 'cognicao', 'ego', 'agilidade', 'instintos', 'constancia', 'posicionamento', 'visao_de_jogo', 'determinacao']) assert.equal(BOT_PADRAO[k], 0, k);
 });

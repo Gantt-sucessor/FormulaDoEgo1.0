@@ -4,12 +4,10 @@ import { supabase } from '../lib/supabase.js';
 import { som } from '../lib/som.js';
 import { useToast } from '../lib/toast.jsx';
 import { getBotGoleiro, setBotGoleiro } from '../lib/local.js';
-import { BOT_PADRAO, JOGADAS_BOT, confrontoChute, djErguerBase, facesPotencia, periciaErguerBase, rolarJogadaBot, rolarPenalti } from '../regras/goleiroBot.js';
+import { ATRIBUTOS } from '../data/atributos.js';
+import { PERICIAS } from '../data/pericias.js';
+import { BOT_PADRAO, LIMITES_BOT, JOGADAS_BOT, confrontoChute, djErguerBase, facesPotencia, periciaErguerBase, rolarJogadaBot, rolarPenalti } from '../regras/goleiroBot.js';
 
-const CAMPOS = [
-  ['destreza', 'Destreza'], ['cognicao', 'Cognição'], ['potencia', 'Potência'],
-  ['agilidade', 'Agilidade'], ['instintos', 'Instintos'], ['constancia', 'Constância'], ['posicionamento', 'Posicionamento'],
-];
 
 const COR = { defendeu: 'text-ok', trave: 'text-ouro', gol: 'text-perigo' };
 
@@ -29,8 +27,12 @@ export function GoleiroBot({ campanha, rolagens, aoRolar }) {
   const chutes = useMemo(() => rolagens.filter((r) => !r.detalhe?.tipo && !r.detalhe?.bot).slice(0, 12), [rolagens]);
   const chute = chutes.find((r) => r.id === chuteId) || chutes[0] || null;
 
+  const limitar = (campo, valor) => {
+    const [min, max] = ATRIBUTOS.some((a) => a.id === campo) ? LIMITES_BOT.atributo : LIMITES_BOT.pericia;
+    return Math.max(min, Math.min(max, Math.trunc(Number(valor)) || 0));
+  };
   const mudar = (campo, valor) => {
-    const novo = { ...bot, [campo]: campo === 'nome' ? valor : Math.max(-1, Math.min(8, Number(valor) || 0)) };
+    const novo = { ...bot, [campo]: campo === 'nome' ? valor : limitar(campo, valor) };
     setBot(novo); setBotGoleiro(campanha.id, novo);
   };
 
@@ -61,7 +63,7 @@ export function GoleiroBot({ campanha, rolagens, aoRolar }) {
   };
 
   const penalti = async (rebaixar) => {
-    const p = rolarPenalti({ potenciaChutador: potChute, potenciaBot: bot.potencia, rebaixar });
+    const p = rolarPenalti({ potenciaChutador: potChute, rebaixar });
     som.tocar(p.defendeu ? 'turno' : 'rodada');
     setUltimo({ nome: rebaixar ? 'Pênalti (espalmar)' : 'Pênalti', penalti: p, veredito: { resultado: p.defendeu ? 'defendeu' : 'gol', texto: p.texto } });
     try {
@@ -81,15 +83,27 @@ export function GoleiroBot({ campanha, rolagens, aoRolar }) {
       {aberto && (
         <div className="space-y-3">
           {ajustes && (
-            <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
-              <label className="col-span-2 sm:col-span-4"><span className="campo-label">Nome</span><input className="entrada !py-1.5" value={bot.nome} onChange={(e) => mudar('nome', e.target.value)} /></label>
-              {CAMPOS.map(([c, rot]) => (
-                <label key={c}><span className="campo-label">{rot}</span><input className="entrada !py-1.5" type="number" min="-1" max="8" value={bot[c]} onChange={(e) => mudar(c, e.target.value)} /></label>
+            <div className="space-y-3">
+              <label className="block"><span className="campo-label">Nome</span><input className="entrada !py-1.5" value={bot.nome} onChange={(e) => mudar('nome', e.target.value)} /></label>
+              <p className="text-[13px] text-mudo">Atributos de −1 a +4 e perícias de 0 a 5, como na criação de personagem.</p>
+              {ATRIBUTOS.map((a) => (
+                <div key={a.id} className="rounded border border-linha p-2">
+                  <label className="flex items-center justify-between gap-3">
+                    <span className="legenda text-ouro">{a.nome}</span>
+                    <input className="entrada !w-20 !py-1" type="number" min={LIMITES_BOT.atributo[0]} max={LIMITES_BOT.atributo[1]} value={bot[a.id]} onChange={(e) => mudar(a.id, e.target.value)} />
+                  </label>
+                  <div className="mt-2 grid grid-cols-1 gap-2 min-[420px]:grid-cols-3">
+                    {PERICIAS.filter((p) => p.atributo === a.id).map((p) => (
+                      <label key={p.id} className="block"><span className="block break-words text-[13px] text-suave">{p.nome}</span>
+                        <input className="entrada !py-1" type="number" min={LIMITES_BOT.pericia[0]} max={LIMITES_BOT.pericia[1]} value={bot[p.id]} onChange={(e) => mudar(p.id, e.target.value)} /></label>
+                    ))}
+                  </div>
+                </div>
               ))}
             </div>
           )}
           <p className="text-[13px] text-mudo">O livro não traz atributos para um goleiro NPC: preencha em “Ajustar atributos”.</p>
-          <p className="text-[13px] text-suave">Destreza {bot.destreza} · Cognição {bot.cognicao} · Agilidade {bot.agilidade} · Instintos {bot.instintos} · Erguer base {periciaErguerBase(bot)}</p>
+          <p className="text-[13px] text-suave">Destreza {bot.destreza} + Agilidade {bot.agilidade} (defesa) · Destreza {bot.destreza} + Instintos {bot.instintos} (espalmar) · Cognição {bot.cognicao} + Erguer base {periciaErguerBase(bot)}</p>
 
           <div className="grid grid-cols-2 gap-2">
             <label><span className="campo-label">Vantagens do bot</span><input className="entrada !py-1.5" type="number" min="0" max="5" value={vant} onChange={(e) => setVant(Math.max(0, Number(e.target.value) || 0))} /></label>
@@ -112,11 +126,11 @@ export function GoleiroBot({ campanha, rolagens, aoRolar }) {
           </label>
 
           <div className="rounded border border-linha p-2">
-            <div className="legenda text-ouro">Pênalti (dados de Potência)</div>
+            <div className="legenda text-ouro">Pênalti (dados iguais, pela Potência do chutador)</div>
             <div className="mt-1 flex flex-wrap items-center gap-2 text-[14px] text-suave">
               <label className="flex items-center gap-2">Potência do chutador
                 <input className="entrada !w-20 !py-1" type="number" min="-1" max="8" value={potChute} onChange={(e) => setPotChute(Number(e.target.value) || 0)} /></label>
-              <span>d{facesPotencia(potChute)} × d{facesPotencia(bot.potencia)}</span>
+              <span>os dois rolam d{facesPotencia(potChute)}</span>
               <button type="button" className="btn btn-mini" onClick={() => penalti(false)}>Rolar pênalti</button>
               <button type="button" className="btn btn-mini" onClick={() => penalti(true)}>Rebaixar dado (espalmar)</button>
             </div>
@@ -128,6 +142,7 @@ export function GoleiroBot({ campanha, rolagens, aoRolar }) {
                 <strong className="uppercase tracking-[0.1em]">{ultimo.nome}</strong>
                 <span className="text-2xl font-bold text-ciano">{ultimo.penalti ? `${ultimo.penalti.chute} × ${ultimo.penalti.defesa}` : ultimo.r.resultado}</span>
               </div>
+              {ultimo.penalti && <p className="text-[13px] text-suave">Chutador d{ultimo.penalti.facesChute} × Goleiro d{ultimo.penalti.facesBot}{ultimo.penalti.facesBot < ultimo.penalti.facesChute ? ' (dado rebaixado)' : ''}</p>}
               {ultimo.r && <p className="text-[13px] text-suave">{ultimo.r.detalheBase}{ultimo.r.rolagensAtributo.length ? ` + ${ultimo.r.rolagensAtributo.length}d6 [${ultimo.r.rolagensAtributo.join(', ')}]` : ''}{ultimo.r.rolagensVantagem.length ? ` + vantagem [${ultimo.r.rolagensVantagem.join(', ')}]` : ''} + perícia {ultimo.r.valorPericia}{ultimo.r.bonus ? ` ${ultimo.r.bonus > 0 ? '+' : '−'} ${Math.abs(ultimo.r.bonus)}` : ''}</p>}
               {ultimo.r?.execucaoAbsoluta && <p className={`text-[13px] font-bold uppercase ${ultimo.r.execucaoAbsoluta.tipo === 'positiva' ? 'text-ok' : 'text-perigo'}`}>{ultimo.r.execucaoAbsoluta.tipo === 'positiva' ? 'Execução absoluta! · crítico' : 'Falha absoluta · falha crítica'}</p>}
               {ultimo.veredito && <p className={`font-bold ${COR[ultimo.veredito.resultado]}`}>{ultimo.veredito.texto}</p>}
